@@ -1,20 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_data_source.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
-
-
-
 
 class MMDataTable extends StatefulWidget {
   final List<Map<String, dynamic>> data;
   final List<MMDataTableColumn> dataTableColumns;
   final String dataTableTitle;
+  final Function? onAdd;
+  final Function? onRefresh;
 
-
-  MMDataTable({Key? key,required this.data,required this.dataTableColumns,required this.dataTableTitle}) : super(key: key);
+  MMDataTable({Key? key,required this.data,this.onAdd,this.onRefresh,required this.dataTableColumns,required this.dataTableTitle}) : super(key: key);
 
   @override
   _MMDataTableState createState() => _MMDataTableState();
@@ -38,7 +35,37 @@ class _MMDataTableState extends State<MMDataTable> {
     return SizedBox.expand(
       child: SingleChildScrollView(
         child: PaginatedDataTable(
-          header: SelectableText(widget.dataTableTitle),
+          header: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SelectableText(widget.dataTableTitle),
+              Row(
+                children: [
+
+                  MainButton(
+                      text: "Refresh",
+                      icon: const Icon(Icons.refresh,
+                        color: Colors.white,
+                      ),
+                      color: Colors.cyan, onPressed: (){
+                      widget.onRefresh!();
+                      }),
+
+                  const SizedBox(width: 16,),
+
+                  MainButton(text: "Add",
+                      icon: const Icon(Icons.add_circle,
+                       color: Colors.white,
+                      ),
+                      color: Colors.cyan, onPressed: (){
+                        widget.onAdd!();
+
+                  }),
+
+                ],
+              )
+            ],
+          ),
           rowsPerPage: _rowsPerPage,
           onRowsPerPageChanged: (rowCount) {
             setState(() {

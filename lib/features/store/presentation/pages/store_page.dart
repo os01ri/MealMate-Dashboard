@@ -23,7 +23,6 @@ class _StorePageState extends State<StorePage> {
   @override
   void initState() {
     super.initState();
-
     _storeCubit = StoreCubit()..getIngredients(IndexIngredientsParams());
   }
 
@@ -93,6 +92,9 @@ class _StorePageState extends State<StorePage> {
       dataTableTitle: "Ingredients Table",
         data: data,
         dataTableColumns: dataTableColumns,
+      onRefresh: (){
+        _storeCubit.getIngredients(IndexIngredientsParams());
+      },
     );
   }
 }
