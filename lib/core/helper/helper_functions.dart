@@ -3,6 +3,7 @@ import 'dart:io';
 
 // import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,6 +30,9 @@ class HelperFunctions {
   }
 
   static Future<String> getFCMToken({bool getFCMToken = false}) async {
+    if(kIsWeb || (!kIsWeb && (Platform.isMacOS || Platform.isWindows))) {
+      return "";
+    }
     SharedPreferences sp = await SharedPreferences.getInstance();
     late String token;
 

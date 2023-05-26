@@ -8,6 +8,7 @@ import 'package:mealmate_dashboard/features/home/views/dashboard/components/head
 import 'package:mealmate_dashboard/features/home/views/dashboard/dashboard_screen.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/side_menu.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/store_page.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -52,11 +53,11 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget getSection () => switch (menuAppController.selectedSection) {
   Sections.dashboard => DashboardScreen(),
-  Sections.categories => DataTableWidget(),
-  Sections.types =>  DataTableWidget(),
-  Sections.users =>  DataTableWidget(),
-  Sections.settings =>  DataTableWidget(),
-  _ =>  DataTableWidget(),
+  Sections.categories => StorePage(),
+  Sections.types =>  MyDataTable(),
+  Sections.users =>  MyDataTable(),
+  Sections.settings =>  MyDataTable(),
+  _ =>  MyDataTable(),
   };
 
   @override
@@ -68,15 +69,18 @@ class _MainScreenState extends State<MainScreen> {
 
 
 
-class DataTableWidget extends StatefulWidget {
+
+class MyDataTable extends StatefulWidget {
+  MyDataTable({Key? key}) : super(key: key);
+
   @override
-  _DataTableWidgetState createState() => _DataTableWidgetState();
+  _MyDataTableState createState() => _MyDataTableState();
 }
 
-class _DataTableWidgetState extends State<DataTableWidget> {
-  int? _sortColumnIndex = null;
-  bool _sortAscending = false;
-
+class _MyDataTableState extends State<MyDataTable> {
+  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  int _sortColumnIndex = 0;
+  bool _sortAscending = true;
   List<Map<String, dynamic>> _data = List.generate(
     20,
         (index) => {
@@ -88,72 +92,85 @@ class _DataTableWidgetState extends State<DataTableWidget> {
   );
 
 
+  void _sort<T>(Comparable<T> Function(Map<String, dynamic> d) getField, int columnIndex, bool ascending) {
+    setState(() {
+      _sortColumnIndex = columnIndex;
+      _sortAscending = ascending;
+      _data.sort((a, b) {
+        final aValue = getField(a);
+        final bValue = getField(b);
+        return ascending ? Comparable.compare(aValue, bValue) : Comparable.compare(bValue, aValue);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
     return SizedBox.expand(
       child: SingleChildScrollView(
-        child: DataTable(
+        child: PaginatedDataTable(
+          header: Text('My DataTable'),
+          rowsPerPage: _rowsPerPage,
+          onRowsPerPageChanged: (rowCount) {
+            setState(() {
+              _rowsPerPage = rowCount!;
+            });
+          },
           sortColumnIndex: _sortColumnIndex,
           sortAscending: _sortAscending,
-
           columns: [
             DataColumn(
               label: Text("ID",textAlign: TextAlign.start,),
-              onSort: (index, ascending) {
-                setState(() {
-                  _sortColumnIndex = index;
-                  _sortAscending = ascending;
-                  _data.sort((a, b) => a['id'].compareTo(b['id']) * (_sortAscending ? 1 : -1));
-                });
-              },
+              onSort: (columnIndex, ascending) => _sort<num>((d) => d['id'], columnIndex, ascending),
             ),
             DataColumn(
               label: Text("Name",textAlign: TextAlign.start),
-              onSort: (index, ascending) {
-                setState(() {
-                  _sortColumnIndex = index;
-                  _sortAscending = ascending;
-                  _data.sort((a, b) => a['name'].compareTo(b['name']) * (_sortAscending ? 1 : -1));
-                });
-              },
+              onSort: (columnIndex, ascending) => _sort<String>((d) => d['name'], columnIndex, ascending),
+
             ),
             DataColumn(
               label: Text("Date"),
-              onSort: (index, ascending) {
-                setState(() {
-                  _sortColumnIndex = index;
-                  _sortAscending = ascending;
-                  _data.sort((a, b) => a['date'].compareTo(b['date']) * (_sortAscending ? 1 : -1));
-                });
-              },
+              onSort: (columnIndex, ascending) => _sort<DateTime>((d) => d['date'], columnIndex, ascending),
+
             ),
             DataColumn(
               label: Text("Note"),
-              onSort: (index, ascending) {
-                setState(() {
-                  _sortColumnIndex = index;
-                  _sortAscending = ascending;
-                  _data.sort((a, b) => a['note'].compareTo(b['note']) * (_sortAscending ? 1 : -1));
-                });
-              },
+              onSort: (columnIndex, ascending) => _sort<String>((d) => d['note'], columnIndex, ascending),
+
             ),
           ],
-          rows: _data
-              .map(
-                (data) => DataRow(
-              cells: [
-                DataCell(Text(data['id'].toString())),
-                DataCell(Text(data['name'])),
-                DataCell(Text(data['date'].toString())),
-                DataCell(Text(data['note'])),
-              ],
-            ),
-          )
-              .toList(),
+          source: _DataSource(_data),
         ),
       ),
     );
   }
+}
+
+class _DataSource extends DataTableSource {
+  final List<Map<String, dynamic>> _data;
+
+  _DataSource(this._data);
+
+  @override
+  DataRow getRow(int index) {
+    final record = _data[index];
+    return DataRow.byIndex(
+      index: index,
+      cells: [
+        DataCell(Text(record['id'].toString())),
+        DataCell(Text(record['name'])),
+        DataCell(Text(record['date'].toString())),
+        DataCell(Text(record['note'])),
+      ],
+    );
+  }
+
+  @override
+  int get rowCount => _data.length;
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get selectedRowCount => 0;
 }

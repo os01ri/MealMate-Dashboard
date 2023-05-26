@@ -4,29 +4,45 @@ class ApiVariables {
   /////////////
   ///General///
   /////////////
-  final _scheme = 'https';
-  final _host = '192.168.243.1';
+  static const _scheme = 'http';
+  static const _host = 'food.programmer23.store';
 
-  Uri _mainUri({
+  static Uri _mainUri({
     required String path,
     Map<String, dynamic>? queryParameters,
   }) {
     final uri = Uri(
       scheme: _scheme,
       host: _host,
-      path: 'api/$path',
+      path: '/$path',
       queryParameters: queryParameters,
     );
     log(uri.toString());
     return uri;
   }
 
-  Uri uploadMedia() => _mainUri(path: 'mediaUpload');
+  ///Auth
+  static Uri _auth({required String path}) {
+    return _mainUri(path: 'admin/$path');
+  }
+
+  static Uri register() {
+    return _auth(path: 'register');
+  }
+  static Uri login() {
+    return _auth(path: 'login');
+  }
+
+  static Uri uploadMedia() => _mainUri(path: 'mediaUpload');
   // Uri uploadVideo() => _mainUri(path: "videoUpload");
   // Uri uploadGif() => _mainUri(path: "GIFUpload");
 
-  Uri _mobileUri({required String path, Map<String, dynamic>? queryParameters}) => _mainUri(
-        path: 'mobile/$path',
-        queryParameters: queryParameters,
-      );
+  static Uri _mobileUri({required String path, Map<String, dynamic>? queryParameters}) => _mainUri(
+    path: path,
+    queryParameters: queryParameters,
+  );
+
+
+  static Uri indexIngredients({Map<String, dynamic>? queryParameters}) =>
+      _mobileUri(path: 'ingredient', queryParameters: queryParameters);
 }
