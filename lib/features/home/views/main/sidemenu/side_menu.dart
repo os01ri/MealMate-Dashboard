@@ -18,7 +18,6 @@ class SideMenu extends StatelessWidget {
             child: Image.asset("assets/images/logo.png"),
           ),
           DrawerListTile(
-            title: "Dashboard",
             sectionName: Sections.dashboard,
             svgSrc: "assets/icons/menu_dashboard.svg",
             press: () {
@@ -26,25 +25,21 @@ class SideMenu extends StatelessWidget {
             },
           ),
           DrawerListTile(
-            title: "Categories",
-            sectionName: Sections.categories,
+            sectionName: Sections.ingredients,
             svgSrc: "assets/icons/menu_tran.svg",
             press: () {},
           ),
           DrawerListTile(
-            title: "Types",
             sectionName: Sections.types,
             svgSrc: "assets/icons/menu_task.svg",
             press: () {},
           ),
           DrawerListTile(
-            title: "Users",
             sectionName: Sections.users,
             svgSrc: "assets/icons/menu_profile.svg",
             press: () {},
           ),
           DrawerListTile(
-            title: "Settings",
             sectionName: Sections.settings,
             svgSrc: "assets/icons/menu_setting.svg",
             press: () {},
@@ -53,18 +48,18 @@ class SideMenu extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,
-    required this.title,
     required this.svgSrc,
     required this.press,
     required this.sectionName,
   }) : super(key: key);
 
-  final String title, svgSrc;
+  final String  svgSrc;
   final Sections sectionName;
   final VoidCallback press;
 
@@ -85,9 +80,11 @@ class DrawerListTile extends StatelessWidget {
         height: 16,
       ),
       title: Text(
-        title,
+        upperFirstLetter(sectionName.name),
         style: TextStyle(color: Colors.white54),
       ),
     );
   }
+  String upperFirstLetter(String value) => "${value[0].toUpperCase()}${value.substring(1)}";
+
 }

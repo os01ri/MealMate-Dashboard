@@ -1,6 +1,6 @@
 enum Sections {
   dashboard,
-  categories,
+  ingredients,
   types,
   users,
   settings

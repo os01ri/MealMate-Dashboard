@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget getSection () => switch (menuAppController.selectedSection) {
   Sections.dashboard => DashboardScreen(),
-  Sections.categories => StorePage(),
+  Sections.ingredients => StorePage(),
   Sections.types =>  MyDataTable(),
   Sections.users =>  MyDataTable(),
   Sections.settings =>  MyDataTable(),
