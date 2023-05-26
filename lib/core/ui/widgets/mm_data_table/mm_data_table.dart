@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_data_source.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 
 
 
@@ -48,7 +51,7 @@ class _MMDataTableState extends State<MMDataTable> {
             for(var item in widget.dataTableColumns)
             _dataColumnBuilder(item)
           ],
-          source: _DataSource(_data),
+          source: DataSource(_data),
         ),
       ),
     );
@@ -94,45 +97,3 @@ class _MMDataTableState extends State<MMDataTable> {
   }
 
 }
-
-class _DataSource extends DataTableSource {
-  final List<Map<String, dynamic>> _data;
-
-  _DataSource(this._data);
-
-  @override
-  DataRow getRow(int index) {
-    final record = _data[index];
-    return DataRow.byIndex(
-      index: index,
-      cells: [
-        for(var item in _data[index].keys)
-          DataCell(SelectableText(record[item].toString(),textDirection: TextDirection.rtl,)),
-      ],
-    );
-  }
-
-  @override
-  int get rowCount => _data.length;
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get selectedRowCount => 0;
-}
-
-class MMDataTableColumn {
-  final String dataKey;
-  final MMDataTableColumnType dataType;
-  final String columnTitle;
-  final bool isSortEnabled;
-
-  MMDataTableColumn({required this.dataKey, required this.dataType, required this.columnTitle,required this.isSortEnabled});
-
-}
-
-enum MMDataTableColumnType {
-  num, datetime, string, bool
-}
-
