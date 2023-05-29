@@ -42,7 +42,16 @@ class ApiVariables {
     queryParameters: queryParameters,
   );
 
+  static Uri _dashboardUri({required String path, Map<String, dynamic>? queryParameters}) => _mainUri(
+    path: "dashboard/$path",
+    queryParameters: queryParameters,
+  );
+
 
   static Uri indexIngredients({Map<String, dynamic>? queryParameters}) =>
-      _mobileUri(path: 'ingredient', queryParameters: queryParameters);
+      _dashboardUri(path: 'ingredient', queryParameters: queryParameters);
+
+
+  static Uri indexNutritional({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'nutritional', queryParameters: queryParameters);
 }

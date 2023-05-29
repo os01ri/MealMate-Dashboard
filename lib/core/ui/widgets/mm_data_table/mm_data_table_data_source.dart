@@ -13,9 +13,42 @@ class DataSource extends DataTableSource {
       index: index,
       cells: [
         for(var item in _data[index].keys)
-          DataCell(SelectableText(record[item].toString(),textDirection: TextDirection.rtl,)),
+          DataCell(
+              getCellWidget(item.toString(),record[item].toString())
+              ),
       ],
     );
+  }
+
+  Widget getCellWidget(String key,String value){
+    if(key.contains("image"))
+      {
+        return Image.network(value,
+          height: 36,
+        );
+      }
+    else if (key.contains("editAndDelete"))
+      {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(icon:Icon(Icons.edit,color: Colors.green,),onPressed: (){
+
+            }),
+
+            SizedBox(width: 12,),
+            IconButton(icon:Icon(Icons.delete,color: Colors.red,),onPressed: (){
+              
+            }),
+
+          ],
+        );
+      }
+    else
+      {
+        return SelectableText(value,textDirection: TextDirection.rtl,);
+      }
+
   }
 
   @override

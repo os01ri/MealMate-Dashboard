@@ -8,6 +8,7 @@ import 'package:mealmate_dashboard/features/home/views/dashboard/components/head
 import 'package:mealmate_dashboard/features/home/views/dashboard/dashboard_screen.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/side_menu.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/nutritional_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/store_page.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget getSection () => switch (menuAppController.selectedSection) {
   Sections.dashboard => DashboardScreen(),
   Sections.ingredients => StorePage(),
-  Sections.types =>  MyDataTable(),
+  Sections.nutritional =>  NutritionalPage(),
   Sections.users =>  MyDataTable(),
   Sections.settings =>  MyDataTable(),
   _ =>  MyDataTable(),

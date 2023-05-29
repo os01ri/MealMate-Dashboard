@@ -84,61 +84,125 @@ class IngredientModelResponse {
         data: data ?? this.data,
       );
 
-  factory IngredientModelResponse.fromRawJson(String str) => IngredientModelResponse.fromJson(
-        json.decode('{"data":$str}'),
+  factory IngredientModelResponse.fromRawJson(String str) =>
+      IngredientModelResponse.fromJson(
+        json.decode(
+            '{"data":${json.encode((json.decode(str) as Map)['data'])}}'),
       );
 
   String toRawJson() => json.encode(toJson());
 
-  factory IngredientModelResponse.fromJson(Map<String, dynamic> json) => IngredientModelResponse(
+  factory IngredientModelResponse.fromJson(Map<String, dynamic> json) =>
+      IngredientModelResponse(
         data: json["data"] == null
             ? []
-            : List<IngredientModel>.from(json["data"]!.map((x) => IngredientModel.fromJson(x))),
+            : List<IngredientModel>.from(
+                json["data"]!.map((x) => IngredientModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class IngredientModel {
   final String? id;
   final String? name;
+  final dynamic price;
+  final dynamic priceById;
+  final String? imageUrl;
   final List<Nutritional>? nutritionals;
-
-  IngredientModel({
-    this.id,
-    this.name,
-    this.nutritionals,
-  });
+  IngredientModel(
+      {this.id,
+      this.name,
+      this.nutritionals,
+      this.price,
+      this.imageUrl,
+      this.priceById});
 
   IngredientModel copyWith({
     String? id,
     String? name,
     List<Nutritional>? nutritionals,
+    dynamic price,
+    dynamic priceById,
+    String? url,
   }) =>
       IngredientModel(
         id: id ?? this.id,
         name: name ?? this.name,
         nutritionals: nutritionals ?? this.nutritionals,
+        price: price ?? this.price,
+        priceById: priceById ?? this.priceById,
+        imageUrl: url ?? this.imageUrl,
       );
 
-  factory IngredientModel.fromRawJson(String str) => IngredientModel.fromJson(json.decode(str));
+  factory IngredientModel.fromRawJson(String str) =>
+      IngredientModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory IngredientModel.fromJson(Map<String, dynamic> json) => IngredientModel(
+  factory IngredientModel.fromJson(Map<String, dynamic> json) =>
+      IngredientModel(
         id: json["id"],
         name: json["name"],
+        price: json["price"],
+        priceById: json["price_by"],
+        imageUrl: json["url"],
         nutritionals: json["nutritionals"] == null
             ? []
-            : List<Nutritional>.from(json["nutritionals"]!.map((x) => Nutritional.fromJson(x))),
+            : List<Nutritional>.from(
+                json["nutritionals"]!.map((x) => Nutritional.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "nutritionals": nutritionals == null ? [] : List<dynamic>.from(nutritionals!.map((x) => x.toJson())),
+        "price": price,
+        "price_by": priceById,
+        "url": imageUrl,
+        "nutritionals": nutritionals == null
+            ? []
+            : List<dynamic>.from(nutritionals!.map((x) => x.toJson())),
+      };
+}
+
+class NutritionalModelResponse {
+  final List<Nutritional>? data;
+
+  NutritionalModelResponse({
+    this.data,
+  });
+
+  NutritionalModelResponse copyWith({
+    List<Nutritional>? data,
+  }) =>
+      NutritionalModelResponse(
+        data: data ?? this.data,
+      );
+
+  factory NutritionalModelResponse.fromRawJson(String str) =>
+      NutritionalModelResponse.fromJson(
+        json.decode(
+            '{"data":${json.encode((json.decode(str) as Map)['data'])}}'),
+      );
+
+  String toRawJson() => json.encode(toJson());
+
+  factory NutritionalModelResponse.fromJson(Map<String, dynamic> json) =>
+      NutritionalModelResponse(
+        data: json["data"] == null
+            ? []
+            : List<Nutritional>.from(
+                json["data"]!.map((x) => Nutritional.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -161,10 +225,12 @@ class Nutritional {
       Nutritional(
         id: id ?? this.id,
         name: name ?? this.name,
-        ingredientNutritionals: ingredientNutritionals ?? this.ingredientNutritionals,
+        ingredientNutritionals:
+            ingredientNutritionals ?? this.ingredientNutritionals,
       );
 
-  factory Nutritional.fromRawJson(String str) => Nutritional.fromJson(json.decode(str));
+  factory Nutritional.fromRawJson(String str) =>
+      Nutritional.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
@@ -197,11 +263,13 @@ class IngredientNutritionals {
         value: value ?? this.value,
       );
 
-  factory IngredientNutritionals.fromRawJson(String str) => IngredientNutritionals.fromJson(json.decode(str));
+  factory IngredientNutritionals.fromRawJson(String str) =>
+      IngredientNutritionals.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory IngredientNutritionals.fromJson(Map<String, dynamic> json) => IngredientNutritionals(
+  factory IngredientNutritionals.fromJson(Map<String, dynamic> json) =>
+      IngredientNutritionals(
         value: json["value"],
       );
 

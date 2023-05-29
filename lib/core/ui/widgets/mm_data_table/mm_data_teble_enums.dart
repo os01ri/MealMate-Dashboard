@@ -1,5 +1,5 @@
 
 enum MMDataTableColumnType {
-  num, datetime, string, bool
+  num, datetime, string, bool,image , editAndDelete
 }
 

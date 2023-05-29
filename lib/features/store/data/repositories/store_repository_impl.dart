@@ -19,6 +19,18 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
   }
 
   @override
+  Future<Either<Failure, NutritionalModelResponse>> indexNutritional({Map<String, dynamic>? params}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.indexNutritional(params: params);
+        return Right(result);
+      },
+    );
+  }
+
+
+
+  @override
   Future<Either<Failure, IngredientModel>> showIngredient({required int id}) {
     // TODO: implement showIngredient
     throw UnimplementedError();

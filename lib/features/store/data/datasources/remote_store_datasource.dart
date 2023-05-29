@@ -11,4 +11,14 @@ class RemoteStoreDatasource {
     final result = await getApi.callRequest();
     return result;
   }
+
+  Future<NutritionalModelResponse> indexNutritional({Map<String, dynamic>? params}) async {
+    GetApi getApi = GetApi(
+      uri: ApiVariables.indexNutritional(),
+      fromJson: NutritionalModelResponse.fromRawJson,
+    );
+    final result = await getApi.callRequest();
+    return result;
+  }
+
 }

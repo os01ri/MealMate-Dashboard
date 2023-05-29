@@ -1,7 +1,7 @@
 enum Sections {
   dashboard,
   ingredients,
-  types,
+  nutritional,
   users,
   settings
 

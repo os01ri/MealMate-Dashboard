@@ -30,7 +30,7 @@ class SideMenu extends StatelessWidget {
             press: () {},
           ),
           DrawerListTile(
-            sectionName: Sections.types,
+            sectionName: Sections.nutritional,
             svgSrc: "assets/icons/menu_task.svg",
             press: () {},
           ),
