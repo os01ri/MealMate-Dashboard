@@ -7,11 +7,13 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_add_fields_widget.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_delete_fields_widget.dart';
 
 class NutritionalPage extends StatefulWidget {
   const NutritionalPage({super.key});
@@ -62,10 +64,9 @@ class _NutritionalPageState extends State<NutritionalPage> {
     for(var item in nutritional)
       {
         data.add({
-          // "id": item.id,
-          "name": item.name,
-          "editAndDelete":true
 
+          "name": item.name,
+          "editAndDelete": item.id
         });
       }
     dataTableColumns.addAll(
@@ -104,10 +105,22 @@ class _NutritionalPageState extends State<NutritionalPage> {
         showMMAddDialog(context: context,
           title: "Add Nutritional",
           addFieldsWidget: NutritionalAddFieldWidget(
-            onAdd: (){
+            onAddFinish: (){
               _storeCubit.getNutritional(IndexNutritionalParams());
             },
           )
+        );
+      },
+      onDelete: (id){
+
+        showMMDeleteDialog(context: context,
+            title: "Delete Nutritional",
+             deleteFieldsWidget: NutritionalDeleteFieldWidget(
+               id: id,
+               onDeleteFinish: (){
+                 _storeCubit.getNutritional(IndexNutritionalParams());
+               },
+             ),
         );
       },
     );

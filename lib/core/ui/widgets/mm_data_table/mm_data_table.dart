@@ -10,8 +10,10 @@ class MMDataTable extends StatefulWidget {
   final String dataTableTitle;
   final Function? onAdd;
   final Function? onRefresh;
+  final Function? onEdit;
+  final Function? onDelete;
 
-  MMDataTable({Key? key,required this.data,this.onAdd,this.onRefresh,required this.dataTableColumns,required this.dataTableTitle}) : super(key: key);
+  MMDataTable({Key? key,required this.data,this.onDelete,this.onEdit,this.onAdd,this.onRefresh,required this.dataTableColumns,required this.dataTableTitle}) : super(key: key);
 
   @override
   _MMDataTableState createState() => _MMDataTableState();
@@ -78,7 +80,15 @@ class _MMDataTableState extends State<MMDataTable> {
             for(var item in widget.dataTableColumns)
             _dataColumnBuilder(item)
           ],
-          source: DataSource(_data),
+          source: DataSource(
+              data: _data,
+            onDelete: (id){
+            widget.onDelete!(id);
+            },
+            onEdit: (id){
+              widget.onEdit!(id);
+            }
+          ),
         ),
       ),
     );

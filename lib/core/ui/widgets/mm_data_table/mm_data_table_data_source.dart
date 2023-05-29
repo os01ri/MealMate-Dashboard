@@ -2,25 +2,28 @@
 import 'package:flutter/material.dart';
 
 class DataSource extends DataTableSource {
-  final List<Map<String, dynamic>> _data;
+  final List<Map<String, dynamic>> data;
+  final Function? onEdit;
+  final Function? onDelete;
 
-  DataSource(this._data);
+  DataSource({required this.data, this.onEdit, this.onDelete});
+
 
   @override
   DataRow getRow(int index) {
-    final record = _data[index];
+    final record = data[index];
     return DataRow.byIndex(
       index: index,
       cells: [
-        for(var item in _data[index].keys)
+        for(var item in data[index].keys)
           DataCell(
-              getCellWidget(item.toString(),record[item].toString())
+              getCellWidget(item.toString(),record[item].toString(),id: record['editAndDelete'])
               ),
       ],
     );
   }
 
-  Widget getCellWidget(String key,String value){
+  Widget getCellWidget(String key,String value,{dynamic id}){
     if(key.contains("image"))
       {
         return Image.network(value,
@@ -33,12 +36,12 @@ class DataSource extends DataTableSource {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(icon:Icon(Icons.edit,color: Colors.green,),onPressed: (){
-
+              onEdit!(id);
             }),
 
             SizedBox(width: 12,),
             IconButton(icon:Icon(Icons.delete,color: Colors.red,),onPressed: (){
-              
+              onDelete!(id);
             }),
 
           ],
@@ -52,7 +55,7 @@ class DataSource extends DataTableSource {
   }
 
   @override
-  int get rowCount => _data.length;
+  int get rowCount => data.length;
 
   @override
   bool get isRowCountApproximate => false;

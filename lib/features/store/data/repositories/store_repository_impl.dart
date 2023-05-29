@@ -28,6 +28,28 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
     );
   }
 
+  @override
+  Future<Either<Failure, bool>> addNutritional({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.addNutritional(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+
+
+  @override
+  Future<Either<Failure, bool>> deleteNutritional({required Map<String, dynamic> params}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.deleteNutritional(params: params);
+        return Right(result);
+      },
+    );
+  }
+
 
 
   @override

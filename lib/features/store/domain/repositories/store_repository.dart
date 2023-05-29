@@ -7,5 +7,9 @@ abstract class StoreRepository {
 
   Future<Either<Failure, NutritionalModelResponse>> indexNutritional({Map<String, dynamic> params});
 
+  Future<Either<Failure, bool>> addNutritional({required Map<String, dynamic> body});
+
+  Future<Either<Failure, bool>> deleteNutritional({required Map<String, dynamic> params});
+
   Future<Either<Failure, IngredientModel>> showIngredient({required int id});
 }
