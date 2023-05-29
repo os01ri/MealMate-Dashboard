@@ -35,48 +35,50 @@ class _MMAddDialogState extends State<MMAddDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-        width: MediaQuery.of(context).size.width*0.6,
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(onPressed: (){
-                      Navigator.of(context).pop();
-                    },
-                        icon: Icon(Icons.close,color: Colors.red,))
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(widget.title,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.styleWeight700(
-                        fontSize: 24,
-                        color: Colors.white
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
+      child: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width*0.6,
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                          icon: Icon(Icons.close,color: Colors.red,))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(widget.title,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.styleWeight700(
+                          fontSize: 24,
+                          color: Colors.white
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
 
-            SizedBox(
-              height: 34,
-            ),
-
-
-              widget.addFieldsWidget
+              SizedBox(
+                height: 34,
+              ),
 
 
-          ],
+                widget.addFieldsWidget
+
+
+            ],
+          ),
         ),
       ),
     );

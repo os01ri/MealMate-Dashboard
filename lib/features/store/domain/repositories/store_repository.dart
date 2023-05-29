@@ -5,6 +5,8 @@ import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.d
 abstract class StoreRepository {
   Future<Either<Failure, IngredientModelResponse>> indexIngredients({Map<String, dynamic> params});
 
+  Future<Either<Failure, bool>> addIngredients({required Map<String, dynamic> body});
+
   Future<Either<Failure, NutritionalModelResponse>> indexNutritional({Map<String, dynamic> params});
 
   Future<Either<Failure, bool>> addNutritional({required Map<String, dynamic> body});

@@ -14,6 +14,17 @@ class RemoteStoreDatasource {
     return result;
   }
 
+  Future<bool> addIngredient({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.addIngredients(),
+      body: body,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+
   Future<NutritionalModelResponse> indexNutritional({Map<String, dynamic>? params}) async {
     GetApi getApi = GetApi(
       uri: ApiVariables.indexNutritional(),

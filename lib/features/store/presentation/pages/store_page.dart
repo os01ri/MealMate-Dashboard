@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/app_config.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredients_add_fields_widget.dart';
 
 class StorePage extends StatefulWidget {
   const StorePage({super.key});
@@ -124,6 +126,16 @@ class _StorePageState extends State<StorePage> {
         dataTableColumns: dataTableColumns,
       onRefresh: (){
         _storeCubit.getIngredients(IndexIngredientsParams());
+      },
+      onAdd: (){
+        showMMAddDialog(context: context,
+            title: "Add Ingredient",
+            addFieldsWidget: IngredientsAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getIngredients(IndexIngredientsParams());
+              },
+            )
+        );
       },
     );
   }

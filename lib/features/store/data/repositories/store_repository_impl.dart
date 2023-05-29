@@ -19,6 +19,17 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
   }
 
   @override
+  Future<Either<Failure, bool>> addIngredients({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.addIngredient(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+
+  @override
   Future<Either<Failure, NutritionalModelResponse>> indexNutritional({Map<String, dynamic>? params}) {
     return wrapHandling(
       tryCall: () async {
