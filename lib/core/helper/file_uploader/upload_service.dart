@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
+import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picker.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/loading_widget.dart';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
@@ -10,75 +11,86 @@ import 'package:http/http.dart' as http;
 class UploadService{
 
 
-  static Future<dynamic> uploadFile({required String url,required File file,Map<String,String>? extraBody,String fileName="image",
+  static Future<dynamic> uploadFile({required String url,required FlutterWebFile file,Map<String,String>? extraBody,String fileName="image",
     required Function success,required Function failed,required BuildContext context
   }) async {
 
+    Map<String, dynamic> fields = {
+    };
 
-      var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
-      var length = await file.length();
+    var request = http.MultipartRequest(
+      "POST", Uri.parse(url),
+    );
 
-      var uri = Uri.parse("$url");
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        'image', file.fileBytes,
+//  contentType: MediaType('application', 'octet-stream'),
+        filename: file.file.name,
+      ),
+    );
 
-      var request = new http.MultipartRequest("POST", uri);
-      if(extraBody!=null)
-      request.fields.addAll(extraBody);
-      request.headers.addAll({"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzMTkyMmQ2LTI4M2ItNGMxZS1iMmI0LTdkODAwNWM4ZTkwYSIsImlhdCI6MTY4NTM5MTczOCwiZXhwIjoxNjg1Mzk1MzM4fQ.zYIvkOoeqfxJQKMDl2ly8gILenjvrKdsbwzcfwL1Fqo"});
+    fields.forEach((k, v) => request.fields[k] = v);
 
-      var multipartFile = new http.MultipartFile(fileName, stream, length,
-          filename: path.basename(file.path));
+    request.headers.addAll(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzMTkyMmQ2LTI4M2ItNGMxZS1iMmI0LTdkODAwNWM4ZTkwYSIsImlhdCI6MTY4NjM3NjExMCwiZXhwIjoxNjg2Mzc5NzEwfQ.KP37vY_YLa-XtTedXgMUbyyG_-DRZxUPNN65SmmuPT0",
+      },
+    );
 
-
-      request.files.add(multipartFile);
-      showDialog<dynamic>(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return Dialog(
-              child: Container(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(right: 20, left: 20, top: 10),
-                        child: Center(
-                            child: Text(
-                              'Uploading File...',
-                            )),
-                      ),
+    showDialog<dynamic>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.6,
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(24.0),
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(right: 20, left: 20, top: 10),
+                      child: Center(
+                          child: Text(
+                            'Uploading File...',
+                          )),
                     ),
-                    Center(
-                      child: LoadingWidget().center(),
-                    ),
-                    SizedBox(height: 6,)
-                  ],
-                ),
+                  ),
+                  Center(
+                    child: LoadingWidget().center(),
+                  ),
+                  SizedBox(height: 6,)
+                ],
               ),
-            );
-          });
+            ),
+          );
+        });
+
       try {
-        var response = await request.send();
+        var streamedResponse = await request.send();
 
       Navigator.of(context).pop();
-      print(response.statusCode);
-      response.stream.transform(utf8.decoder).listen((value) {
-        print(value);
-        if (response.statusCode == 200)
-          {
-                success(value);
-          }
+      print(streamedResponse.statusCode);
+        if (streamedResponse.statusCode == 200)
+        {
+          var _result = await http.Response.fromStream(streamedResponse);
+          var value = (jsonDecode(_result.body));
+          print(value);
+          success(value);
+        }
         else
-          {
-            failed(-1);
-          }
-      });
+        {
+          failed(-1);
+        }
 
       }
       catch(e){
-
+        print(e);
         Navigator.of(context).pop();
 
           failed(-1);

@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
+import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picker.dart';
+import 'package:mealmate_dashboard/core/helper/file_uploader/upload_service.dart';
 import 'package:mealmate_dashboard/core/helper/helper_functions.dart';
 import 'package:mealmate_dashboard/core/ui/theme/colors.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
@@ -28,7 +30,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
   late TextEditingController nameController;
   final _formKey = GlobalKey<FormState>();
   late final StoreCubit _storeCubit;
-
+  String? imageForIngredient;
 
 
   @override
@@ -61,23 +63,45 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
             },
           ),
 
+          SizedBox(height: 30,),
 
-          // MainButton(
-          //     text: "Pick File",
-          //     icon: const Icon(Icons.cancel,
-          //       color: Colors.white,
-          //     ),
-          //     color: Colors.grey, onPressed: () async {
-          //   FilePickerResult? result = await FilePicker.platform.pickFiles();
-          //
-          //   if (result != null) {
-          //     final fileBytes = result.files.first.bytes;
-          //     final fileName = result.files.first.name;
-          //
-          //   } else {
-          //     // User canceled the picker
-          //   }
-          // }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              MainButton(
+                  text: imageForIngredient!=null?"Change Image for ingredient":"Pick Image for ingredient",
+                  icon: const Icon(Icons.cancel,
+                    color: Colors.white,
+                  ),
+                  color: Colors.grey, onPressed: () async {
+
+                PlatformFilePicker().startWebFilePicker((files) {
+                  if(files.isNotEmpty)
+                    {
+                      UploadService.uploadFile(
+                          context: context,
+                          url: "http://food.programmer23.store/addimage",
+                          file: files.first,
+                          fileName: "image",
+                          success: (data){
+                            print(data);
+                            setState(() {
+                              imageForIngredient = data["data"][0]["url"].toString();
+                            });
+                          },
+                          failed: (f){
+                            print(f);
+                          }
+                      );
+                    }
+                });
+
+              }).center(),
+
+              if(imageForIngredient!=null)
+              Image.network(imageForIngredient!,height: 50,),
+            ],
+          ),
 
 
           SizedBox(height: 30,),
@@ -114,4 +138,4 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
       ),
     );
   }
-}
+ }

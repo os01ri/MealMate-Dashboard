@@ -53,7 +53,7 @@ class HelperFunctions {
         mode: LaunchMode.externalNonBrowserApplication,
       );
 
-  static Future<File?> pickImage() async => await _ImageHelper.getImageAndCrop();
+  static Future<File?> pickImage() async => await _ImageHelper.getImage();
 
   // static Future<String?> getDeviceId() async {
   //   final deviceInfo = DeviceInfoPlugin();

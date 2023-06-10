@@ -24,7 +24,7 @@ class DeleteApi<T> with HandlingExceptionRequest {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'fcm_token': fcmToken,
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzMTkyMmQ2LTI4M2ItNGMxZS1iMmI0LTdkODAwNWM4ZTkwYSIsImlhdCI6MTY4NTM5MjkyMCwiZXhwIjoxNjg1Mzk2NTIwfQ.AZ5wziXigfFqrGQs3mo9a3c9gyZurJuvHQjbxyvyP8g",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzMTkyMmQ2LTI4M2ItNGMxZS1iMmI0LTdkODAwNWM4ZTkwYSIsImlhdCI6MTY4NTQ0NDQ3NiwiZXhwIjoxNjg1NDQ4MDc2fQ.U4E6fdpkxVZiaJ2VVxQ2tEalBoKlTZg5E2F8VwAOqx0",
         if (isAuth) 'Authorization': 'Bearer $token',
       };
       var request = http.Request('DELETE', uri);

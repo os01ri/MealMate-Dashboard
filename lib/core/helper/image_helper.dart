@@ -20,6 +20,20 @@ class _ImageHelper {
     return image;
   }
 
+  static Future<File?> getImage() async {
+ //   await _requestPermission();
+
+    File? image;
+
+    final XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (xFile != null) {
+       image = File(xFile.path);
+    }
+
+    return image;
+  }
+
   static Future<void> _requestPermission() async {
     const status = Permission.manageExternalStorage;
     if ((await status.isDenied)) {
