@@ -8,8 +8,10 @@ import 'package:mealmate_dashboard/features/store/data/models/categories_ingredi
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/repositories/store_repository_impl.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
@@ -28,6 +30,8 @@ class StoreCubit extends Cubit<StoreState> {
   final _deleteNutritional = DeleteNutritionalUseCase(storeRepository: StoreRepositoryImpl());
   final _indexUnitTypes = IndexUnitTypesUseCase(storeRepository: StoreRepositoryImpl());
   final _indexCategoriesTypes = IndexCategoriesIngredientUseCase(storeRepository: StoreRepositoryImpl());
+  final _addCategoriesTypes = AddCategoriesIngredientUseCase(storeRepository: StoreRepositoryImpl());
+  final _deleteCategoriesTypes = DeleteCategoriesIngredientUseCase(storeRepository: StoreRepositoryImpl());
 
   StoreCubit() : super(const StoreState());
 
@@ -165,6 +169,40 @@ class StoreCubit extends Cubit<StoreState> {
           (r) {
         log('succ');
         emit(state.copyWith(status: CubitStatus.success, categories: r.data));
+      },
+    );
+  }
+
+  addIngredientsCategories(AddCategoriesIngredientParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _addCategoriesTypes(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
+  deleteIngredientsCategories(DeleteCategoriesIngredientParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _deleteCategoriesTypes(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
       },
     );
   }

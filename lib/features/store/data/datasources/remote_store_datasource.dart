@@ -85,5 +85,26 @@ class RemoteStoreDatasource {
     return result;
   }
 
+  Future<bool> addCategoriesIngredient({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.addCategoriesIngredient(),
+      body: body,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+  Future<bool> deleteCategoriesIngredient({required Map<String, dynamic> params}) async {
+    DeleteApi deleteApi = DeleteApi(
+      uri: ApiVariables.deleteCategoriesIngredient(
+          id: params['id']
+      ),
+      fromJson: (v) => true,
+    );
+    final result = await deleteApi.callRequest();
+    return result;
+  }
+
 
 }

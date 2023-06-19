@@ -76,5 +76,12 @@ class ApiVariables {
   static Uri indexCategoriesIngredient({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'categoryingredient/index', queryParameters: queryParameters);
 
+  static Uri addCategoriesIngredient({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'categoryingredient/store', queryParameters: queryParameters);
+
+
+  static Uri deleteCategoriesIngredient({required int id,}) =>
+      _dashboardUri(path: 'categoryingredient/$id/destroy');
+
 
 }

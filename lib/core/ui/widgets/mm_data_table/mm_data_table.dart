@@ -53,8 +53,10 @@ class _MMDataTableState extends State<MMDataTable> {
                       widget.onRefresh!();
                       }),
 
+                  if(widget.onAdd!=null)
                   const SizedBox(width: 16,),
 
+                  if(widget.onAdd!=null)
                   MainButton(text: "Add",
                       icon: const Icon(Icons.add_circle,
                        color: Colors.white,

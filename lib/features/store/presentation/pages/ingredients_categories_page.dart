@@ -16,6 +16,8 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredie
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/categories/categories_add_fields_widget.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/categories/categories_delete_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_add_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_delete_fields_widget.dart';
 
@@ -106,7 +108,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
     );
 
     return MMDataTable(
-      dataTableTitle: "Unit Types Table",
+      dataTableTitle: "Ingredient Categories Table",
         data: data,
         dataTableColumns: dataTableColumns,
       onRefresh: (){
@@ -114,8 +116,8 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
       },
       onAdd: (){
         showMMAddDialog(context: context,
-          title: "Add Ingredient Category",
-          addFieldsWidget: NutritionalAddFieldWidget(
+          title: "Add Ingredient Category Category",
+          addFieldsWidget: CategoriesAddFieldWidget(
             onAddFinish: (){
               _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
             },
@@ -126,7 +128,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
 
         showMMDeleteDialog(context: context,
             title: "Delete Ingredient Category",
-             deleteFieldsWidget: NutritionalDeleteFieldWidget(
+             deleteFieldsWidget: CategoriesDeleteFieldWidget(
                id: id,
                onDeleteFinish: (){
                  _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());

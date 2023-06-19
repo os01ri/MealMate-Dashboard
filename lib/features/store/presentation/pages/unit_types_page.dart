@@ -68,8 +68,7 @@ class _UnitTypesPageState extends State<UnitTypesPage> {
         data.add({
           "id": item.id,
           "name": item.name,
-          "code": item.code,
-          "editAndDelete": item.id
+          "code": item.code
         });
       }
     dataTableColumns.addAll(
@@ -93,12 +92,6 @@ class _UnitTypesPageState extends State<UnitTypesPage> {
             isSortEnabled: true
         ),
 
-        MMDataTableColumn(
-            dataKey: "editAndDelete",
-            dataType: MMDataTableColumnType.editAndDelete,
-            columnTitle: "Edit/Delete",
-            isSortEnabled: false
-        ),
 
       ]
     );
@@ -110,28 +103,7 @@ class _UnitTypesPageState extends State<UnitTypesPage> {
       onRefresh: (){
         _storeCubit.getUnitTypes(IndexUnitTypesParams());
       },
-      onAdd: (){
-        showMMAddDialog(context: context,
-          title: "Add Unit Type",
-          addFieldsWidget: NutritionalAddFieldWidget(
-            onAddFinish: (){
-              _storeCubit.getUnitTypes(IndexUnitTypesParams());
-            },
-          )
-        );
-      },
-      onDelete: (id){
 
-        showMMDeleteDialog(context: context,
-            title: "Delete Nutritional",
-             deleteFieldsWidget: NutritionalDeleteFieldWidget(
-               id: id,
-               onDeleteFinish: (){
-                 _storeCubit.getNutritional(IndexNutritionalParams());
-               },
-             ),
-        );
-      },
     );
   }
 }

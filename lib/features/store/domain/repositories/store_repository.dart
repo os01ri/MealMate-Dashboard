@@ -21,5 +21,9 @@ abstract class StoreRepository {
 
   Future<Either<Failure, CategoriesIngredientResponse>> indexCategoriesIngredient({required Map<String, dynamic> params});
 
+  Future<Either<Failure, bool>> addCategoriesIngredient({required Map<String, dynamic> body});
+
+  Future<Either<Failure, bool>> deleteCategoriesIngredient({required Map<String, dynamic> params});
+
   Future<Either<Failure, IngredientModel>> showIngredient({required int id});
 }
