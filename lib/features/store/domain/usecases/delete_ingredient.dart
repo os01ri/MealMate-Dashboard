@@ -4,22 +4,22 @@ import 'package:mealmate_dashboard/core/usecase/usecase.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/repositories/store_repository.dart';
 
-class DeleteNutritionalUseCase implements UseCase<bool, DeleteNutritionalParams> {
+class DeleteIngredientUseCase implements UseCase<bool, DeleteIngredientParams> {
   final StoreRepository storeRepository;
 
-  DeleteNutritionalUseCase({required this.storeRepository});
+  DeleteIngredientUseCase({required this.storeRepository});
 
   @override
-  Future<Either<Failure, bool>> call(DeleteNutritionalParams params) async {
-    return storeRepository.deleteNutritional(params: params.getParams());
+  Future<Either<Failure, bool>> call(DeleteIngredientParams params) async {
+    return storeRepository.deleteIngredient(params: params.getParams());
   }
 }
 
-class DeleteNutritionalParams implements UseCaseParams {
+class DeleteIngredientParams implements UseCaseParams {
   final int id;
 
 
-  DeleteNutritionalParams({
+  DeleteIngredientParams({
     required this.id,
 
   });
@@ -27,7 +27,7 @@ class DeleteNutritionalParams implements UseCaseParams {
   @override
   Map<String, dynamic> getParams() {
     return {
-      "id": id.toString(),
+      "id": id,
     };
   }
 
