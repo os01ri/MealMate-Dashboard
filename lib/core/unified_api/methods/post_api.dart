@@ -46,8 +46,11 @@ class PostApi<T> with HandlingExceptionRequest {
       request.headers.addAll(headers);
       http.StreamedResponse streamedResponse = await request.send().timeout(timeout);
       log(request.body, name: "request body");
+      print(request.body);
       http.Response response = await http.Response.fromStream(streamedResponse);
       log(response.body);
+      print(response.body);
+
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
         return fromJson(response.body);

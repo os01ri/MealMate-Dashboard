@@ -7,10 +7,13 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredient_delete_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredients_add_fields_widget.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_delete_fields_widget.dart';
 
 class StorePage extends StatefulWidget {
   const StorePage({super.key});
@@ -68,7 +71,7 @@ class _StorePageState extends State<StorePage> {
           "price" : item.price,
           "priceBy": item.priceById,
           "image" : item.imageUrl,
-          "editAndDelete":true
+          "editAndDelete": item.id
 
         });
       }
@@ -135,6 +138,17 @@ class _StorePageState extends State<StorePage> {
                 _storeCubit.getIngredients(IndexIngredientsParams());
               },
             )
+        );
+      },
+      onDelete: (id){
+        showMMDeleteDialog(context: context,
+          title: "Delete Ingredient",
+          deleteFieldsWidget: IngredientDeleteFieldWidget(
+            id: id,
+            onDeleteFinish: (){
+              _storeCubit.getIngredients(IndexIngredientsParams());
+            },
+          ),
         );
       },
     );

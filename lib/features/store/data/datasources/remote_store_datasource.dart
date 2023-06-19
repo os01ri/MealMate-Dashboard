@@ -2,7 +2,9 @@ import 'package:mealmate_dashboard/core/unified_api/api_variables.dart';
 import 'package:mealmate_dashboard/core/unified_api/methods/delete_api.dart';
 import 'package:mealmate_dashboard/core/unified_api/methods/get_api.dart';
 import 'package:mealmate_dashboard/core/unified_api/methods/post_api.dart';
+import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 
 class RemoteStoreDatasource {
   Future<IngredientModelResponse> indexIngredients({Map<String, dynamic>? params}) async {
@@ -24,6 +26,16 @@ class RemoteStoreDatasource {
     return result;
   }
 
+  Future<bool> deleteIngredient({required Map<String, dynamic> params}) async {
+    DeleteApi deleteApi = DeleteApi(
+      uri: ApiVariables.deleteIngredient(
+          id: params['id']
+      ),
+      fromJson: (v) => true,
+    );
+    final result = await deleteApi.callRequest();
+    return result;
+  }
 
   Future<NutritionalModelResponse> indexNutritional({Map<String, dynamic>? params}) async {
     GetApi getApi = GetApi(
@@ -47,12 +59,31 @@ class RemoteStoreDatasource {
   Future<bool> deleteNutritional({required Map<String, dynamic> params}) async {
     DeleteApi deleteApi = DeleteApi(
       uri: ApiVariables.deleteNutritional(
-        id: params['id']
+          id: params['id']
       ),
       fromJson: (v) => true,
     );
     final result = await deleteApi.callRequest();
     return result;
   }
+
+  Future<UnitTypesModelResponse> indexUnitTypes({Map<String, dynamic>? params}) async {
+    GetApi getApi = GetApi(
+      uri: ApiVariables.indexUnitTypes(),
+      fromJson: UnitTypesModelResponse.fromRawJson,
+    );
+    final result = await getApi.callRequest();
+    return result;
+  }
+
+  Future<CategoriesIngredientResponse> indexCategoriesIngredient({Map<String, dynamic>? params}) async {
+    GetApi getApi = GetApi(
+      uri: ApiVariables.indexCategoriesIngredient(),
+      fromJson: CategoriesIngredientResponse.fromRawJson,
+    );
+    final result = await getApi.callRequest();
+    return result;
+  }
+
 
 }

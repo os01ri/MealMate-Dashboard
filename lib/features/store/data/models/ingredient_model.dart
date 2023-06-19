@@ -250,10 +250,10 @@ class Nutritional {
 }
 
 class IngredientNutritionals {
-  final int? value;
-  final int? id;
-  final int? percent;
-  final int? unitId;
+   double? value;
+   int? id;
+   double? percent;
+   int? unitId;
 
   IngredientNutritionals({
     this.value,
@@ -263,9 +263,9 @@ class IngredientNutritionals {
   });
 
   IngredientNutritionals copyWith({
-    int? value,
+    double? value,
     int? id,
-    int? percent,
+    double? percent,
     int? unitId
   }) =>
       IngredientNutritionals(

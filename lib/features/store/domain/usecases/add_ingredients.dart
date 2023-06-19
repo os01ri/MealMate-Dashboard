@@ -19,9 +19,9 @@ class AddIngredientsParams implements UseCaseParams {
   final String name;
   final String imageUrl;
   final double price;
-  final int priceById;
+  final double priceBy;
   final int priceUnitId;
-  final String categoryId;
+  final int categoryId;
   final List<IngredientNutritionals> ingredientNutritionals;
 
   AddIngredientsParams(
@@ -29,7 +29,7 @@ class AddIngredientsParams implements UseCaseParams {
         required this.name,
         required this.imageUrl,
         required this.price,
-        required this.priceById,
+        required this.priceBy,
         required this.priceUnitId,
         required this.categoryId,
         required this.ingredientNutritionals
@@ -47,7 +47,7 @@ class AddIngredientsParams implements UseCaseParams {
     "name": name,
     "price": price,
     "unit_id": priceUnitId,
-    "price_by": priceById,
+    "price_by": priceBy,
     "category_id": categoryId,
     "url": imageUrl,
     "nutritional":[

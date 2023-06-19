@@ -2,28 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
-import 'package:mealmate_dashboard/core/ui/theme/colors.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
-import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
-import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
-import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
-import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/delete_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_nutritional.dart';
-import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
-class NutritionalDeleteFieldWidget extends StatefulWidget {
+class IngredientDeleteFieldWidget extends StatefulWidget {
   final Function onDeleteFinish;
-  final dynamic id;
-  const NutritionalDeleteFieldWidget({Key? key,required this.onDeleteFinish,required this.id}) : super(key: key);
+  final int id;
+  const IngredientDeleteFieldWidget({Key? key,required this.onDeleteFinish,required this.id}) : super(key: key);
 
   @override
-  State<NutritionalDeleteFieldWidget> createState() => _NutritionalDeleteFieldWidgetState();
+  State<IngredientDeleteFieldWidget> createState() => _IngredientDeleteFieldWidgetState();
 }
 
-class _NutritionalDeleteFieldWidgetState extends State<NutritionalDeleteFieldWidget> {
-  late TextEditingController nameController;
+class _IngredientDeleteFieldWidgetState extends State<IngredientDeleteFieldWidget> {
   final _formKey = GlobalKey<FormState>();
   late final StoreCubit _storeCubit;
 
@@ -32,7 +26,6 @@ class _NutritionalDeleteFieldWidgetState extends State<NutritionalDeleteFieldWid
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController();
     _storeCubit = StoreCubit();
 
   }
@@ -89,7 +82,7 @@ class _NutritionalDeleteFieldWidgetState extends State<NutritionalDeleteFieldWid
                 _ =>  mmDeleteDialogFooter(context: context,
                 onDelete: (){
 
-                _storeCubit.deleteNutritional(DeleteNutritionalParams(id: widget.id));
+                _storeCubit.deleteIngredient(DeleteIngredientParams(id: widget.id));
 
                 }),
               };

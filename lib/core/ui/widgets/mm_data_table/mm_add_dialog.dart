@@ -37,7 +37,7 @@ class _MMAddDialogState extends State<MMAddDialog> {
     return Dialog(
       child: SingleChildScrollView(
         child: Container(
-          width: MediaQuery.of(context).size.width*0.6,
+          width: MediaQuery.of(context).size.width*0.75,
           padding: EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
