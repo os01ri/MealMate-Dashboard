@@ -8,8 +8,10 @@ import 'package:mealmate_dashboard/features/home/views/dashboard/components/head
 import 'package:mealmate_dashboard/features/home/views/dashboard/dashboard_screen.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/side_menu.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/ingredients_categories_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/nutritional_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/store_page.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/unit_types_page.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -56,6 +58,8 @@ class _MainScreenState extends State<MainScreen> {
   Sections.dashboard => DashboardScreen(),
   Sections.ingredients => StorePage(),
   Sections.nutritional =>  NutritionalPage(),
+  Sections.units =>  UnitTypesPage(),
+  Sections.categories =>  IngredientsCategoriesPage(),
   Sections.users =>  MyDataTable(),
   Sections.settings =>  MyDataTable(),
   _ =>  MyDataTable(),

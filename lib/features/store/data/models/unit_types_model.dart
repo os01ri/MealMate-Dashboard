@@ -138,12 +138,12 @@ class UnitTypesModel {
       UnitTypesModel(
         id: json["id"],
         name: json["name"],
-        code: json["price"]
+        code: json["code"]
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "price": code,
+        "code": code,
       };
 }

@@ -135,6 +135,41 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+  getUnitTypes(IndexUnitTypesParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _indexUnitTypes(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success, unitTypes: r.data));
+      },
+    );
+  }
+
+  getIngredientsCategories(IndexCategoriesIngredientParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _indexCategoriesTypes(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success, categories: r.data));
+      },
+    );
+  }
+
+
   getNutritionalAndUnitsAndCategories(
       {required IndexUnitTypesParams paramsUnits,
       required IndexCategoriesIngredientParams paramsCategoriesIngredient,
