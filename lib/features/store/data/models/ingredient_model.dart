@@ -108,7 +108,7 @@ class IngredientModelResponse {
 }
 
 class IngredientModel {
-  final String? id;
+  final int? id;
   final String? name;
   final dynamic price;
   final dynamic priceById;
@@ -123,7 +123,7 @@ class IngredientModel {
       this.priceById});
 
   IngredientModel copyWith({
-    String? id,
+    int? id,
     String? name,
     List<Nutritional>? nutritionals,
     dynamic price,
@@ -207,7 +207,7 @@ class NutritionalModelResponse {
 }
 
 class Nutritional {
-  final String? id;
+  final int? id;
   final String? name;
   final IngredientNutritionals? ingredientNutritionals;
 
@@ -218,7 +218,7 @@ class Nutritional {
   });
 
   Nutritional copyWith({
-    String? id,
+    int? id,
     String? name,
     IngredientNutritionals? ingredientNutritionals,
   }) =>
@@ -251,16 +251,29 @@ class Nutritional {
 
 class IngredientNutritionals {
   final int? value;
+  final int? id;
+  final int? percent;
+  final int? unitId;
 
   IngredientNutritionals({
     this.value,
+    this.id,
+    this.percent,
+    this.unitId
   });
 
   IngredientNutritionals copyWith({
     int? value,
+    int? id,
+    int? percent,
+    int? unitId
   }) =>
       IngredientNutritionals(
         value: value ?? this.value,
+        id: id ?? this.id,
+        percent: percent ?? this.percent,
+        unitId: unitId ?? this.unitId,
+
       );
 
   factory IngredientNutritionals.fromRawJson(String str) =>
@@ -271,9 +284,15 @@ class IngredientNutritionals {
   factory IngredientNutritionals.fromJson(Map<String, dynamic> json) =>
       IngredientNutritionals(
         value: json["value"],
+        percent: json["precent"],
+        id: json["id"],
+        unitId: json["unit_id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "value": value,
+    "value": value,
+    "precent": percent,
+    "id": id,
+    "unit_id": unitId,
       };
 }

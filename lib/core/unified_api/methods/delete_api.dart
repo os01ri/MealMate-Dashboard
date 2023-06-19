@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../helper/helper_functions.dart';
@@ -23,8 +24,9 @@ class DeleteApi<T> with HandlingExceptionRequest {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        if(!kIsWeb)
         'fcm_token': fcmToken,
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzMTkyMmQ2LTI4M2ItNGMxZS1iMmI0LTdkODAwNWM4ZTkwYSIsImlhdCI6MTY4NTQ0NDQ3NiwiZXhwIjoxNjg1NDQ4MDc2fQ.U4E6fdpkxVZiaJ2VVxQ2tEalBoKlTZg5E2F8VwAOqx0",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg3MTA3OTg3LCJleHAiOjE2ODc0Njc5ODd9.uUo5X_DpAxfJM9JViBSMU08NBUTFTcNmm66YtJwvKgI",
         if (isAuth) 'Authorization': 'Bearer $token',
       };
       var request = http.Request('DELETE', uri);

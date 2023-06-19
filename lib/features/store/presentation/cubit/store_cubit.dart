@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
+import 'package:mealmate_dashboard/core/unified_api/parallel/parallel.dart';
+import 'package:mealmate_dashboard/core/unified_api/parallel/parallel_service.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/repositories/store_repository_impl.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_ingredients.dart';
@@ -104,6 +106,39 @@ class StoreCubit extends Cubit<StoreState> {
         emit(state.copyWith(status: CubitStatus.success));
       },
     );
+  }
+
+  get(IndexNutritionalParams params){
+    emit(state.copyWith(status: CubitStatus.loading));
+    
+     
+    ParallelService parallelService = ParallelService(services: [
+      ParallelModel(
+          service: _indexNutritional(params),
+          name: "_indexNutritional"),
+    ]);
+
+
+    parallelService.getResults().catchError((onError){
+     
+    }).then((value) {
+      if (parallelService.isServicesFailed()) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+       
+      } else {
+        dynamic forstRes = value!.firstWhere((element) => element.name=="_indexNutritional").finalResult;
+        log('succ sadads');
+        var fData = forstRes.fold(
+              (l) {
+            log('fail');
+          },
+              (r) => r.data,
+        );
+        emit(state.copyWith(status: CubitStatus.success, nutritional: fData));
+      }
+    });
+
   }
 
 }

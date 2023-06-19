@@ -49,17 +49,17 @@ class ApiVariables {
 
 
   static Uri indexIngredients({Map<String, dynamic>? queryParameters}) =>
-      _dashboardUri(path: 'ingredient', queryParameters: queryParameters);
+      _dashboardUri(path: 'ingredient/index', queryParameters: queryParameters);
 
   static Uri addIngredients({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'ingredient/store', queryParameters: queryParameters);
 
   static Uri indexNutritional({Map<String, dynamic>? queryParameters}) =>
-      _dashboardUri(path: 'nutritional', queryParameters: queryParameters);
+      _dashboardUri(path: 'nutritional/index', queryParameters: queryParameters);
 
   static Uri addNutritional({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'nutritional/store', queryParameters: queryParameters);
 
   static Uri deleteNutritional({required String id,}) =>
-      _dashboardUri(path: 'nutritional/$id');
+      _dashboardUri(path: 'nutritional/$id/destroy');
 }

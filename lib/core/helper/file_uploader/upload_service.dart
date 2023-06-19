@@ -35,7 +35,7 @@ class UploadService{
     request.headers.addAll(
       {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzMTkyMmQ2LTI4M2ItNGMxZS1iMmI0LTdkODAwNWM4ZTkwYSIsImlhdCI6MTY4NjM3NjExMCwiZXhwIjoxNjg2Mzc5NzEwfQ.KP37vY_YLa-XtTedXgMUbyyG_-DRZxUPNN65SmmuPT0",
+        'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg3MTA3OTg3LCJleHAiOjE2ODc0Njc5ODd9.uUo5X_DpAxfJM9JViBSMU08NBUTFTcNmm66YtJwvKgI",
       },
     );
 

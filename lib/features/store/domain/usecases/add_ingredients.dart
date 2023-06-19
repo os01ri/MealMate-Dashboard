@@ -17,12 +17,24 @@ class AddIngredientsUseCase implements UseCase<bool, AddIngredientsParams> {
 
 class AddIngredientsParams implements UseCaseParams {
   final String name;
+  final String imageUrl;
+  final double price;
+  final int priceById;
+  final int priceUnitId;
+  final String categoryId;
+  final List<IngredientNutritionals> ingredientNutritionals;
 
+  AddIngredientsParams(
+      {
+        required this.name,
+        required this.imageUrl,
+        required this.price,
+        required this.priceById,
+        required this.priceUnitId,
+        required this.categoryId,
+        required this.ingredientNutritionals
+      });
 
-  AddIngredientsParams({
-    required this.name,
-
-  });
 
   @override
   Map<String, dynamic> getParams() {
@@ -32,7 +44,15 @@ class AddIngredientsParams implements UseCaseParams {
 
   @override
   Map<String, dynamic> getBody() => {
-    "name": name.toString(),
+    "name": name,
+    "price": price,
+    "unit_id": priceUnitId,
+    "price_by": priceById,
+    "category_id": categoryId,
+    "url": imageUrl,
+    "nutritional":[
+      ...ingredientNutritionals.map((e) => e.toJson())
+    ]
   };
 
   @override
