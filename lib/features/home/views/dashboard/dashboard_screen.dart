@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/helper/responsive.dart';
 import 'components/header.dart';

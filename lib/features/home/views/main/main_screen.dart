@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/helper/responsive.dart';
 import 'package:mealmate_dashboard/features/home/controllers/MenuAppController.dart';
@@ -114,7 +115,7 @@ class _MyDataTableState extends State<MyDataTable> {
     return SizedBox.expand(
       child: SingleChildScrollView(
         child: PaginatedDataTable(
-          header: Text('My DataTable'),
+          header: Text('My DataTable'.tr()),
           rowsPerPage: _rowsPerPage,
           onRowsPerPageChanged: (rowCount) {
             setState(() {
@@ -125,21 +126,21 @@ class _MyDataTableState extends State<MyDataTable> {
           sortAscending: _sortAscending,
           columns: [
             DataColumn(
-              label: Text("ID",textAlign: TextAlign.start,),
+              label: Text("ID".tr(),textAlign: TextAlign.start,),
               onSort: (columnIndex, ascending) => _sort<num>((d) => d['id'], columnIndex, ascending),
             ),
             DataColumn(
-              label: Text("Name",textAlign: TextAlign.start),
+              label: Text("Name".tr(),textAlign: TextAlign.start),
               onSort: (columnIndex, ascending) => _sort<String>((d) => d['name'], columnIndex, ascending),
 
             ),
             DataColumn(
-              label: Text("Date"),
+              label: Text("Date".tr()),
               onSort: (columnIndex, ascending) => _sort<DateTime>((d) => d['date'], columnIndex, ascending),
 
             ),
             DataColumn(
-              label: Text("Note"),
+              label: Text("Note".tr()),
               onSort: (columnIndex, ascending) => _sort<String>((d) => d['note'], columnIndex, ascending),
 
             ),

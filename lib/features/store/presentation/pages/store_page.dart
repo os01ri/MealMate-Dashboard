@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/app_config.dart';
@@ -48,7 +49,7 @@ class _StorePageState extends State<StorePage> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.success =>
                 ingredientsDataTable(state.ingredients),
-                _ => const Text('error').center(),
+                _ => Text('error'.tr()).center(),
               };
               },
             ).expand(),
@@ -86,37 +87,37 @@ class _StorePageState extends State<StorePage> {
         MMDataTableColumn(
             dataKey: "name",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Name",
+            columnTitle: "Name".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "nutritional",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Nutritional value",
+            columnTitle: "Nutritional value".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "price",
             dataType: MMDataTableColumnType.num,
-            columnTitle: "Price",
+            columnTitle: "Price".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "priceBy",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Price By",
+            columnTitle: "Price By".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "image",
             dataType: MMDataTableColumnType.image,
-            columnTitle: "Image",
+            columnTitle: "Image".tr(),
             isSortEnabled: false
         ),
         MMDataTableColumn(
             dataKey: "editAndDelete",
             dataType: MMDataTableColumnType.editAndDelete,
-            columnTitle: "Edit/Delete",
+            columnTitle: "Edit/Delete".tr(),
             isSortEnabled: false
         ),
 
@@ -124,7 +125,7 @@ class _StorePageState extends State<StorePage> {
     );
 
     return MMDataTable(
-      dataTableTitle: "Ingredients Table",
+      dataTableTitle: "Ingredients Table".tr(),
         data: data,
         dataTableColumns: dataTableColumns,
       onRefresh: (){
@@ -132,7 +133,7 @@ class _StorePageState extends State<StorePage> {
       },
       onAdd: (){
         showMMAddDialog(context: context,
-            title: "Add Ingredient",
+            title: "Add Ingredient".tr(),
             addFieldsWidget: IngredientsAddFieldWidget(
               onAddFinish: (){
                 _storeCubit.getIngredients(IndexIngredientsParams());
@@ -142,7 +143,7 @@ class _StorePageState extends State<StorePage> {
       },
       onDelete: (id){
         showMMDeleteDialog(context: context,
-          title: "Delete Ingredient",
+          title: "Delete Ingredient".tr(),
           deleteFieldsWidget: IngredientDeleteFieldWidget(
             id: id,
             onDeleteFinish: (){

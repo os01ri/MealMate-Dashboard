@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/helper/responsive.dart';
@@ -22,7 +23,7 @@ class Header extends StatelessWidget {
         children: [
           if (!Responsive.isMobile(context))
             Text(
-              "${menuAppController.selectedSection.name.toUpperCase()}",
+              "${menuAppController.selectedSection.name.tr().toUpperCase()}",
               style: Theme.of(context).textTheme.titleLarge,
             ),
 
@@ -70,7 +71,7 @@ class ProfileCard extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Majd Kazmoz"),
+              child: Text("Majd Kazmoz".tr()),
             ),
           Icon(Icons.keyboard_arrow_down),
         ],

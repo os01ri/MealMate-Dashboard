@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mealmate_dashboard/features/home/controllers/MenuAppController.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
@@ -90,11 +91,11 @@ class DrawerListTile extends StatelessWidget {
         height: 16,
       ),
       title: Text(
-        upperFirstLetter(sectionName.name),
+        upperFirstLetter(sectionName.name.tr()),
         style: TextStyle(color: Colors.white54),
       ),
     );
   }
-  String upperFirstLetter(String value) => "${value[0].toUpperCase()}${value.substring(1)}";
+  String upperFirstLetter(String value) => value.length>0?"${value[0].toUpperCase()}${value.substring(1)}":"";
 
 }

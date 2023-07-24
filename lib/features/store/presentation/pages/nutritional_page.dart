@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/app_config.dart';
@@ -47,7 +48,7 @@ class _NutritionalPageState extends State<NutritionalPage> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.success =>
                 nutritionalDataTable(state.nutritional),
-                _ => const Text('error').center(),
+                _ => Text('error'.tr()).center(),
               };
               },
             ).expand(),
@@ -95,7 +96,7 @@ class _NutritionalPageState extends State<NutritionalPage> {
     );
 
     return MMDataTable(
-      dataTableTitle: "Nutritional Table",
+      dataTableTitle: "Nutritional Table".tr(),
         data: data,
         dataTableColumns: dataTableColumns,
       onRefresh: (){
@@ -103,7 +104,7 @@ class _NutritionalPageState extends State<NutritionalPage> {
       },
       onAdd: (){
         showMMAddDialog(context: context,
-          title: "Add Nutritional",
+          title: "Add Nutritional".tr(),
           addFieldsWidget: NutritionalAddFieldWidget(
             onAddFinish: (){
               _storeCubit.getNutritional(IndexNutritionalParams());
@@ -114,7 +115,7 @@ class _NutritionalPageState extends State<NutritionalPage> {
       onDelete: (id){
 
         showMMDeleteDialog(context: context,
-            title: "Delete Nutritional",
+            title: "Delete Nutritional".tr(),
              deleteFieldsWidget: NutritionalDeleteFieldWidget(
                id: id,
                onDeleteFinish: (){

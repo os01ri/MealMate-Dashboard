@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
@@ -49,8 +50,6 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
     nameController = TextEditingController();
     _storeCubit = StoreCubit();
 
-
-
   }
 
   @override
@@ -76,7 +75,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Ingredient Category Details",
+                      child: Text("Ingredient Category Details".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -91,13 +90,13 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                         fit: FlexFit.tight,
                         flex: 5,
                         child: SimpleLabelTextField(
-                          labelText: "Ingredient Category Name",
+                          labelText: "Ingredient Category Name".tr(),
                           textEditingController: nameController,
                           validator: (text) {
                             if (text != null && text.isNotEmpty) {
                               return null;
                             } else {
-                              return "please add a valid Name";
+                              return "please add a valid Name".tr();
                             }
                           },
                         ),
@@ -128,7 +127,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Category Image",
+                      child: Text("Category Image".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -140,7 +139,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                     mainAxisAlignment: imageForCategory==null?MainAxisAlignment.center:MainAxisAlignment.spaceBetween,
                     children: [
                       MainButton(
-                          text: imageForCategory!=null?"Change Image for ingredient":"Pick an Image for ingredient",
+                          text: imageForCategory!=null?"Change Image for ingredient".tr():"Pick an Image for ingredient".tr(),
                           icon: const Icon(Icons.camera,
                             color: Colors.white,
                           ),
@@ -198,7 +197,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => const Text('error').center(),
+                CubitStatus.failure => Text('error'.tr()).center(),
 
                 _ =>  mmAddDialogFooter(context: context,
                 onAdd: () {

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
-import 'package:mealmate_dashboard/core/ui/theme/colors.dart';
-import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
-import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class NutritionalAddFieldWidget extends StatefulWidget {
@@ -44,13 +42,13 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
 
 
           SimpleLabelTextField(
-            labelText: "Nutritional Name",
+            labelText: "Nutritional Name".tr(),
             textEditingController: nameController,
             validator: (text) {
               if (text != null && text.isNotEmpty) {
                 return null;
               } else {
-                return "please add a valid Name";
+                return "please add a valid Name".tr();
               }
             },
           ),
@@ -74,7 +72,7 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => const Text('error').center(),
+                CubitStatus.failure => Text('error'.tr()).center(),
 
                 _ =>  mmAddDialogFooter(context: context,
                 onAdd: (){

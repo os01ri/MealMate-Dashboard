@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/app_config.dart';
@@ -53,7 +54,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.success =>
                 ingredientsCategoriesDataTable(state.categories),
-                _ => const Text('error').center(),
+                _ => Text('error'.tr()).center(),
               };
               },
             ).expand(),
@@ -116,7 +117,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
       },
       onAdd: (){
         showMMAddDialog(context: context,
-          title: "Add Ingredient Category Category",
+          title: "Add Ingredient Category".tr(),
           addFieldsWidget: CategoriesAddFieldWidget(
             onAddFinish: (){
               _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
@@ -127,7 +128,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
       onDelete: (id){
 
         showMMDeleteDialog(context: context,
-            title: "Delete Ingredient Category",
+            title: "Delete Ingredient Category".tr(),
              deleteFieldsWidget: CategoriesDeleteFieldWidget(
                id: id,
                onDeleteFinish: (){

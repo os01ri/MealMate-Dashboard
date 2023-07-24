@@ -1,19 +1,13 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
 import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picker.dart';
 import 'package:mealmate_dashboard/core/helper/file_uploader/upload_service.dart';
-import 'package:mealmate_dashboard/core/helper/helper_functions.dart';
-import 'package:mealmate_dashboard/core/ui/theme/colors.dart';
-import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
-import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_drop_down_option.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
@@ -21,7 +15,6 @@ import 'package:mealmate_dashboard/features/store/data/models/categories_ingredi
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_ingredients.dart';
-import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
@@ -73,7 +66,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
         CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
         CubitStatus.success =>
         addFormWidget(categories: state.categories,nutritional: state.nutritional, unitTypes: state.unitTypes),
-        _ => const Text('error').center(),
+        _ => Text('error'.tr()).center(),
       };
       },
     ).center();
@@ -103,7 +96,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Ingredient Details",
+                      child: Text("Ingredient Details".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -118,13 +111,13 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                         fit: FlexFit.tight,
                         flex: 5,
                         child: SimpleLabelTextField(
-                          labelText: "Ingredient Name",
+                          labelText: "Ingredient Name".tr(),
                           textEditingController: nameController,
                           validator: (text) {
                             if (text != null && text.isNotEmpty) {
                               return null;
                             } else {
-                              return "please add a valid Name";
+                              return "please add a valid Name".tr();
                             }
                           },
                         ),
@@ -144,8 +137,8 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                           },
                           selectedItem: ingredientCategoryName,
                           itemsOptions: categories.map((e) => e.name.toString()).toList(),
-                          title: "Ingredient Category",
-                          hint: "Select one...",
+                          title: "Ingredient Category".tr(),
+                          hint: "Select one...".tr(),
                         ),
                       ),
 
@@ -173,7 +166,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Price Details",
+                      child: Text("Price Details".tr(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -188,7 +181,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                         fit: FlexFit.tight,
                         flex: 3,
                         child: SimpleLabelTextField(
-                          labelText: "Ingredient Price",
+                          labelText: "Ingredient Price".tr(),
                           textEditingController: priceController,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
@@ -198,7 +191,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                             if (text != null && text.isNotEmpty) {
                               return null;
                             } else {
-                              return "please add a valid Price";
+                              return "please add a valid Price".tr();
                             }
                           },
                         ),
@@ -214,7 +207,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                         fit: FlexFit.tight,
                         flex: 5,
                         child: SimpleLabelTextField(
-                          labelText: "Weight per Price",
+                          labelText: "Weight per Price".tr(),
                           textEditingController: valueController,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
@@ -223,7 +216,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                             if (text != null && text.isNotEmpty) {
                               return null;
                             } else {
-                              return "please add a valid Weight";
+                              return "please add a valid Weight".tr();
                             }
                           },
                         ),
@@ -243,8 +236,8 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                           },
                           selectedItem: ingredientPriceUnit,
                           itemsOptions: unitTypes.map((e) => e.name.toString()).toList(),
-                          title: "Unit Type",
-                          hint: "Select one...",
+                          title: "Unit Type".tr(),
+                          hint: "Select one...".tr(),
                         ),
                       ),
 
@@ -272,7 +265,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Ingredient Image",
+                      child: Text("Ingredient Image".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -284,7 +277,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                     mainAxisAlignment: imageForIngredient==null?MainAxisAlignment.center:MainAxisAlignment.spaceBetween,
                     children: [
                       MainButton(
-                          text: imageForIngredient!=null?"Change Image for ingredient":"Pick an Image for ingredient",
+                          text: imageForIngredient!=null?"Change Image for ingredient".tr():"Pick an Image for ingredient".tr(),
                           icon: const Icon(Icons.camera,
                             color: Colors.white,
                           ),
@@ -341,7 +334,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Ingredient Nutritional",
+                      child: Text("Ingredient Nutritional".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -421,7 +414,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => const Text('error').center(),
+                CubitStatus.failure => Text('error'.tr()).center(),
 
                 _ =>  mmAddDialogFooter(context: context,
                 onAdd: () {
@@ -537,8 +530,8 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                              },
                              selectedItem: ingredientNutritional,
                              itemsOptions: widget.nutritional.map((e) => e.name.toString()).toList(),
-                             title: "Ingredient Nutritionals",
-                             hint: "Select one...",
+                             title: "Ingredient Nutritionals".tr(),
+                             hint: "Select one...".tr(),
                            ),
                          ),
                          SizedBox(width: 16),
@@ -546,7 +539,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                            fit: FlexFit.tight,
                            flex: 3,
                            child: SimpleLabelTextField(
-                             labelText: "Nutritional Percent",
+                             labelText: "Nutritional Percent".tr(),
                              textEditingController: percentController,
                              inputFormatters: [
                                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
@@ -558,7 +551,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                                if (text != null && text.isNotEmpty) {
                                  return null;
                                } else {
-                                 return "please add a valid Nutritional Percent";
+                                 return "please add a valid Nutritional Percent".tr();
                                }
                              },
                            ),
@@ -574,7 +567,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                            fit: FlexFit.tight,
                            flex: 5,
                            child: SimpleLabelTextField(
-                             labelText: "Weight per unit",
+                             labelText: "Weight per unit".tr(),
                              textEditingController: valueController,
                              inputFormatters: [
                                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
@@ -583,7 +576,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                                if (text != null && text.isNotEmpty) {
                                  return null;
                                } else {
-                                 return "please add a valid Weight";
+                                 return "please add a valid Weight".tr();
                                }
                              },
                            ),
@@ -603,8 +596,8 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                              },
                              selectedItem: ingredientUnit,
                              itemsOptions: widget.unitTypes.map((e) => e.name.toString()).toList(),
-                             title: "Unit Type",
-                             hint: "Select one...",
+                             title: "Unit Type".tr(),
+                             hint: "Select one...".tr(),
                            ),
                          ),
 

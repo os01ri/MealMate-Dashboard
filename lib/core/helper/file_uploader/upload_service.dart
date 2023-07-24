@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picker.dart';
@@ -57,7 +58,7 @@ class UploadService{
                       padding: EdgeInsets.only(right: 20, left: 20, top: 10),
                       child: Center(
                           child: Text(
-                            'Uploading File...',
+                            'Uploading File...'.tr(),
                           )),
                     ),
                   ),
