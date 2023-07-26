@@ -1,12 +1,20 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 // import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mealmate_dashboard/features/auth/data/models/user_model.dart';
+import 'package:mealmate_dashboard/features/auth/presentation/pages/auth_page.dart';
+import 'package:mealmate_dashboard/features/home/controllers/app_controller.dart';
+import 'package:mealmate_dashboard/main.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,6 +35,33 @@ class HelperFunctions {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String? token = sp.getString(PrefsKeys.accessToken);
     return token;
+  }
+
+  static Future<void> setToken(String token) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString(PrefsKeys.accessToken,token);
+  }
+
+  static Future<UserModel?> getUser() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? user = sp.getString(PrefsKeys.userInfo);
+    return UserModel.fromJson(json.decode(user!));
+  }
+
+  static Future<void> setUser(UserModel userModel) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString(PrefsKeys.userInfo,json.encode(userModel.toJson()));
+  }
+
+
+  static Future<void> logout() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    Provider.of<AppController>(navigatorKey.currentContext!,listen: false).clear();
+    sp.clear().then((value) {
+      Navigator.pushAndRemoveUntil(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) {
+        return AuthPage();
+      },), (route) => false);
+    });
   }
 
   static Future<String> getFCMToken({bool getFCMToken = false}) async {

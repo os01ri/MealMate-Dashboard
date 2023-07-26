@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:mealmate_dashboard/core/helper/helper_functions.dart';
+import 'package:mealmate_dashboard/main.dart';
 
 import '../error/exceptions.dart';
 import '../error/failures.dart';
@@ -14,6 +16,9 @@ mixin HandlingExceptionManager {
       return right;
     } on UnauthenticatedException catch (e) {
       log("<<UnauthenticatedException>>");
+      if(navigatorKey.currentState!=null)
+      HelperFunctions.logout();
+
       return Left(UnauthenticatedFailure(e.message));
     } on ValidationException catch (e) {
       log("<<validateRegister>>");

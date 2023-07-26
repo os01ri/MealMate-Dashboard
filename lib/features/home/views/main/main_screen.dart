@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/helper/responsive.dart';
-import 'package:mealmate_dashboard/features/home/controllers/MenuAppController.dart';
+import 'package:mealmate_dashboard/features/home/controllers/app_controller.dart';
 import 'package:mealmate_dashboard/features/home/views/dashboard/components/header.dart';
 import 'package:mealmate_dashboard/features/home/views/dashboard/dashboard_screen.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
@@ -21,7 +21,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late MenuAppController menuAppController;
+  late AppController menuAppController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    menuAppController = Provider.of<MenuAppController>(context, listen: true);
+    menuAppController = Provider.of<AppController>(context, listen: true);
   }
 }
 

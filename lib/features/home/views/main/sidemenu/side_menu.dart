@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mealmate_dashboard/features/home/controllers/MenuAppController.dart';
+import 'package:mealmate_dashboard/features/home/controllers/app_controller.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +76,7 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MenuAppController menuAppController = Provider.of<MenuAppController>(context);
+    AppController menuAppController = Provider.of<AppController>(context);
 
     return ListTile(
       onTap: (){

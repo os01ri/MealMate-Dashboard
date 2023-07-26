@@ -23,15 +23,10 @@ class ApiVariables {
 
   ///Auth
   static Uri _auth({required String path}) {
-    return _mainUri(path: 'admin/$path');
+    return _mainUri(path: 'auth/$path');
   }
 
-  static Uri register() {
-    return _auth(path: 'register');
-  }
-  static Uri login() {
-    return _auth(path: 'login');
-  }
+
 
   static Uri uploadMedia() => _mainUri(path: 'mediaUpload');
   // Uri uploadVideo() => _mainUri(path: "videoUpload");
@@ -79,9 +74,12 @@ class ApiVariables {
   static Uri addCategoriesIngredient({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'categoryingredient/store', queryParameters: queryParameters);
 
-
   static Uri deleteCategoriesIngredient({required int id,}) =>
       _dashboardUri(path: 'categoryingredient/$id/destroy');
 
+
+
+  static Uri login({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'auth/login', queryParameters: queryParameters);
 
 }

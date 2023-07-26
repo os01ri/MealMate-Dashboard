@@ -87,7 +87,7 @@ class CategoriesIngredientResponse {
   factory CategoriesIngredientResponse.fromRawJson(String str) =>
       CategoriesIngredientResponse.fromJson(
         json.decode(
-            '{"data":${json.encode((json.decode(str) as Map)['data'])}}'),
+            '{"data":${json.encode((json.decode(str) as Map)['data']['categories'])}}'),
       );
 
   String toRawJson() => json.encode(toJson());

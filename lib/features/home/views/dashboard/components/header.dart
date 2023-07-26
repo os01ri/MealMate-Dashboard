@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
+import 'package:mealmate_dashboard/core/helper/helper_functions.dart';
 import 'package:mealmate_dashboard/core/helper/responsive.dart';
-import 'package:mealmate_dashboard/features/home/controllers/MenuAppController.dart';
+import 'package:mealmate_dashboard/features/home/controllers/app_controller.dart';
 import 'package:provider/provider.dart';
 
 
@@ -15,7 +16,7 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MenuAppController menuAppController = Provider.of<MenuAppController>(context);
+    AppController menuAppController = Provider.of<AppController>(context);
 
     return Padding(
       padding: const EdgeInsets.all(defaultPadding),
@@ -30,7 +31,7 @@ class Header extends StatelessWidget {
           if (!Responsive.isDesktop(context))
             IconButton(
               icon: Icon(Icons.menu),
-              onPressed: context.read<MenuAppController>().controlMenu,
+              onPressed: context.read<AppController>().controlMenu,
             ),
 
           if (!Responsive.isMobile(context))
@@ -50,6 +51,7 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<AppController>(context,listen: false).userModel;
     return Container(
       margin: EdgeInsets.only(left: defaultPadding),
       padding: EdgeInsets.symmetric(
@@ -71,9 +73,16 @@ class ProfileCard extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Majd Kazmoz".tr()),
+              child: Text(user?.username??""),
             ),
-          Icon(Icons.keyboard_arrow_down),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GestureDetector(
+                onTap: (){
+                  HelperFunctions.logout();
+                },
+                child: Icon(Icons.logout)),
+          ),
         ],
       ),
     );

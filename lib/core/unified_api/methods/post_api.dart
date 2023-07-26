@@ -37,7 +37,6 @@ class PostApi<T> with HandlingExceptionRequest {
         if(!kIsWeb)
           'fcm_token': fcmToken,
         'Accept': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg3MjEyMDMyLCJleHAiOjE2ODc1NzIwMzJ9.6V1KxM41yX3-gFvs6GyGEkd_W95oeqvzUl5IEpuYnv0',
         if (isAuth) 'Authorization': 'Bearer $token',
       };
 

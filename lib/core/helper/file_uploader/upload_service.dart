@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picker.dart';
+import 'package:mealmate_dashboard/core/helper/helper_functions.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/loading_widget.dart';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
@@ -32,11 +33,14 @@ class UploadService{
     );
 
     fields.forEach((k, v) => request.fields[k] = v);
+    String? token = await HelperFunctions.getToken();
+    bool isAuth = await HelperFunctions.isAuth();
 
     request.headers.addAll(
       {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg3MjEyMDMyLCJleHAiOjE2ODc1NzIwMzJ9.6V1KxM41yX3-gFvs6GyGEkd_W95oeqvzUl5IEpuYnv0",
+        if (isAuth) 'Authorization': 'Bearer $token',
+
       },
     );
 
