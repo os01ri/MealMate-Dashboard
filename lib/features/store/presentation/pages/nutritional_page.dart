@@ -81,14 +81,14 @@ class _NutritionalPageState extends State<NutritionalPage> {
         MMDataTableColumn(
             dataKey: "name",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Name",
+            columnTitle: "Name".tr(),
             isSortEnabled: true
         ),
 
         MMDataTableColumn(
             dataKey: "editAndDelete",
             dataType: MMDataTableColumnType.editAndDelete,
-            columnTitle: "Edit/Delete",
+            columnTitle: "Edit/Delete".tr(),
             isSortEnabled: false
         ),
 

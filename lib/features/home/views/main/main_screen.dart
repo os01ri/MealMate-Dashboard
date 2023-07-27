@@ -21,11 +21,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   late AppController menuAppController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: menuAppController.scaffoldKey,
+      key: _scaffoldKey,
       drawer: const SideMenu(),
       body: SafeArea(
         child: Row(
@@ -42,7 +44,9 @@ class _MainScreenState extends State<MainScreen> {
                 child: Flex(
                   direction: Axis.vertical,
                   children: [
-                    const Header(),
+                    Header(
+                      scaffoldKey: _scaffoldKey,
+                    ),
               const SizedBox(height: defaultPadding),
                     Flexible(
                       child: getSection()

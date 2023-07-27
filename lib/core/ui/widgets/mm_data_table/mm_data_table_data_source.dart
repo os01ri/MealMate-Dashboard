@@ -27,7 +27,7 @@ class DataSource extends DataTableSource {
     if(key.contains("image"))
       {
         return Image.network(value,
-          height: 36,
+          height: 70,
         );
       }
     else if (key.contains("editAndDelete"))
@@ -49,7 +49,7 @@ class DataSource extends DataTableSource {
       }
     else
       {
-        return SelectableText(value,textDirection: TextDirection.rtl,);
+        return Text(value,textDirection: TextDirection.rtl,);
       }
 
   }

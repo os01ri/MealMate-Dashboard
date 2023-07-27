@@ -82,26 +82,26 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
         MMDataTableColumn(
             dataKey: "id",
             dataType: MMDataTableColumnType.num,
-            columnTitle: "ID",
+            columnTitle: "ID".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "name",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Name",
+            columnTitle: "Name".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "image",
             dataType: MMDataTableColumnType.image,
-            columnTitle: "Image",
+            columnTitle: "Image".tr(),
             isSortEnabled: false
         ),
 
         MMDataTableColumn(
             dataKey: "editAndDelete",
             dataType: MMDataTableColumnType.editAndDelete,
-            columnTitle: "Edit/Delete",
+            columnTitle: "Edit/Delete".tr(),
             isSortEnabled: false
         ),
 
@@ -109,7 +109,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
     );
 
     return MMDataTable(
-      dataTableTitle: "Ingredient Categories Table",
+      dataTableTitle: "Ingredient Categories Table".tr(),
         data: data,
         dataTableColumns: dataTableColumns,
       onRefresh: (){

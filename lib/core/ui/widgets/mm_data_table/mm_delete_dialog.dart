@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
@@ -88,7 +89,7 @@ Widget mmDeleteDialogFooter({required BuildContext context,required Function onD
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       MainButton(
-          text: "Cancel",
+          text: "Cancel".tr(),
           icon: const Icon(Icons.cancel,
             color: Colors.white,
           ),
@@ -98,7 +99,7 @@ Widget mmDeleteDialogFooter({required BuildContext context,required Function onD
 
       const SizedBox(width: 16,),
 
-      MainButton(text: "Delete",
+      MainButton(text: "Delete".tr(),
           icon: const Icon(Icons.delete,
             color: Colors.white,
           ),

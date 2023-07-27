@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
@@ -90,7 +91,7 @@ Widget mmAddDialogFooter({required BuildContext context,required Function onAdd}
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       MainButton(
-          text: "Cancel",
+          text: "Cancel".tr(),
           icon: const Icon(Icons.cancel,
             color: Colors.white,
           ),
@@ -100,7 +101,7 @@ Widget mmAddDialogFooter({required BuildContext context,required Function onAdd}
 
       const SizedBox(width: 16,),
 
-      MainButton(text: "Add",
+      MainButton(text: "Add".tr(),
           icon: const Icon(Icons.add_circle,
             color: Colors.white,
           ),

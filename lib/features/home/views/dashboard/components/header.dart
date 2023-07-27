@@ -1,4 +1,5 @@
 
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,8 +11,10 @@ import 'package:provider/provider.dart';
 
 
 class Header extends StatelessWidget {
+  final dynamic scaffoldKey;
   const Header({
     Key? key,
+    required this.scaffoldKey
   }) : super(key: key);
 
   @override
@@ -31,12 +34,19 @@ class Header extends StatelessWidget {
           if (!Responsive.isDesktop(context))
             IconButton(
               icon: Icon(Icons.menu),
-              onPressed: context.read<AppController>().controlMenu,
+              onPressed: (){
+                context.read<AppController>().controlMenu(scaffoldKey);
+              },
             ),
 
+           
           if (!Responsive.isMobile(context))
-            Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-          Expanded(child: SearchField()),
+            Expanded(child: LanguageField()),
+
+          if (Responsive.isMobile(context))
+            Expanded(child: SizedBox()),
+
+
           ProfileCard()
         ],
       ),
@@ -89,35 +99,68 @@ class ProfileCard extends StatelessWidget {
   }
 }
 
-class SearchField extends StatelessWidget {
-  const SearchField({
+class LanguageField extends StatelessWidget {
+  const LanguageField({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search",
-        fillColor: secondaryColor,
-        filled: true,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        suffixIcon: InkWell(
-          onTap: () {},
-          child: Container(
-            padding: EdgeInsets.all(defaultPadding * 0.75),
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return  Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          SizedBox(
+            width: 300,
+            child: AnimatedToggleSwitch<String>.size(
+              current: context.locale.languageCode=="ar"?"Arabic":"English",
+              values: ["English","Arabic",],
+              borderColor: Colors.transparent,
+              colorBuilder: (i) {
+                return  bgColor;
+              },
+
+              innerColor: Color(0xFFF0F0F0),
+              height: 42,
+              borderWidth: 5,
+              indicatorSize: Size.fromWidth(double.infinity),
+              iconBuilder: (value, size) {
+
+                return Center(child: Text(value,
+                  style: Theme.of(context).textTheme.headline5!.apply(
+                      fontSizeDelta: -2,
+                      color: ((value == "Arabic" && context.locale.languageCode=='ar') || (value != "Arabic" && context.locale.languageCode!='ar'))? Colors.white :bgColor
+                  ),
+                ));
+              },
+              onChanged: (i){
+                if(i!="Arabic")
+                {
+                //  AppSettings.language = 'en';
+                  context.locale = Locale('en');
+                }
+                else
+                {
+                //  AppSettings.language = 'ar';
+                  context.locale = Locale('ar');
+                }
+
+                Provider.of<AppController>(context,listen: false).reset();
+                Future.delayed(Duration(milliseconds: 50)).then((value) {
+                  HelperFunctions.restart();
+                });
+
+              },
             ),
-            child: SvgPicture.asset("assets/icons/Search.svg"),
           ),
-        ),
+
+
+        ],
       ),
     );
+
   }
 }

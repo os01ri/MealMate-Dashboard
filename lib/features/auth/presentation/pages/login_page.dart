@@ -16,6 +16,7 @@ import 'package:mealmate_dashboard/features/auth/domain/usecases/login_usecase.d
 import 'package:mealmate_dashboard/features/auth/presentation/cubit/auth_cubit/auth_cubit.dart';
 import 'package:mealmate_dashboard/features/auth/presentation/pages/auth_page.dart';
 import 'package:mealmate_dashboard/features/auth/presentation/widgets/auth_text_field.dart';
+import 'package:mealmate_dashboard/features/home/views/dashboard/components/header.dart';
 import 'package:mealmate_dashboard/features/home/views/main/main_screen.dart';
 
 
@@ -134,7 +135,16 @@ class _LoginPageState extends State<LoginPage> {
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Text("Error in login"),
-                            )
+                            ),
+                          SizedBox(height: 30,),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              LanguageField(),
+                            ],
+                          ),
+
                         ],
                       ).paddingHorizontal(
                         Responsive.isMobile(context)?8:MediaQuery.of(context).size.width*0.25

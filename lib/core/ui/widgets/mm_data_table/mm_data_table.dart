@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
@@ -40,12 +41,12 @@ class _MMDataTableState extends State<MMDataTable> {
           header: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SelectableText(widget.dataTableTitle),
+              Text(widget.dataTableTitle),
               Row(
                 children: [
 
                   MainButton(
-                      text: "Refresh",
+                      text: "Refresh".tr(),
                       icon: const Icon(Icons.refresh,
                         color: Colors.white,
                       ),
@@ -57,7 +58,7 @@ class _MMDataTableState extends State<MMDataTable> {
                   const SizedBox(width: 16,),
 
                   if(widget.onAdd!=null)
-                  MainButton(text: "Add",
+                  MainButton(text: "Add".tr(),
                       icon: const Icon(Icons.add_circle,
                        color: Colors.white,
                       ),
@@ -77,7 +78,7 @@ class _MMDataTableState extends State<MMDataTable> {
             });
           },
           sortColumnIndex: _sortColumnIndex,
-          sortAscending: _sortAscending,
+          sortAscending: _sortAscending,dataRowHeight: 100,
           columns: [
             for(var item in widget.dataTableColumns)
             _dataColumnBuilder(item)
@@ -116,7 +117,7 @@ class _MMDataTableState extends State<MMDataTable> {
     }
 
     return DataColumn(
-      label: SelectableText(mmDataTableColumn.columnTitle,
+      label: Text(mmDataTableColumn.columnTitle,
         textAlign: TextAlign.start,
       ),
       onSort: mmDataTableColumn.isSortEnabled? onSort : null,

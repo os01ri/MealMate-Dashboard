@@ -4,9 +4,6 @@ import 'package:mealmate_dashboard/features/auth/data/models/user_model.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
 
 class AppController extends ChangeNotifier {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
   Sections selectedSection = Sections.dashboard;
 
@@ -30,7 +27,12 @@ class AppController extends ChangeNotifier {
   }
 
 
-  void controlMenu() {
+  reset(){
+    selectedSection = Sections.dashboard;
+    notifyListeners();
+  }
+
+  void controlMenu(_scaffoldKey) {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
     }

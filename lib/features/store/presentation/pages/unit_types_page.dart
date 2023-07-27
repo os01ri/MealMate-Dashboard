@@ -78,19 +78,19 @@ class _UnitTypesPageState extends State<UnitTypesPage> {
         MMDataTableColumn(
             dataKey: "id",
             dataType: MMDataTableColumnType.num,
-            columnTitle: "ID",
+            columnTitle: "ID".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "name",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Name",
+            columnTitle: "Name".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "code",
             dataType: MMDataTableColumnType.string,
-            columnTitle: "Code",
+            columnTitle: "Code".tr(),
             isSortEnabled: true
         ),
 
@@ -99,7 +99,7 @@ class _UnitTypesPageState extends State<UnitTypesPage> {
     );
 
     return MMDataTable(
-      dataTableTitle: "Unit Types Table",
+      dataTableTitle: "Unit Types Table".tr(),
         data: data,
         dataTableColumns: dataTableColumns,
       onRefresh: (){

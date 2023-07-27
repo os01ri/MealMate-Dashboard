@@ -53,5 +53,14 @@
   "please add a valid Name" : "please add a valid Name",
   "please add a valid Price" : "please add a valid Price",
   "please add a valid Weight" : "please add a valid Weight",
-  "please add a valid Nutritional Percent" : "please add a valid Nutritional Percent"
+  "please add a valid Nutritional Percent" : "please add a valid Nutritional Percent",
+  "Add": "Add",
+  "Refresh" : "Refresh",
+  "Cancel" : "Cancel",
+  "Delete": "Delete",
+  "user_name": "User Name",
+  "please_enter_user_name": "Please Enter the user name",
+  "password" : "Password",
+  "login": "Login"
+
 }

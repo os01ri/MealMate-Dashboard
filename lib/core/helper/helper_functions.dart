@@ -58,10 +58,14 @@ class HelperFunctions {
     SharedPreferences sp = await SharedPreferences.getInstance();
     Provider.of<AppController>(navigatorKey.currentContext!,listen: false).clear();
     sp.clear().then((value) {
-      Navigator.pushAndRemoveUntil(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) {
+      restart();
+    });
+  }
+
+  static Future<void> restart() async {
+    Navigator.pushAndRemoveUntil(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) {
         return AuthPage();
       },), (route) => false);
-    });
   }
 
   static Future<String> getFCMToken({bool getFCMToken = false}) async {
