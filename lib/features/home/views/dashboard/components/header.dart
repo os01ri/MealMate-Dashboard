@@ -99,11 +99,16 @@ class ProfileCard extends StatelessWidget {
   }
 }
 
-class LanguageField extends StatelessWidget {
+class LanguageField extends StatefulWidget {
   const LanguageField({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<LanguageField> createState() => _LanguageFieldState();
+}
+
+class _LanguageFieldState extends State<LanguageField> {
   @override
   Widget build(BuildContext context) {
     return  Padding(
@@ -147,9 +152,10 @@ class LanguageField extends StatelessWidget {
                 //  AppSettings.language = 'ar';
                   context.locale = Locale('ar');
                 }
+                Navigator.of(context).popUntil((route) => false);
 
                 Provider.of<AppController>(context,listen: false).reset();
-                Future.delayed(Duration(milliseconds: 50)).then((value) {
+                Future.delayed(Duration(milliseconds: 200)).then((value) {
                   HelperFunctions.restart();
                 });
 
