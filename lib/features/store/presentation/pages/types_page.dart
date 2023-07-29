@@ -10,32 +10,38 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_c
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
+import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/index_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/categories_ingredients/categories_ingredients_add_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/categories_ingredients/categories_ingredients_delete_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_add_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_delete_fields_widget.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/types/types_add_fields_widget.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/types/types_delete_fields_widget.dart';
 
-class IngredientsCategoriesPage extends StatefulWidget {
-  const IngredientsCategoriesPage({super.key});
+class TypesPage extends StatefulWidget {
+  const TypesPage({super.key});
 
   @override
-  State<IngredientsCategoriesPage> createState() => _IngredientsCategoriesPageState();
+  State<TypesPage> createState() => _TypesPageState();
 }
 
-class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
+class _TypesPageState extends State<TypesPage> {
   late final StoreCubit _storeCubit;
 
   @override
   void initState() {
     super.initState();
-    _storeCubit = StoreCubit()..getIngredientsCategories(IndexCategoriesIngredientParams());
+    _storeCubit = StoreCubit()..getTypes(IndexTypesParams());
   }
 
 
@@ -53,7 +59,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.success =>
-                ingredientsCategoriesDataTable(state.categoriesIngredients),
+                typesDataTable(state.types),
                 _ => Text('error'.tr()).center(),
               };
               },
@@ -64,11 +70,11 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
     );
   }
 
-  Widget ingredientsCategoriesDataTable(List<CategoriesIngredientModel> categories){
+  Widget typesDataTable(List<TypesModel> types){
     List<Map<String, dynamic>> data = [];
     List<MMDataTableColumn> dataTableColumns = [];
 
-    for(var item in categories)
+    for(var item in types)
       {
         data.add({
           "id": item.id,
@@ -109,18 +115,18 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
     );
 
     return MMDataTable(
-      dataTableTitle: "Ingredient Categories Table".tr(),
+      dataTableTitle: "Types Table".tr(),
         data: data,
         dataTableColumns: dataTableColumns,
       onRefresh: (){
-        _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
+        _storeCubit.getTypes(IndexTypesParams());
       },
       onAdd: (){
         showMMAddDialog(context: context,
-          title: "Add Ingredient Category".tr(),
-          addFieldsWidget: CategoriesIngredientsAddFieldWidget(
+          title: "Add Type".tr(),
+          addFieldsWidget: TypesAddFieldWidget(
             onAddFinish: (){
-              _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
+              _storeCubit.getTypes(IndexTypesParams());
             },
           )
         );
@@ -128,11 +134,11 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
       onDelete: (id){
 
         showMMDeleteDialog(context: context,
-            title: "Delete Ingredient Category".tr(),
-             deleteFieldsWidget: CategoriesIngredientsDeleteFieldWidget(
+            title: "Delete Type".tr(),
+             deleteFieldsWidget: TypesDeleteFieldWidget(
                id: id,
                onDeleteFinish: (){
-                 _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
+                 _storeCubit.getTypes(IndexTypesParams());
                },
              ),
         );

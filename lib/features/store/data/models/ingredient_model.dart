@@ -1,74 +1,7 @@
-// import 'dart:convert';
-
-// import 'package:mealmate_dashboard/features/store/domain/entities/ingredient.dart';
-
-// class IngredientModel extends Ingredient {
-//   IngredientModel({
-//     final String? name,
-//     final double? price,
-//     final String? imageUrl,
-//   }) : super(
-//           name: name,
-//           price: price,
-//           imageUrl: imageUrl,
-//         );
-
-//   IngredientModel copyWith({
-//     String? name,
-//     double? price,
-//     String? imageUrl,
-//   }) {
-//     return IngredientModel(
-//       name: name ?? this.name,
-//       price: price ?? this.price,
-//       imageUrl: imageUrl ?? this.imageUrl,
-//     );
-//   }
-
-//   Map<String, dynamic> toMap() {
-//     return <String, dynamic>{
-//       'name': name,
-//       'price': price,
-//       'imageUrl': imageUrl,
-//     };
-//   }
-
-//   factory IngredientModel.fromMap(Map<String, dynamic> map) {
-//     return IngredientModel(
-//       name: map['name'] != null ? map['name'] as String : null,
-//       price: map['price'] != null ? map['price'] as double : null,
-//       imageUrl: map['imageUrl'] != null ? map['imageUrl'] as String : null,
-//     );
-//   }
-
-//   String toJson() => json.encode(toMap());
-
-//   factory IngredientModel.fromJson(String source) =>
-//       IngredientModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-//   @override
-//   String toString() => 'IngredientModel(name: $name, price: $price, imageUrl: $imageUrl)';
-
-//   @override
-//   bool operator ==(covariant IngredientModel other) {
-//     if (identical(this, other)) return true;
-
-//     return other.name == name && other.price == price && other.imageUrl == imageUrl;
-//   }
-
-//   @override
-//   int get hashCode => name.hashCode ^ price.hashCode ^ imageUrl.hashCode;
-// }
-
-// To parse this JSON data, do
-//
-//     final ingredientModel = ingredientModelFromJson(jsonString);
-
-// To parse this JSON data, do
-//
-//     final ingredientModelResponse = ingredientModelResponseFromJson(jsonString);
 
 import 'dart:convert';
+
+import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart';
 
 class IngredientModelResponse {
   final List<IngredientModel>? data;
@@ -114,18 +47,21 @@ class IngredientModel {
   final dynamic priceById;
   final String? imageUrl;
   final List<Nutritional>? nutritionals;
+  final RecipeIngredient? recipeIngredient;
   IngredientModel(
       {this.id,
       this.name,
       this.nutritionals,
       this.price,
       this.imageUrl,
+        this.recipeIngredient,
       this.priceById});
 
   IngredientModel copyWith({
     int? id,
     String? name,
     List<Nutritional>? nutritionals,
+    RecipeIngredient? recipeIngredient,
     dynamic price,
     dynamic priceById,
     String? url,
@@ -134,6 +70,7 @@ class IngredientModel {
         id: id ?? this.id,
         name: name ?? this.name,
         nutritionals: nutritionals ?? this.nutritionals,
+        recipeIngredient: recipeIngredient ?? this.recipeIngredient,
         price: price ?? this.price,
         priceById: priceById ?? this.priceById,
         imageUrl: url ?? this.imageUrl,
@@ -149,12 +86,15 @@ class IngredientModel {
         id: json["id"],
         name: json["name"],
         price: json["price"],
-        priceById: json["price_by"],
+        priceById:json["unit"]==null?null: (json['price_by'].toString() + " " + json["unit"]['name'].toString()),
         imageUrl: json["url"],
         nutritionals: json["nutritionals"] == null
             ? []
             : List<Nutritional>.from(
-                json["nutritionals"]!.map((x) => Nutritional.fromJson(x))),
+            json["nutritionals"]!.map((x) => Nutritional.fromJson(x))),
+        recipeIngredient: json["recipe_ingredient"] == null
+            ? null
+            : RecipeIngredient.fromJson(json["recipe_ingredient"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -166,6 +106,9 @@ class IngredientModel {
         "nutritionals": nutritionals == null
             ? []
             : List<dynamic>.from(nutritionals!.map((x) => x.toJson())),
+    "recipe_ingredient": recipeIngredient == null
+        ? null
+        : recipeIngredient!.toJson(),
       };
 }
 

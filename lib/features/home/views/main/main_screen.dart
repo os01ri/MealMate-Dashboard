@@ -9,9 +9,12 @@ import 'package:mealmate_dashboard/features/home/views/dashboard/components/head
 import 'package:mealmate_dashboard/features/home/views/dashboard/dashboard_screen.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_enum.dart';
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/side_menu.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/categories_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/ingredients_categories_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/nutritional_page.dart';
-import 'package:mealmate_dashboard/features/store/presentation/pages/store_page.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/ingredients_page.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/recipes_page.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/types_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/unit_types_page.dart';
 import 'package:provider/provider.dart';
 
@@ -61,10 +64,13 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget getSection () => switch (menuAppController.selectedSection) {
   Sections.dashboard => DashboardScreen(),
-  Sections.ingredients => StorePage(),
+  Sections.recipes => RecipesPage(),
+  Sections.ingredients => IngredientsPage(),
   Sections.nutritional =>  NutritionalPage(),
   Sections.units =>  UnitTypesPage(),
-  Sections.categories =>  IngredientsCategoriesPage(),
+  Sections.categoriesIngredients =>  IngredientsCategoriesPage(),
+  Sections.categories =>  CategoriesPage(),
+  Sections.types =>  TypesPage(),
   Sections.users =>  MyDataTable(),
   Sections.settings =>  MyDataTable(),
   _ =>  MyDataTable(),

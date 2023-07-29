@@ -43,11 +43,48 @@ class ApiVariables {
   );
 
 
+  static Uri indexRecipes({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'recipe/index', queryParameters: queryParameters);
+
+  static Uri addRecipe({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'recipe/store', queryParameters: queryParameters);
+
+  static Uri deleteRecipe({required int id,}) =>
+      _dashboardUri(path: 'recipe/$id/destroy');
+
+
+  static Uri indexCategories({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'category/index', queryParameters: queryParameters);
+
+  static Uri addCategories({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'category/store', queryParameters: queryParameters);
+
+  static Uri deleteCategories({required int id,}) =>
+      _dashboardUri(path: 'category/$id/destroy');
+
+
+
+  static Uri indexTypes({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'type/index', queryParameters: queryParameters);
+
+  static Uri addTypes({Map<String, dynamic>? queryParameters}) =>
+      _dashboardUri(path: 'type/store', queryParameters: queryParameters);
+
+  static Uri deleteTypes({required int id,}) =>
+      _dashboardUri(path: 'type/$id/destroy');
+
+
+
+
   static Uri indexIngredients({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'ingredient/index', queryParameters: queryParameters);
 
   static Uri addIngredients({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'ingredient/store', queryParameters: queryParameters);
+
+  static Uri deleteIngredient({required int id,}) =>
+      _dashboardUri(path: 'ingredient/$id/destroy');
+
 
   static Uri indexNutritional({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'nutritional/index', queryParameters: queryParameters);
@@ -58,9 +95,6 @@ class ApiVariables {
   static Uri deleteNutritional({required String id,}) =>
       _dashboardUri(path: 'nutritional/$id/destroy');
 
-
-  static Uri deleteIngredient({required int id,}) =>
-      _dashboardUri(path: 'ingredient/$id/destroy');
 
 
   static Uri indexUnitTypes({Map<String, dynamic>? queryParameters}) =>

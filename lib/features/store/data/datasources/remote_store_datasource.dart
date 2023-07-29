@@ -3,10 +3,111 @@ import 'package:mealmate_dashboard/core/unified_api/methods/delete_api.dart';
 import 'package:mealmate_dashboard/core/unified_api/methods/get_api.dart';
 import 'package:mealmate_dashboard/core/unified_api/methods/post_api.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
+import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 
 class RemoteStoreDatasource {
+  Future<RecipeModelResponse> indexRecipes({Map<String, dynamic>? params}) async {
+    GetApi getApi = GetApi(
+      uri: ApiVariables.indexRecipes(),
+      fromJson: RecipeModelResponse.fromRawJson,
+    );
+    final result = await getApi.callRequest();
+    return result;
+  }
+
+  Future<bool> addRecipe({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.addRecipe(),
+      body: body,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+  Future<bool> deleteRecipe({required Map<String, dynamic> params}) async {
+    DeleteApi deleteApi = DeleteApi(
+      uri: ApiVariables.deleteRecipe(
+          id: params['id']
+      ),
+      fromJson: (v) => true,
+    );
+    final result = await deleteApi.callRequest();
+    return result;
+  }
+
+
+
+  Future<CategoriesModelResponse> indexCategories({Map<String, dynamic>? params}) async {
+    GetApi getApi = GetApi(
+      uri: ApiVariables.indexCategories(),
+      fromJson: CategoriesModelResponse.fromRawJson,
+    );
+    final result = await getApi.callRequest();
+    return result;
+  }
+
+  Future<bool> addCategories({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.addCategories(),
+      body: body,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+  Future<bool> deleteCategories({required Map<String, dynamic> params}) async {
+    DeleteApi deleteApi = DeleteApi(
+      uri: ApiVariables.deleteCategories(
+          id: params['id']
+      ),
+      fromJson: (v) => true,
+    );
+    final result = await deleteApi.callRequest();
+    return result;
+  }
+
+
+
+
+  Future<TypesModelResponse> indexTypes({Map<String, dynamic>? params}) async {
+    GetApi getApi = GetApi(
+      uri: ApiVariables.indexTypes(),
+      fromJson: TypesModelResponse.fromRawJson,
+    );
+    final result = await getApi.callRequest();
+    return result;
+  }
+
+  Future<bool> addTypes({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.addTypes(),
+      body: body,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+  Future<bool> deleteTypes({required Map<String, dynamic> params}) async {
+    DeleteApi deleteApi = DeleteApi(
+      uri: ApiVariables.deleteTypes(
+          id: params['id']
+      ),
+      fromJson: (v) => true,
+    );
+    final result = await deleteApi.callRequest();
+    return result;
+  }
+
+
+
+
   Future<IngredientModelResponse> indexIngredients({Map<String, dynamic>? params}) async {
     GetApi getApi = GetApi(
       uri: ApiVariables.indexIngredients(),

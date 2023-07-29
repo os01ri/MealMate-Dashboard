@@ -5,22 +5,21 @@ import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
-import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
-class CategoriesDeleteFieldWidget extends StatefulWidget {
+class CategoriesIngredientsDeleteFieldWidget extends StatefulWidget {
   final Function onDeleteFinish;
   final int id;
-  const CategoriesDeleteFieldWidget({Key? key,required this.onDeleteFinish,required this.id}) : super(key: key);
+  const CategoriesIngredientsDeleteFieldWidget({Key? key,required this.onDeleteFinish,required this.id}) : super(key: key);
 
   @override
-  State<CategoriesDeleteFieldWidget> createState() => _CategoriesDeleteFieldWidgetState();
+  State<CategoriesIngredientsDeleteFieldWidget> createState() => _CategoriesIngredientsDeleteFieldWidgetState();
 }
 
-class _CategoriesDeleteFieldWidgetState extends State<CategoriesDeleteFieldWidget> {
+class _CategoriesIngredientsDeleteFieldWidgetState extends State<CategoriesIngredientsDeleteFieldWidget> {
   final _formKey = GlobalKey<FormState>();
   late final StoreCubit _storeCubit;
 
@@ -85,7 +84,7 @@ class _CategoriesDeleteFieldWidgetState extends State<CategoriesDeleteFieldWidge
                 _ =>  mmDeleteDialogFooter(context: context,
                 onDelete: (){
 
-                _storeCubit.deleteCategories(DeleteCategoriesParams(id: widget.id));
+                _storeCubit.deleteIngredientsCategories(DeleteCategoriesIngredientParams(id: widget.id));
 
                 }),
               };

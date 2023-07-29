@@ -152,10 +152,11 @@ class _LanguageFieldState extends State<LanguageField> {
                 //  AppSettings.language = 'ar';
                   context.locale = Locale('ar');
                 }
+                setState(() {});
                 Navigator.of(context).popUntil((route) => false);
 
                 Provider.of<AppController>(context,listen: false).reset();
-                Future.delayed(Duration(milliseconds: 200)).then((value) {
+                Future.delayed(Duration(milliseconds: 400)).then((value) {
                   HelperFunctions.restart();
                 });
 

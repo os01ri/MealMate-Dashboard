@@ -16,14 +16,14 @@ import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredien
 import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredients_add_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_delete_fields_widget.dart';
 
-class StorePage extends StatefulWidget {
-  const StorePage({super.key});
+class IngredientsPage extends StatefulWidget {
+  const IngredientsPage({super.key});
 
   @override
-  State<StorePage> createState() => _StorePageState();
+  State<IngredientsPage> createState() => _IngredientsPageState();
 }
 
-class _StorePageState extends State<StorePage> {
+class _IngredientsPageState extends State<IngredientsPage> {
   late final StoreCubit _storeCubit;
 
   @override
@@ -66,7 +66,7 @@ class _StorePageState extends State<StorePage> {
     for(var item in ingredients)
       {
         data.add({
-          // "id": item.id,
+          "id": item.id,
           "name": item.name,
           "nutritional":item.nutritionals!.map((e) => "${e.name}: ${e.ingredientNutritionals!.value}%").join("\n").toString(),
           "price" : item.price,
@@ -78,12 +78,12 @@ class _StorePageState extends State<StorePage> {
       }
     dataTableColumns.addAll(
       [
-        // MMDataTableColumn(
-        //     dataKey: "id",
-        //     dataType: MMDataTableColumnType.string,
-        //     columnTitle: "ID",
-        //     isSortEnabled: true
-        // ),
+        MMDataTableColumn(
+            dataKey: "id",
+            dataType: MMDataTableColumnType.num,
+            columnTitle: "ID",
+            isSortEnabled: true
+        ),
         MMDataTableColumn(
             dataKey: "name",
             dataType: MMDataTableColumnType.string,

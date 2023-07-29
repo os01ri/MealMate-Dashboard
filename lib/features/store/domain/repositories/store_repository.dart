@@ -1,10 +1,35 @@
 import 'package:dartz/dartz.dart';
 import 'package:mealmate_dashboard/core/error/failures.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
+import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 
 abstract class StoreRepository {
+  Future<Either<Failure, RecipeModelResponse>> indexRecipes({Map<String, dynamic> params});
+
+  Future<Either<Failure, bool>> addRecipe({required Map<String, dynamic> body});
+
+  Future<Either<Failure, bool>> deleteRecipe({required Map<String, dynamic> params});
+
+
+  Future<Either<Failure, CategoriesModelResponse>> indexCategories({Map<String, dynamic> params});
+
+  Future<Either<Failure, bool>> addCategories({required Map<String, dynamic> body});
+
+  Future<Either<Failure, bool>> deleteCategories({required Map<String, dynamic> params});
+
+
+  Future<Either<Failure, TypesModelResponse>> indexTypes({Map<String, dynamic> params});
+
+  Future<Either<Failure, bool>> addTypes({required Map<String, dynamic> body});
+
+  Future<Either<Failure, bool>> deleteTypes({required Map<String, dynamic> params});
+
+
+
   Future<Either<Failure, IngredientModelResponse>> indexIngredients({Map<String, dynamic> params});
 
   Future<Either<Failure, bool>> addIngredients({required Map<String, dynamic> body});

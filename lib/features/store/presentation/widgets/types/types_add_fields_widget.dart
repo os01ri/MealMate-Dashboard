@@ -25,20 +25,21 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/add_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
-class CategoriesAddFieldWidget extends StatefulWidget {
+class TypesAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const CategoriesAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  const TypesAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
 
   @override
-  State<CategoriesAddFieldWidget> createState() => _CategoriesAddFieldWidgetState();
+  State<TypesAddFieldWidget> createState() => _TypesAddFieldWidgetState();
 }
 
-class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
+class _TypesAddFieldWidgetState extends State<TypesAddFieldWidget> {
   late TextEditingController nameController;
   final _formKey = GlobalKey<FormState>();
   late final StoreCubit _storeCubit;
@@ -76,7 +77,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Category Details".tr(),
+                      child: Text("Type Details".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -91,7 +92,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                         fit: FlexFit.tight,
                         flex: 5,
                         child: SimpleLabelTextField(
-                          labelText: "Category Name".tr(),
+                          labelText: "Type Name".tr(),
                           textEditingController: nameController,
                           validator: (text) {
                             if (text != null && text.isNotEmpty) {
@@ -128,7 +129,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                 children: [
                   Transform.translate(
                       offset: Offset(0,-10),
-                      child: Text("Category Image".tr(),
+                      child: Text("Type Image".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -140,7 +141,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                     mainAxisAlignment: imageForCategory==null?MainAxisAlignment.center:MainAxisAlignment.spaceBetween,
                     children: [
                       MainButton(
-                          text: imageForCategory!=null?"Change Image for Category".tr():"Pick an Image for Category".tr(),
+                          text: imageForCategory!=null?"Change Image for Type".tr():"Pick an Image for Type".tr(),
                           icon: const Icon(Icons.camera,
                             color: Colors.white,
                           ),
@@ -224,7 +225,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
     if(fromFields && image)
     {
 
-      _storeCubit.addCategories(AddCategoriesParams(
+      _storeCubit.addTypes(AddTypesParams(
         name: nameController.text,
         imageUrl: imageForCategory!,
       ));

@@ -9,18 +9,19 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categor
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/delete_types.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
-class CategoriesDeleteFieldWidget extends StatefulWidget {
+class TypesDeleteFieldWidget extends StatefulWidget {
   final Function onDeleteFinish;
   final int id;
-  const CategoriesDeleteFieldWidget({Key? key,required this.onDeleteFinish,required this.id}) : super(key: key);
+  const TypesDeleteFieldWidget({Key? key,required this.onDeleteFinish,required this.id}) : super(key: key);
 
   @override
-  State<CategoriesDeleteFieldWidget> createState() => _CategoriesDeleteFieldWidgetState();
+  State<TypesDeleteFieldWidget> createState() => _TypesDeleteFieldWidgetState();
 }
 
-class _CategoriesDeleteFieldWidgetState extends State<CategoriesDeleteFieldWidget> {
+class _TypesDeleteFieldWidgetState extends State<TypesDeleteFieldWidget> {
   final _formKey = GlobalKey<FormState>();
   late final StoreCubit _storeCubit;
 
@@ -85,7 +86,7 @@ class _CategoriesDeleteFieldWidgetState extends State<CategoriesDeleteFieldWidge
                 _ =>  mmDeleteDialogFooter(context: context,
                 onDelete: (){
 
-                _storeCubit.deleteCategories(DeleteCategoriesParams(id: widget.id));
+                _storeCubit.deleteTypes(DeleteTypesParams(id: widget.id));
 
                 }),
               };
