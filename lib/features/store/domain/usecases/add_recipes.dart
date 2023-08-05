@@ -16,25 +16,9 @@ class AddRecipesUseCase implements UseCase<bool, AddRecipeParams> {
 }
 
 class AddRecipeParams implements UseCaseParams {
-  final String name;
-  final String imageUrl;
-  final double price;
-  final double priceBy;
-  final int priceUnitId;
-  final int categoryId;
-  final List<IngredientNutritionals> ingredientNutritionals;
+  final Map<String, dynamic> body;
 
-  AddRecipeParams(
-      {
-        required this.name,
-        required this.imageUrl,
-        required this.price,
-        required this.priceBy,
-        required this.priceUnitId,
-        required this.categoryId,
-        required this.ingredientNutritionals
-      });
-
+  AddRecipeParams({required this.body});
 
   @override
   Map<String, dynamic> getParams() {
@@ -44,19 +28,11 @@ class AddRecipeParams implements UseCaseParams {
 
   @override
   Map<String, dynamic> getBody() => {
-    "name": name,
-    "price": price,
-    "unit_id": priceUnitId,
-    "price_by": priceBy,
-    "category_id": categoryId,
-    "url": imageUrl,
-    "nutritional":[
-      ...ingredientNutritionals.map((e) => e.toJson())
-    ]
+    ...body
   };
 
   @override
-  List<Object?> get props => [name];
+  List<Object?> get props => [body];
 
   @override
   bool? get stringify => true;

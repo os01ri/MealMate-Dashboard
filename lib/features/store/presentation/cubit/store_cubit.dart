@@ -395,12 +395,12 @@ class StoreCubit extends Cubit<StoreState> {
 
   getNutritionalAndUnitsAndCategories(
       {required IndexUnitTypesParams paramsUnits,
-      required IndexCategoriesIngredientParams paramsCategoriesIngredient,
+        required IndexCategoriesIngredientParams paramsCategoriesIngredient,
         required IndexNutritionalParams paramsNutritional,
       }){
     emit(state.copyWith(status: CubitStatus.loading));
-    
-     
+
+
     ParallelService parallelService = ParallelService(services: [
       ParallelModel(
           service: _indexUnitTypes(paramsUnits),
@@ -437,10 +437,72 @@ class StoreCubit extends Cubit<StoreState> {
         emit(
             state.copyWith(
               status: CubitStatus.success,
-          nutritional: indexNutritionalData,
-          categoriesIngredients: indexCategoriesTypesData,
-          unitTypes: indexUnitTypesData,
-        ));
+              nutritional: indexNutritionalData,
+              categoriesIngredients: indexCategoriesTypesData,
+              unitTypes: indexUnitTypesData,
+            ));
+      }
+    });
+
+  }
+
+
+  getRecipesAndUnitsAndCategories(
+      {required IndexTypesParams paramsTypes,
+        required IndexCategoriesParams paramsCategories,
+        required IndexIngredientsParams paramsIngredients,
+        required IndexUnitTypesParams paramsUnitTypes,
+      }){
+    emit(state.copyWith(status: CubitStatus.loading));
+
+
+    ParallelService parallelService = ParallelService(services: [
+      ParallelModel(
+          service: _indexTypes(paramsTypes),
+          name: "_indexTypes"),
+      ParallelModel(
+          service: _indexCategories(paramsCategories),
+          name: "_indexCategories"),
+      ParallelModel(
+          service: _indexIngredients(paramsIngredients),
+          name: "_indexIngredients"),
+      ParallelModel(
+          service: _indexUnitTypes(paramsUnitTypes),
+          name: "_indexUnitTypes"),
+    ]);
+
+
+    parallelService.getResults().catchError((onError){
+      log('fail');
+      emit(state.copyWith(status: CubitStatus.failure));
+    }).then((value) {
+      if (parallelService.isServicesFailed()) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+
+      } else {
+        log('success');
+
+        dynamic indexIngredientsResult = value!.firstWhere((element) => element.name=="_indexIngredients").finalResult;
+        var indexIngredientsData = indexIngredientsResult.fold((l) {log('fail');}, (r) => r.data,);
+
+        dynamic indexCategoriesResult = value.firstWhere((element) => element.name=="_indexCategories").finalResult;
+        var indexCategoriesData = indexCategoriesResult.fold((l) {log('fail');}, (r) => r.data,);
+
+        dynamic indexTypesResult = value.firstWhere((element) => element.name=="_indexTypes").finalResult;
+        var indexTypesData = indexTypesResult.fold((l) {log('fail');}, (r) => r.data,);
+
+        dynamic indexUnitTypesResult = value.firstWhere((element) => element.name=="_indexUnitTypes").finalResult;
+        var indexUnitTypesData = indexUnitTypesResult.fold((l) {log('fail');}, (r) => r.data,);
+
+        emit(
+            state.copyWith(
+              status: CubitStatus.success,
+              ingredients: indexIngredientsData,
+              categories: indexCategoriesData,
+              types: indexTypesData,
+              unitTypes: indexUnitTypesData
+            ));
       }
     });
 

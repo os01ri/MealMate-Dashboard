@@ -17,6 +17,7 @@ import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit
 import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredient_delete_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredients_add_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/nutritional/nutritional_delete_fields_widget.dart';
+import 'package:mealmate_dashboard/features/store/presentation/widgets/recipes/recipes_add_fields_widget.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/recipes/recipes_delete_fields_widget.dart';
 
 class RecipesPage extends StatefulWidget {
@@ -71,9 +72,13 @@ class _RecipesPageState extends State<RecipesPage> {
         data.add({
           "id": item.id,
           "name": item.name,
+          "description": item.description,
+          "ingredients": item.ingredients!.map((e) => "${e.name}: ${e.recipeIngredient!.quantity}${e.ingredientUnitType}").join("\n"),
           "category": item.category!.name,
           "type": item.type!.name,
           "steps": item.steps!.map((e) => "${e.name}: ${e.description!}").join("\n").toString(),
+          "feeds": item.feeds,
+          "time": item.time,
           "image" : item.url,
           "editAndDelete": item.id
         });
@@ -93,6 +98,18 @@ class _RecipesPageState extends State<RecipesPage> {
             isSortEnabled: true
         ),
         MMDataTableColumn(
+            dataKey: "description",
+            dataType: MMDataTableColumnType.string,
+            columnTitle: "Description".tr(),
+            isSortEnabled: true
+        ),
+        MMDataTableColumn(
+            dataKey: "ingredients",
+            dataType: MMDataTableColumnType.string,
+            columnTitle: "Ingredients".tr(),
+            isSortEnabled: true
+        ),
+        MMDataTableColumn(
             dataKey: "category",
             dataType: MMDataTableColumnType.string,
             columnTitle: "Category".tr(),
@@ -108,6 +125,18 @@ class _RecipesPageState extends State<RecipesPage> {
             dataKey: "steps",
             dataType: MMDataTableColumnType.string,
             columnTitle: "Steps".tr(),
+            isSortEnabled: true
+        ),
+        MMDataTableColumn(
+            dataKey: "feeds",
+            dataType: MMDataTableColumnType.string,
+            columnTitle: "feeds".tr(),
+            isSortEnabled: true
+        ),
+        MMDataTableColumn(
+            dataKey: "time",
+            dataType: MMDataTableColumnType.string,
+            columnTitle: "time".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
@@ -136,7 +165,7 @@ class _RecipesPageState extends State<RecipesPage> {
       onAdd: (){
         showMMAddDialog(context: context,
             title: "Add Recipes".tr(),
-            addFieldsWidget: IngredientsAddFieldWidget(
+            addFieldsWidget: RecipesAddFieldWidget(
               onAddFinish: (){
                 _storeCubit.getRecipes(IndexRecipesParams());
               },

@@ -48,12 +48,14 @@ class IngredientModel {
   final String? imageUrl;
   final List<Nutritional>? nutritionals;
   final RecipeIngredient? recipeIngredient;
+  final String? ingredientUnitType;
   IngredientModel(
       {this.id,
       this.name,
       this.nutritionals,
       this.price,
       this.imageUrl,
+        this.ingredientUnitType,
         this.recipeIngredient,
       this.priceById});
 
@@ -65,6 +67,7 @@ class IngredientModel {
     dynamic price,
     dynamic priceById,
     String? url,
+    String? ingredientUnitType,
   }) =>
       IngredientModel(
         id: id ?? this.id,
@@ -74,6 +77,7 @@ class IngredientModel {
         price: price ?? this.price,
         priceById: priceById ?? this.priceById,
         imageUrl: url ?? this.imageUrl,
+          ingredientUnitType: ingredientUnitType ?? this.ingredientUnitType
       );
 
   factory IngredientModel.fromRawJson(String str) =>
@@ -95,6 +99,8 @@ class IngredientModel {
         recipeIngredient: json["recipe_ingredient"] == null
             ? null
             : RecipeIngredient.fromJson(json["recipe_ingredient"]),
+        ingredientUnitType:json["unit"]==null?"": json["unit"]['name'].toString(),
+
       );
 
   Map<String, dynamic> toJson() => {
