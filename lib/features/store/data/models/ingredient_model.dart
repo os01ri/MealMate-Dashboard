@@ -49,6 +49,9 @@ class IngredientModel {
   final List<Nutritional>? nutritionals;
   final RecipeIngredient? recipeIngredient;
   final String? ingredientUnitType;
+  final String? ingredientUnitTypeId;
+  final String? ingredientCategory;
+  final String? ingredientCategoryId;
   IngredientModel(
       {this.id,
       this.name,
@@ -56,7 +59,10 @@ class IngredientModel {
       this.price,
       this.imageUrl,
         this.ingredientUnitType,
+        this.ingredientUnitTypeId,
         this.recipeIngredient,
+        this.ingredientCategory,
+        this.ingredientCategoryId,
       this.priceById});
 
   IngredientModel copyWith({
@@ -68,6 +74,9 @@ class IngredientModel {
     dynamic priceById,
     String? url,
     String? ingredientUnitType,
+    String? ingredientUnitTypeId,
+    String? ingredientCategory,
+    String? ingredientCategoryId,
   }) =>
       IngredientModel(
         id: id ?? this.id,
@@ -77,7 +86,10 @@ class IngredientModel {
         price: price ?? this.price,
         priceById: priceById ?? this.priceById,
         imageUrl: url ?? this.imageUrl,
-          ingredientUnitType: ingredientUnitType ?? this.ingredientUnitType
+          ingredientUnitType: ingredientUnitType ?? this.ingredientUnitType,
+          ingredientUnitTypeId: ingredientUnitTypeId ?? this.ingredientUnitTypeId,
+          ingredientCategoryId: ingredientCategoryId ?? this.ingredientCategoryId,
+          ingredientCategory: ingredientCategory ?? this.ingredientCategory
       );
 
   factory IngredientModel.fromRawJson(String str) =>
@@ -100,6 +112,9 @@ class IngredientModel {
             ? null
             : RecipeIngredient.fromJson(json["recipe_ingredient"]),
         ingredientUnitType:json["unit"]==null?"": json["unit"]['name'].toString(),
+        ingredientUnitTypeId: json["unit"]==null?"": json["unit"]['id'].toString(),
+        ingredientCategoryId:json["category1"]==null?"": json["category1"]['id'].toString(),
+        ingredientCategory: json["category1"]==null?"": json["category1"]['name'].toString(),
 
       );
 

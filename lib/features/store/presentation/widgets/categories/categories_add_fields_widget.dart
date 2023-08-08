@@ -16,9 +16,11 @@ import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_drop_down_option.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
+import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories.dart';
@@ -32,7 +34,9 @@ import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit
 
 class CategoriesAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const CategoriesAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  final bool isAdd;
+  final CategoriesModel? categoriesModel;
+  const CategoriesAddFieldWidget({Key? key,required this.onAddFinish,this.isAdd=true,this.categoriesModel}) : super(key: key);
 
   @override
   State<CategoriesAddFieldWidget> createState() => _CategoriesAddFieldWidgetState();
@@ -51,6 +55,11 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
     nameController = TextEditingController();
     _storeCubit = StoreCubit();
 
+    if(!widget.isAdd)
+      {
+        nameController = TextEditingController(text: widget.categoriesModel!.name);
+        imageForCategory = widget.categoriesModel!.url;
+      }
   }
 
   @override
@@ -200,10 +209,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.failure => Text('error'.tr()).center(),
 
-                _ =>  mmAddDialogFooter(context: context,
-                onAdd: () {
-                _onAdd();
-                }),
+                _ =>  getFooter()
               };
               },
             ),
@@ -215,7 +221,17 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
 
   }
 
-
+  Widget getFooter(){
+    if(widget.isAdd)
+      return mmAddDialogFooter(context: context,
+          onAdd: () {
+            _onAdd();
+          });
+    else return mmUpdateDialogFooter(context: context,
+        onUpdate: () {
+          _onUpdate();
+        });
+  }
 
   void _onAdd(){
     firstCheck = true;
@@ -228,6 +244,21 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
         name: nameController.text,
         imageUrl: imageForCategory!,
       ));
+    }
+
+  }
+
+  void _onUpdate(){
+    firstCheck = true;
+    bool fromFields =  _formKey.currentState!.validate();
+    bool image = imageForCategory!=null;
+    if(fromFields && image)
+    {
+
+      // _storeCubit.addCategories(AddCategoriesParams(
+      //   name: nameController.text,
+      //   imageUrl: imageForCategory!,
+      // ));
     }
 
   }

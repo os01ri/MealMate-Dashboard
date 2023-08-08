@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picke
 import 'package:mealmate_dashboard/core/helper/file_uploader/upload_service.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_drop_down_option.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
@@ -22,7 +23,10 @@ import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit
 
 class IngredientsAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const IngredientsAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  final bool isAdd;
+  final IngredientModel? ingredientModel;
+
+  const IngredientsAddFieldWidget({Key? key,required this.onAddFinish,this.isAdd=true,this.ingredientModel}) : super(key: key);
 
   @override
   State<IngredientsAddFieldWidget> createState() => _IngredientsAddFieldWidgetState();
@@ -41,7 +45,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
   TextEditingController priceController = TextEditingController();
   TextEditingController valueController = TextEditingController();
   late final StoreCubit _storeCubitNutritional;
-  final keysForms = <GlobalKey<_IngredientNutritionalWidgetState>>[];
+  final nutritionalKeysForms = <GlobalKey<_IngredientNutritionalWidgetState>>[];
 
   bool isRefresh = false;
    @override
@@ -54,6 +58,22 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
       paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
       paramsUnits: IndexUnitTypesParams()
     );
+
+    if(!widget.isAdd)
+      {
+        nameController = TextEditingController(text: widget.ingredientModel!.name);
+        priceController = TextEditingController(text: widget.ingredientModel!.price.toString());
+        valueController = TextEditingController(text: widget.ingredientModel!.priceById.toString().split(" ").first.toString());
+        imageForIngredient = widget.ingredientModel!.imageUrl;
+        ingredientPriceUnit = widget.ingredientModel!.ingredientUnitType;
+        ingredientPriceUnitId = int.parse(widget.ingredientModel!.ingredientUnitTypeId.toString());
+        ingredientCategoryName = widget.ingredientModel!.ingredientCategory.toString();
+        ingredientCategoryId = int.parse(widget.ingredientModel!.ingredientCategoryId.toString());
+        widget.ingredientModel!.nutritionals!.forEach((element) {
+          nutritionalKeysForms.add(GlobalKey<_IngredientNutritionalWidgetState>());
+        });
+
+      }
 
   }
 
@@ -352,17 +372,18 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                       child: const CircularProgressIndicator.adaptive().center(),
                     ),
                     child: ListView.builder(
-                      itemCount: keysForms.length,
+                      itemCount: nutritionalKeysForms.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return IngredientNutritionalWidget(
-                          key: keysForms[index],
+                          key: nutritionalKeysForms[index],
+                          nutritionalUpdate: widget.ingredientModel!=null && widget.ingredientModel!.nutritionals!.length > index?widget.ingredientModel!.nutritionals![index] : null,
                           index: index,
                           nutritional: nutritional,
                           unitTypes: unitTypes,
                           onRemove: (index) async {
                             setState(() {
-                              keysForms.removeAt(index);
+                              nutritionalKeysForms.removeAt(index);
                             });
                           },
                         );
@@ -384,7 +405,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                           ),
                           backgroundColor:  Colors.cyan,
                           onPressed: (){
-                            keysForms.add(GlobalKey<_IngredientNutritionalWidgetState>());
+                            nutritionalKeysForms.add(GlobalKey<_IngredientNutritionalWidgetState>());
                             setState(() {
 
                             });
@@ -416,10 +437,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.failure => Text('error'.tr()).center(),
 
-                _ =>  mmAddDialogFooter(context: context,
-                onAdd: () {
-                _onAdd();
-                }),
+                _ =>  getFooter()
               };
               },
             ),
@@ -430,9 +448,60 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
     );
   }
 
+  Widget getFooter(){
+    if(widget.isAdd) {
+      return mmAddDialogFooter(context: context,
+          onAdd: () {
+            _onAdd();
+          });
+    } else {
+      return mmUpdateDialogFooter(context: context,
+        onUpdate: () {
+          _onUpdate();
+        });
+    }
+  }
+
+
+
+  void _onUpdate(){
+    firstCheck = true;
+    bool nutritional =nutritionalKeysForms.where((element) => element.currentState!.formKey.currentState!.validate()).length == nutritionalKeysForms.length;
+    bool fromFields =  _formKey.currentState!.validate();
+    bool image = imageForIngredient!=null;
+    if(nutritional && fromFields && image)
+    {
+
+      // _storeCubit.addIngredients(AddIngredientsParams(
+      //   name: nameController.text,
+      //   price: double.parse(priceController.text),
+      //   priceBy: double.parse(valueController.text),
+      //   priceUnitId: ingredientPriceUnitId!,
+      //   categoryId: ingredientCategoryId!,
+      //   imageUrl: imageForIngredient!,
+      //   ingredientNutritionals: [
+      //     ...nutritionalKeysForms.map((e) {
+      //       var nutritionalId = e.currentState!.ingredientNutritionalId;
+      //       var unitId = e.currentState!.ingredientUnitId;
+      //       var value = double.parse(e.currentState!.valueController.text);
+      //       var percent = double.parse(e.currentState!.percentController.text);
+      //       return IngredientNutritionals(
+      //           id: nutritionalId,
+      //           unitId: unitId,
+      //           value: value,
+      //           percent: percent
+      //       );
+      //     } )
+      //   ],
+      // ));
+    }
+
+  }
+
+
   void _onAdd(){
     firstCheck = true;
-    bool nutritional =keysForms.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysForms.length;
+    bool nutritional =nutritionalKeysForms.where((element) => element.currentState!.formKey.currentState!.validate()).length == nutritionalKeysForms.length;
     bool fromFields =  _formKey.currentState!.validate();
     bool image = imageForIngredient!=null;
     if(nutritional && fromFields && image)
@@ -446,7 +515,7 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
         categoryId: ingredientCategoryId!,
         imageUrl: imageForIngredient!,
         ingredientNutritionals: [
-          ...keysForms.map((e) {
+          ...nutritionalKeysForms.map((e) {
             var nutritionalId = e.currentState!.ingredientNutritionalId;
             var unitId = e.currentState!.ingredientUnitId;
             var value = double.parse(e.currentState!.valueController.text);
@@ -472,9 +541,11 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
   final Function onRemove;
   final List<Nutritional> nutritional;
   final List<UnitTypesModel> unitTypes;
+  final Nutritional? nutritionalUpdate;
 
    const IngredientNutritionalWidget({Key? key,
      required  this.nutritional, required  this.unitTypes,
+     this.nutritionalUpdate,
      required this.index,required this.onRemove}) : super(key: key);
  
    @override
@@ -494,6 +565,23 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.nutritionalUpdate!=null)
+      {
+        ingredientNutritional = widget.nutritionalUpdate!.name;
+        ingredientNutritionalId = widget.nutritionalUpdate!.id;
+        if(widget.nutritionalUpdate!.ingredientNutritionals!.unitId!=null) {
+          ingredientUnitId = widget.nutritionalUpdate!.ingredientNutritionals!.unitId;
+        }
+        if(widget.nutritionalUpdate!.ingredientNutritionals!.unitId!=null) {
+          ingredientUnit = widget.unitTypes.firstWhere((element) => element.id==ingredientUnitId).name;
+        }
+        if(widget.nutritionalUpdate!.ingredientNutritionals!.value!=null) {
+          valueController = TextEditingController(text: widget.nutritionalUpdate!.ingredientNutritionals!.value.toString());
+        }
+        if(widget.nutritionalUpdate!.ingredientNutritionals!.percent!=null) {
+          percentController = TextEditingController(text: widget.nutritionalUpdate!.ingredientNutritionals!.percent.toString());
+        }
+      }
   }
   
    @override

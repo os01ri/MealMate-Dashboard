@@ -88,8 +88,8 @@ class _MMDataTableState extends State<MMDataTable> {
             onDelete: (id){
             widget.onDelete!(id);
             },
-            onEdit: (id){
-              widget.onEdit!(id);
+            onEdit: (item){
+              widget.onEdit!(item);
             }
           ),
         ),

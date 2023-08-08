@@ -4,13 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
+import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class NutritionalAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const NutritionalAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  final bool isAdd;
+  final Nutritional? nutritional;
+  const NutritionalAddFieldWidget({Key? key,required this.onAddFinish, this.isAdd=true, this.nutritional}) : super(key: key);
 
   @override
   State<NutritionalAddFieldWidget> createState() => _NutritionalAddFieldWidgetState();
@@ -29,6 +33,10 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
     nameController = TextEditingController();
     _storeCubit = StoreCubit();
 
+    if(!widget.isAdd)
+      {
+        nameController = TextEditingController(text: widget.nutritional!.name);
+      }
   }
 
   @override
@@ -74,13 +82,7 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.failure => Text('error'.tr()).center(),
 
-                _ =>  mmAddDialogFooter(context: context,
-                onAdd: (){
-                if(_formKey.currentState!.validate())
-                {
-                _storeCubit.addNutritional(AddNutritionalParams(name: nameController.text));
-                }
-                }),
+                _ =>  getFooter()
               };
               },
             ),
@@ -89,5 +91,32 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
         ],
       ),
     );
+  }
+
+  Widget getFooter(){
+    if(widget.isAdd)
+      return mmAddDialogFooter(context: context,
+          onAdd: () {
+            _onAdd();
+          });
+    else return mmUpdateDialogFooter(context: context,
+        onUpdate: () {
+          _onUpdate();
+        });
+  }
+
+
+  void _onUpdate(){
+    if(_formKey.currentState!.validate())
+    {
+      //_storeCubit.addNutritional(AddNutritionalParams(name: nameController.text));
+    }
+  }
+
+  void _onAdd(){
+    if(_formKey.currentState!.validate())
+    {
+      _storeCubit.addNutritional(AddNutritionalParams(name: nameController.text));
+    }
   }
 }

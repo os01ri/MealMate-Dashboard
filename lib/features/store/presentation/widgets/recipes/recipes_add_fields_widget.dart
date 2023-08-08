@@ -9,11 +9,13 @@ import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picke
 import 'package:mealmate_dashboard/core/helper/file_uploader/upload_service.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_drop_down_option.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/entities/ingredient.dart';
@@ -29,7 +31,9 @@ import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit
 
 class RecipesAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const RecipesAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  final bool isAdd;
+  final RecipeModel? recipeModel;
+  const RecipesAddFieldWidget({Key? key,required this.onAddFinish,this.isAdd=true,this.recipeModel}) : super(key: key);
 
   @override
   State<RecipesAddFieldWidget> createState() => _RecipesAddFieldWidgetState();
@@ -65,7 +69,25 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
       paramsUnitTypes: IndexUnitTypesParams()
     );
 
-  }
+    if(!widget.isAdd)
+    {
+      nameController = TextEditingController(text: widget.recipeModel!.name);
+      descriptionController = TextEditingController(text: widget.recipeModel!.description.toString());
+      feedController = TextEditingController(text: widget.recipeModel!.feeds.toString());
+      timeController = TextEditingController(text: widget.recipeModel!.time.toString());
+      ingredientCategoryName = widget.recipeModel!.category!.name.toString();
+      ingredientCategoryId = int.parse(widget.recipeModel!.category!.id.toString());
+      recipeTypeName = widget.recipeModel!.type!.name.toString();
+      recipeTypeId = int.parse(widget.recipeModel!.type!.id.toString());
+      imageForRecipe = widget.recipeModel!.url;
+      widget.recipeModel!.steps!.forEach((element) {
+        keysFormsSteps.add(GlobalKey<_StepsWidgetState>());
+      });
+      widget.recipeModel!.ingredients!.forEach((element) {
+        keysFormsIngredients.add(GlobalKey<_RecipeIngredientsWidgetState>());
+      });
+    }
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -355,6 +377,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
                     itemBuilder: (context, index) {
                       return RecipeIngredientsWidget(
                         key: keysFormsIngredients[index],
+                        recipeIngredient: widget.recipeModel!=null && widget.recipeModel!.ingredients!.length > index?widget.recipeModel!.ingredients![index].recipeIngredient : null,
                         index: index,
                         ingredients: ingredient,
                         unitTypes: unitTypes,
@@ -426,6 +449,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
                     itemBuilder: (context, index) {
                       return StepsWidget(
                         key: keysFormsSteps[index],
+                        step: widget.recipeModel!=null && widget.recipeModel!.steps!.length > index?widget.recipeModel!.steps![index] : null,
                         index: index,
                         onRemove: (index) async {
                           setState(() {
@@ -478,12 +502,8 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-              //  CubitStatus.failure => Text('error'.tr()).center(),
-
-                _ =>  mmAddDialogFooter(context: context,
-                onAdd: () {
-                _onAdd();
-                }),
+                CubitStatus.failure => Text('error'.tr()).center(),
+                _ =>  getFooter()
               };
               },
             ),
@@ -492,6 +512,54 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
         ],
       ),
     );
+  }
+
+
+  Widget getFooter(){
+    if(widget.isAdd)
+      return mmAddDialogFooter(context: context,
+          onAdd: () {
+            _onAdd();
+          });
+    else return mmUpdateDialogFooter(context: context,
+        onUpdate: () {
+          _onUpdate();
+        });
+  }
+
+  void _onUpdate(){
+    firstCheck = true;
+    bool ingredients = keysFormsIngredients.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsIngredients.length;
+    bool steps = keysFormsSteps.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsIngredients.length;
+    bool fromFields =  _formKey.currentState!.validate();
+    bool image = imageForRecipe!=null;
+    if(ingredients && steps && fromFields && image)
+    {
+
+      // _storeCubit.addRecipe(AddRecipeParams(
+      //     body: {
+      //       "name":nameController.text,
+      //       "description":descriptionController.text,
+      //       "feeds": feedController.text,
+      //       "time":feedController.text,
+      //       "url":imageForRecipe,
+      //       "type_id":recipeTypeId,
+      //       "category_id":ingredientCategoryId,
+      //       "step": keysFormsSteps.map((e) =>
+      //       {
+      //         "name":e.currentState!.nameController.text.toString(),
+      //         "rank":e.currentState!.widget.index.toString(),
+      //         "description":e.currentState!.descriptionController.text.toString()
+      //       }).toList(),
+      //       "ingredient": keysFormsIngredients.map((e) =>  {
+      //         "id":e.currentState!.ingredientId.toString(),
+      //         "quantity":e.currentState!.quantityController.text.toString(),
+      //         "unit_id":e.currentState!.ingredientUnitId.toString()
+      //       }).toList()
+      //     }
+      // ));
+    }
+
   }
 
   void _onAdd(){
@@ -504,30 +572,31 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
     {
 
       _storeCubit.addRecipe(AddRecipeParams(
-        body: {
-          "name":nameController.text,
-          "description":descriptionController.text,
-          "feeds": feedController.text,
-          "time":feedController.text,
-          "url":imageForRecipe,
-          "type_id":recipeTypeId,
-          "category_id":ingredientCategoryId,
-          "step": keysFormsSteps.map((e) =>
-          {
-            "name":e.currentState!.nameController.text.toString(),
-            "rank":e.currentState!.widget.index.toString(),
-            "description":e.currentState!.descriptionController.text.toString()
-          }).toList(),
-          "ingredient": keysFormsIngredients.map((e) =>  {
-            "id":e.currentState!.ingredientId.toString(),
-            "quantity":e.currentState!.quantityController.text.toString(),
-            "unit_id":e.currentState!.ingredientUnitId.toString()
-          }).toList()
-        }
+          body: {
+            "name":nameController.text,
+            "description":descriptionController.text,
+            "feeds": feedController.text,
+            "time":feedController.text,
+            "url":imageForRecipe,
+            "type_id":recipeTypeId,
+            "category_id":ingredientCategoryId,
+            "step": keysFormsSteps.map((e) =>
+            {
+              "name":e.currentState!.nameController.text.toString(),
+              "rank":e.currentState!.widget.index.toString(),
+              "description":e.currentState!.descriptionController.text.toString()
+            }).toList(),
+            "ingredient": keysFormsIngredients.map((e) =>  {
+              "id":e.currentState!.ingredientId.toString(),
+              "quantity":e.currentState!.quantityController.text.toString(),
+              "unit_id":e.currentState!.ingredientUnitId.toString()
+            }).toList()
+          }
       ));
     }
 
   }
+
 
 }
 
@@ -537,8 +606,9 @@ class RecipeIngredientsWidget extends StatefulWidget {
   final Function onRemove;
   final List<IngredientModel> ingredients;
   final List<UnitTypesModel> unitTypes;
-
+  final RecipeIngredient? recipeIngredient;
   const RecipeIngredientsWidget({Key? key,
+    this.recipeIngredient,
     required  this.ingredients, required  this.unitTypes,
     required this.index,required this.onRemove}) : super(key: key);
 
@@ -558,6 +628,15 @@ class _RecipeIngredientsWidgetState extends State<RecipeIngredientsWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    if(widget.recipeIngredient!=null)
+      {
+        ingredientId = int.parse(widget.recipeIngredient!.ingredientId.toString());
+        ingredientName = widget.ingredients.firstWhere((element) => element.id == ingredientId).name;
+        ingredientUnitId = int.parse(widget.recipeIngredient!.unitId.toString());
+        ingredientUnit = widget.unitTypes.firstWhere((element) => element.id == ingredientUnitId).name;
+        quantityController = TextEditingController(text: widget.recipeIngredient!.quantity.toString());
+      }
   }
 
   @override
@@ -702,9 +781,11 @@ class _RecipeIngredientsWidgetState extends State<RecipeIngredientsWidget> {
 class StepsWidget extends StatefulWidget {
   final int index;
   final Function onRemove;
+  final Steps? step;
 
 
   const StepsWidget({Key? key,
+    this.step,
     required this.index,required this.onRemove}) : super(key: key);
 
   @override
@@ -721,6 +802,12 @@ class _StepsWidgetState extends State<StepsWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    if(widget.step!=null)
+      {
+        nameController = TextEditingController(text: widget.step!.name.toString());
+        descriptionController = TextEditingController(text: widget.step!.description.toString());
+      }
   }
 
   @override

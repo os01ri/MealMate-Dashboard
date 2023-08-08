@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
@@ -74,7 +75,7 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
           "id": item.id,
           "name": item.name,
           "image": item.url,
-          "editAndDelete": item.id
+          "editAndDelete": item
         });
       }
     dataTableColumns.addAll(
@@ -117,14 +118,27 @@ class _IngredientsCategoriesPageState extends State<IngredientsCategoriesPage> {
       },
       onAdd: (){
         showMMAddDialog(context: context,
-          title: "Add Ingredient Category".tr(),
-          addFieldsWidget: CategoriesIngredientsAddFieldWidget(
-            onAddFinish: (){
-              _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
-            },
-          )
+            title: "Add Ingredient Category".tr(),
+            addFieldsWidget: CategoriesIngredientsAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
+              },
+            )
         );
       },
+      onEdit: (item){
+        showMMUpdateDialog(context: context,
+            title: "Update Ingredient Category".tr(),
+            updateFieldsWidget: CategoriesIngredientsAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getIngredientsCategories(IndexCategoriesIngredientParams());
+              },
+              isAdd: false,
+              categoriesIngredientModel: item,
+            )
+        );
+      },
+
       onDelete: (id){
 
         showMMDeleteDialog(context: context,

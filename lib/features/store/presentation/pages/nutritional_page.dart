@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
@@ -67,7 +68,7 @@ class _NutritionalPageState extends State<NutritionalPage> {
         data.add({
 
           "name": item.name,
-          "editAndDelete": item.id
+          "editAndDelete": item
         });
       }
     dataTableColumns.addAll(
@@ -110,6 +111,18 @@ class _NutritionalPageState extends State<NutritionalPage> {
               _storeCubit.getNutritional(IndexNutritionalParams());
             },
           )
+        );
+      },
+      onEdit: (item){
+        showMMUpdateDialog(context: context,
+            title: "Update Nutritional".tr(),
+              updateFieldsWidget: NutritionalAddFieldWidget(
+                onAddFinish: (){
+                  _storeCubit.getNutritional(IndexNutritionalParams());
+                },
+                isAdd: false,
+                nutritional: item,
+              ),
         );
       },
       onDelete: (id){

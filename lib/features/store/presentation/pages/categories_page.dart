@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
@@ -78,7 +79,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           "id": item.id,
           "name": item.name,
           "image": item.url,
-          "editAndDelete": item.id
+          "editAndDelete": item
         });
       }
     dataTableColumns.addAll(
@@ -127,6 +128,18 @@ class _CategoriesPageState extends State<CategoriesPage> {
               _storeCubit.getCategories(IndexCategoriesParams());
             },
           )
+        );
+      },
+      onEdit: (item){
+        showMMUpdateDialog(context: context,
+            title: "Update Category".tr(),
+            updateFieldsWidget: CategoriesAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getCategories(IndexCategoriesParams());
+              },
+              isAdd: false,
+              categoriesModel: item,
+            )
         );
       },
       onDelete: (id){

@@ -21,6 +21,7 @@ import 'package:mealmate_dashboard/features/store/presentation/widgets/recipes/r
 import 'package:mealmate_dashboard/features/store/presentation/widgets/recipes/recipes_delete_fields_widget.dart';
 
 class RecipesPage extends StatefulWidget {
+
   const RecipesPage({super.key});
 
   @override
@@ -80,7 +81,7 @@ class _RecipesPageState extends State<RecipesPage> {
           "feeds": item.feeds,
           "time": item.time,
           "image" : item.url,
-          "editAndDelete": item.id
+          "editAndDelete": item
         });
       }
     dataTableColumns.addAll(
@@ -169,6 +170,18 @@ class _RecipesPageState extends State<RecipesPage> {
               onAddFinish: (){
                 _storeCubit.getRecipes(IndexRecipesParams());
               },
+            )
+        );
+      },
+      onEdit: (item){
+        showMMAddDialog(context: context,
+            title: "Update Recipes".tr(),
+            addFieldsWidget: RecipesAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getRecipes(IndexRecipesParams());
+              },
+              isAdd: false,
+              recipeModel: item,
             )
         );
       },

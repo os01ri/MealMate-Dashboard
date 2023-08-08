@@ -16,6 +16,7 @@ import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_drop_down_option.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
@@ -31,7 +32,9 @@ import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit
 
 class CategoriesIngredientsAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const CategoriesIngredientsAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  final bool isAdd;
+  final CategoriesIngredientModel? categoriesIngredientModel;
+  const CategoriesIngredientsAddFieldWidget({Key? key,required this.onAddFinish,this.isAdd=true,this.categoriesIngredientModel}) : super(key: key);
 
   @override
   State<CategoriesIngredientsAddFieldWidget> createState() => _CategoriesIngredientsAddFieldWidgetState();
@@ -49,6 +52,12 @@ class _CategoriesIngredientsAddFieldWidgetState extends State<CategoriesIngredie
     super.initState();
     nameController = TextEditingController();
     _storeCubit = StoreCubit();
+
+    if(!widget.isAdd)
+      {
+        nameController = TextEditingController(text: widget.categoriesIngredientModel!.name);
+        imageForCategory = widget.categoriesIngredientModel!.url;
+      }
 
   }
 
@@ -199,10 +208,7 @@ class _CategoriesIngredientsAddFieldWidgetState extends State<CategoriesIngredie
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.failure => Text('error'.tr()).center(),
 
-                _ =>  mmAddDialogFooter(context: context,
-                onAdd: () {
-                _onAdd();
-                }),
+                _ => getFooter()
               };
               },
             ),
@@ -214,7 +220,17 @@ class _CategoriesIngredientsAddFieldWidgetState extends State<CategoriesIngredie
 
   }
 
-
+  Widget getFooter(){
+    if(widget.isAdd)
+    return mmAddDialogFooter(context: context,
+        onAdd: () {
+          _onAdd();
+        });
+    else return mmUpdateDialogFooter(context: context,
+        onUpdate: () {
+          _onUpdate();
+        });
+  }
 
   void _onAdd(){
     firstCheck = true;
@@ -227,6 +243,21 @@ class _CategoriesIngredientsAddFieldWidgetState extends State<CategoriesIngredie
         name: nameController.text,
         imageUrl: imageForCategory!,
       ));
+    }
+
+  }
+
+  void _onUpdate(){
+    firstCheck = true;
+    bool fromFields =  _formKey.currentState!.validate();
+    bool image = imageForCategory!=null;
+    if(fromFields && image)
+    {
+
+      // _storeCubit.addIngredientsCategories(AddCategoriesIngredientParams(
+      //   name: nameController.text,
+      //   imageUrl: imageForCategory!,
+      // ));
     }
 
   }

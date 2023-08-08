@@ -17,13 +17,13 @@ class DataSource extends DataTableSource {
       cells: [
         for(var item in data[index].keys)
           DataCell(
-              getCellWidget(item.toString(),record[item].toString(),id: record['editAndDelete'])
+              getCellWidget(item.toString(),record[item].toString(),item: record['editAndDelete'])
               ),
       ],
     );
   }
 
-  Widget getCellWidget(String key,String value,{dynamic id}){
+  Widget getCellWidget(String key,String value,{dynamic item}){
     if(key.contains("image"))
       {
         return Image.network(value,
@@ -36,12 +36,12 @@ class DataSource extends DataTableSource {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(icon:Icon(Icons.edit,color: Colors.green,),onPressed: (){
-              onEdit!(id);
+              onEdit!(item);
             }),
 
             SizedBox(width: 12,),
             IconButton(icon:Icon(Icons.delete,color: Colors.red,),onPressed: (){
-              onDelete!(id);
+              onDelete!(item.id);
             }),
 
           ],

@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
@@ -80,7 +81,7 @@ class _TypesPageState extends State<TypesPage> {
           "id": item.id,
           "name": item.name,
           "image": item.url,
-          "editAndDelete": item.id
+          "editAndDelete": item
         });
       }
     dataTableColumns.addAll(
@@ -131,8 +132,19 @@ class _TypesPageState extends State<TypesPage> {
           )
         );
       },
+      onEdit: (item){
+        showMMUpdateDialog(context: context,
+            title: "Update Type".tr(),
+            updateFieldsWidget: TypesAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getTypes(IndexTypesParams());
+              },
+              isAdd: false,
+              typesModel: item,
+            )
+        );
+      },
       onDelete: (id){
-
         showMMDeleteDialog(context: context,
             title: "Delete Type".tr(),
              deleteFieldsWidget: TypesDeleteFieldWidget(

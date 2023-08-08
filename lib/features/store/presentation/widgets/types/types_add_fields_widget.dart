@@ -16,10 +16,12 @@ import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_drop_down_option.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/data/models/types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories_types.dart';
@@ -33,7 +35,9 @@ import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit
 
 class TypesAddFieldWidget extends StatefulWidget {
   final Function onAddFinish;
-  const TypesAddFieldWidget({Key? key,required this.onAddFinish}) : super(key: key);
+  final bool isAdd;
+  final TypesModel? typesModel;
+  const TypesAddFieldWidget({Key? key,required this.onAddFinish,this.isAdd=true,this.typesModel}) : super(key: key);
 
   @override
   State<TypesAddFieldWidget> createState() => _TypesAddFieldWidgetState();
@@ -52,6 +56,11 @@ class _TypesAddFieldWidgetState extends State<TypesAddFieldWidget> {
     nameController = TextEditingController();
     _storeCubit = StoreCubit();
 
+    if(!widget.isAdd)
+      {
+        nameController = TextEditingController(text: widget.typesModel!.name);
+        imageForCategory = widget.typesModel!.url;
+      }
   }
 
   @override
@@ -201,10 +210,7 @@ class _TypesAddFieldWidgetState extends State<TypesAddFieldWidget> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.failure => Text('error'.tr()).center(),
 
-                _ =>  mmAddDialogFooter(context: context,
-                onAdd: () {
-                _onAdd();
-                }),
+                _ =>  getFooter()
               };
               },
             ),
@@ -216,6 +222,33 @@ class _TypesAddFieldWidgetState extends State<TypesAddFieldWidget> {
 
   }
 
+  Widget getFooter(){
+    if(widget.isAdd)
+      return mmAddDialogFooter(context: context,
+          onAdd: () {
+            _onAdd();
+          });
+    else return mmUpdateDialogFooter(context: context,
+        onUpdate: () {
+          _onUpdate();
+        });
+  }
+
+
+  void _onUpdate(){
+    firstCheck = true;
+    bool fromFields =  _formKey.currentState!.validate();
+    bool image = imageForCategory!=null;
+    if(fromFields && image)
+    {
+
+      // _storeCubit.addTypes(AddTypesParams(
+      //   name: nameController.text,
+      //   imageUrl: imageForCategory!,
+      // ));
+    }
+
+  }
 
 
   void _onAdd(){

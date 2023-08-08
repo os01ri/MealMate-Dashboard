@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
@@ -72,7 +73,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
           "price" : item.price,
           "priceBy": item.priceById,
           "image" : item.imageUrl,
-          "editAndDelete": item.id
+          "editAndDelete": item
 
         });
       }
@@ -138,6 +139,18 @@ class _IngredientsPageState extends State<IngredientsPage> {
               onAddFinish: (){
                 _storeCubit.getIngredients(IndexIngredientsParams());
               },
+            )
+        );
+      },
+      onEdit: (item){
+        showMMUpdateDialog(context: context,
+            title: "Update Ingredient".tr(),
+            updateFieldsWidget: IngredientsAddFieldWidget(
+              onAddFinish: (){
+                _storeCubit.getIngredients(IndexIngredientsParams());
+              },
+              isAdd: false,
+              ingredientModel: item,
             )
         );
       },

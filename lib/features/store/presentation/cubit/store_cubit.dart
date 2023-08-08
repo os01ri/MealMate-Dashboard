@@ -113,8 +113,6 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
-
-
   getCategories(IndexCategoriesParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
