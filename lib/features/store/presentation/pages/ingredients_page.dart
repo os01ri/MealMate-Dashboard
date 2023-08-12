@@ -69,6 +69,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
         data.add({
           "id": item.id,
           "name": item.name,
+          "category": item.ingredientCategory,
           "nutritional":item.nutritionals!.map((e) => "${e.name}: ${e.ingredientNutritionals!.value}%").join("\n").toString(),
           "price" : item.price,
           "priceBy": item.priceById,
@@ -82,13 +83,19 @@ class _IngredientsPageState extends State<IngredientsPage> {
         MMDataTableColumn(
             dataKey: "id",
             dataType: MMDataTableColumnType.num,
-            columnTitle: "ID",
+            columnTitle: "ID".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(
             dataKey: "name",
             dataType: MMDataTableColumnType.string,
             columnTitle: "Name".tr(),
+            isSortEnabled: true
+        ),
+        MMDataTableColumn(
+            dataKey: "category",
+            dataType: MMDataTableColumnType.string,
+            columnTitle: "Category".tr(),
             isSortEnabled: true
         ),
         MMDataTableColumn(

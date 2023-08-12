@@ -49,7 +49,12 @@ class DataSource extends DataTableSource {
       }
     else
       {
-        return Text(value,textDirection: TextDirection.rtl,);
+        return Container(
+            constraints: BoxConstraints(
+              minWidth: 0,
+              maxWidth: 250
+            ),
+            child: SelectableText(value,));
       }
 
   }

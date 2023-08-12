@@ -71,8 +71,6 @@ class _MainScreenState extends State<MainScreen> {
   Sections.categoriesIngredients =>  IngredientsCategoriesPage(),
   Sections.categories =>  CategoriesPage(),
   Sections.types =>  TypesPage(),
-  Sections.users =>  MyDataTable(),
-  Sections.settings =>  MyDataTable(),
   _ =>  MyDataTable(),
   };
 

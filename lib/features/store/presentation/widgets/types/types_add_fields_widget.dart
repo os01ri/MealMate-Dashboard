@@ -31,6 +31,7 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/add_types.dart
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_types.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class TypesAddFieldWidget extends StatefulWidget {
@@ -242,10 +243,13 @@ class _TypesAddFieldWidgetState extends State<TypesAddFieldWidget> {
     if(fromFields && image)
     {
 
-      // _storeCubit.addTypes(AddTypesParams(
-      //   name: nameController.text,
-      //   imageUrl: imageForCategory!,
-      // ));
+      _storeCubit.updateTypes(UpdateTypesParams(
+       body: {
+         "id":widget.typesModel!.id,
+         "name": nameController.text,
+         "url": imageForCategory!,
+       },
+      ));
     }
 
   }

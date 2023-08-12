@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Meal Mate Dashboard',
       navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,

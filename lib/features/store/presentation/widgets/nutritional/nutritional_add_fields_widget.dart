@@ -8,6 +8,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialo
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class NutritionalAddFieldWidget extends StatefulWidget {
@@ -109,7 +110,10 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
   void _onUpdate(){
     if(_formKey.currentState!.validate())
     {
-      //_storeCubit.addNutritional(AddNutritionalParams(name: nameController.text));
+      _storeCubit.updateNutritional(UpdateNutritionalParams(body: {
+        "id": widget.nutritional!.id,
+        "name": nameController.text
+      }));
     }
   }
 

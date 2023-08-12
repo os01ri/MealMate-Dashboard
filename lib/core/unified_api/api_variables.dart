@@ -49,6 +49,9 @@ class ApiVariables {
   static Uri addRecipe({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'recipe/store', queryParameters: queryParameters);
 
+  static Uri updateRecipe({Map<String, dynamic>? queryParameters,required dynamic id}) =>
+      _dashboardUri(path: 'recipe/$id/update', queryParameters: queryParameters);
+
   static Uri deleteRecipe({required int id,}) =>
       _dashboardUri(path: 'recipe/$id/destroy');
 
@@ -58,6 +61,9 @@ class ApiVariables {
 
   static Uri addCategories({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'category/store', queryParameters: queryParameters);
+
+  static Uri updateCategories({Map<String, dynamic>? queryParameters,required dynamic id}) =>
+      _dashboardUri(path: 'category/$id/update', queryParameters: queryParameters);
 
   static Uri deleteCategories({required int id,}) =>
       _dashboardUri(path: 'category/$id/destroy');
@@ -69,6 +75,9 @@ class ApiVariables {
 
   static Uri addTypes({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'type/store', queryParameters: queryParameters);
+
+  static Uri updateTypes({Map<String, dynamic>? queryParameters,required dynamic id}) =>
+      _dashboardUri(path: 'type/$id/update', queryParameters: queryParameters);
 
   static Uri deleteTypes({required int id,}) =>
       _dashboardUri(path: 'type/$id/destroy');
@@ -82,6 +91,9 @@ class ApiVariables {
   static Uri addIngredients({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'ingredient/store', queryParameters: queryParameters);
 
+  static Uri updateIngredients({Map<String, dynamic>? queryParameters,required dynamic id}) =>
+      _dashboardUri(path: 'ingredient/$id/update', queryParameters: queryParameters);
+
   static Uri deleteIngredient({required int id,}) =>
       _dashboardUri(path: 'ingredient/$id/destroy');
 
@@ -91,6 +103,9 @@ class ApiVariables {
 
   static Uri addNutritional({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'nutritional/store', queryParameters: queryParameters);
+
+  static Uri updateNutritional({Map<String, dynamic>? queryParameters,required dynamic id}) =>
+      _dashboardUri(path: 'nutritional/$id/update', queryParameters: queryParameters);
 
   static Uri deleteNutritional({required String id,}) =>
       _dashboardUri(path: 'nutritional/$id/destroy');
@@ -107,6 +122,9 @@ class ApiVariables {
 
   static Uri addCategoriesIngredient({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'categoryingredient/store', queryParameters: queryParameters);
+
+  static Uri updateCategoriesIngredient({Map<String, dynamic>? queryParameters,required dynamic id}) =>
+      _dashboardUri(path: 'categoryingredient/$id/update', queryParameters: queryParameters);
 
   static Uri deleteCategoriesIngredient({required int id,}) =>
       _dashboardUri(path: 'categoryingredient/$id/destroy');

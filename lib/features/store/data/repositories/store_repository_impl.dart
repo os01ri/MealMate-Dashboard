@@ -34,6 +34,16 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
   }
 
   @override
+  Future<Either<Failure, bool>> updateRecipe({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.updateRecipe(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> deleteRecipe({required Map<String, dynamic> params}) {
     return wrapHandling(
       tryCall: () async {
@@ -60,6 +70,16 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
     return wrapHandling(
       tryCall: () async {
         final result = await _datasource.addCategories(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateCategories({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.updateCategories(body: body);
         return Right(result);
       },
     );
@@ -98,6 +118,16 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
   }
 
   @override
+  Future<Either<Failure, bool>> updateTypes({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.updateType(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> deleteTypes({required Map<String, dynamic> params}) {
     return wrapHandling(
       tryCall: () async {
@@ -128,6 +158,17 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
       },
     );
   }
+
+  @override
+  Future<Either<Failure, bool>> updateIngredients({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.updateIngredient(body: body);
+        return Right(result);
+      },
+    );
+  }
+
 
   @override
   Future<Either<Failure, bool>> deleteIngredient({required Map<String, dynamic> params}) {
@@ -163,6 +204,16 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
     );
   }
 
+
+  @override
+  Future<Either<Failure, bool>> updateNutritional({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.updateNutritional(body: body);
+        return Right(result);
+      },
+    );
+  }
 
 
   @override
@@ -206,6 +257,15 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
     );
   }
 
+  @override
+  Future<Either<Failure, bool>> updateCategoriesIngredient({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.updateCategoriesIngredient(body: body);
+        return Right(result);
+      },
+    );
+  }
 
 
   @override

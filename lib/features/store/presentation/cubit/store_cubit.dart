@@ -30,34 +30,46 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritio
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_recipe.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_categories.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_categories_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_ingredients.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_nutritional.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_recipes.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_types.dart';
 
 part 'store_state.dart';
 
 class StoreCubit extends Cubit<StoreState> {
   final _indexRecipes = IndexRecipesUseCase(storeRepository: StoreRepositoryImpl());
   final _addRecipe = AddRecipesUseCase(storeRepository: StoreRepositoryImpl());
+  final _updateRecipe = UpdateRecipesUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteRecipe = DeleteRecipeUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexIngredients = IndexIngredientsUseCase(storeRepository: StoreRepositoryImpl());
   final _addIngredients = AddIngredientsUseCase(storeRepository: StoreRepositoryImpl());
+  final _updateIngredients = UpdateIngredientsUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteIngredient = DeleteIngredientUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexNutritional = IndexNutritionalUseCase(storeRepository: StoreRepositoryImpl());
   final _addNutritional = AddNutritionalUseCase(storeRepository: StoreRepositoryImpl());
+  final _updateNutritional = UpdateNutritionalUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteNutritional = DeleteNutritionalUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexUnitTypes = IndexUnitTypesUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexCategoriesTypes = IndexCategoriesIngredientUseCase(storeRepository: StoreRepositoryImpl());
   final _addCategoriesTypes = AddCategoriesIngredientUseCase(storeRepository: StoreRepositoryImpl());
+  final _updateCategoriesTypes = UpdateCategoriesIngredientsUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteCategoriesTypes = DeleteCategoriesIngredientUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexCategories = IndexCategoriesUseCase(storeRepository: StoreRepositoryImpl());
   final _addCategories = AddCategoriesUseCase(storeRepository: StoreRepositoryImpl());
+  final _updateCategories = UpdateCategoriesUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteCategories = DeleteCategoriesUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexTypes = IndexTypesUseCase(storeRepository: StoreRepositoryImpl());
   final _addTypes = AddTypesUseCase(storeRepository: StoreRepositoryImpl());
+  final _updateTypes = UpdateTypesUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteTypes = DeleteTypesUseCase(storeRepository: StoreRepositoryImpl());
 
   StoreCubit() : super(const StoreState());
@@ -96,6 +108,23 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+  updateRecipe(UpdateRecipesParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _updateRecipe(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
   deleteRecipe(DeleteRecipeParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
@@ -112,6 +141,8 @@ class StoreCubit extends Cubit<StoreState> {
       },
     );
   }
+
+
 
   getCategories(IndexCategoriesParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
@@ -134,6 +165,23 @@ class StoreCubit extends Cubit<StoreState> {
     emit(state.copyWith(status: CubitStatus.loading));
 
     final result = await _addCategories(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
+  updateCategories(UpdateCategoriesParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _updateCategories(params);
 
     result.fold(
           (l) {
@@ -200,6 +248,23 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+  updateTypes(UpdateTypesParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _updateTypes(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
   deleteTypes(DeleteTypesParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
@@ -253,6 +318,23 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+  updateIngredients(UpdateIngredientsParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _updateIngredients(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
   deleteIngredient(DeleteIngredientParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
@@ -269,6 +351,7 @@ class StoreCubit extends Cubit<StoreState> {
       },
     );
   }
+
 
 
   getNutritional(IndexNutritionalParams params) async {
@@ -305,6 +388,23 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+  updateNutritional(UpdateNutritionalParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _updateNutritional(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
   deleteNutritional(DeleteNutritionalParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
@@ -322,6 +422,8 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+
+
   getUnitTypes(IndexUnitTypesParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
@@ -338,6 +440,8 @@ class StoreCubit extends Cubit<StoreState> {
       },
     );
   }
+
+
 
   getIngredientsCategories(IndexCategoriesIngredientParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
@@ -373,6 +477,23 @@ class StoreCubit extends Cubit<StoreState> {
     );
   }
 
+  updateIngredientsCategories(UpdateCategoriesIngredientsParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _updateCategoriesTypes(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
+  }
+
   deleteIngredientsCategories(DeleteCategoriesIngredientParams params) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
@@ -389,6 +510,7 @@ class StoreCubit extends Cubit<StoreState> {
       },
     );
   }
+
 
 
   getNutritionalAndUnitsAndCategories(
@@ -443,6 +565,7 @@ class StoreCubit extends Cubit<StoreState> {
     });
 
   }
+
 
 
   getRecipesAndUnitsAndCategories(

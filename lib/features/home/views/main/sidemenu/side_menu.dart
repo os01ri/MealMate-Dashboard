@@ -40,11 +40,7 @@ class SideMenu extends StatelessWidget {
             svgSrc: "assets/icons/menu_task.svg",
             press: () {},
           ),
-          DrawerListTile(
-            sectionName: Sections.units,
-            svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
-          ),
+
           DrawerListTile(
             sectionName: Sections.categoriesIngredients,
             svgSrc: "assets/icons/menu_task.svg",
@@ -61,15 +57,11 @@ class SideMenu extends StatelessWidget {
             press: () {},
           ),
           DrawerListTile(
-            sectionName: Sections.users,
-            svgSrc: "assets/icons/menu_profile.svg",
+            sectionName: Sections.units,
+            svgSrc: "assets/icons/menu_task.svg",
             press: () {},
           ),
-          DrawerListTile(
-            sectionName: Sections.settings,
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
-          ),
+
         ],
       ),
     );

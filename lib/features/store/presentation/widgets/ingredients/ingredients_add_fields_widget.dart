@@ -19,6 +19,7 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/add_ingredient
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class IngredientsAddFieldWidget extends StatefulWidget {
@@ -26,10 +27,16 @@ class IngredientsAddFieldWidget extends StatefulWidget {
   final bool isAdd;
   final IngredientModel? ingredientModel;
 
-  const IngredientsAddFieldWidget({Key? key,required this.onAddFinish,this.isAdd=true,this.ingredientModel}) : super(key: key);
+  const IngredientsAddFieldWidget(
+      {Key? key,
+      required this.onAddFinish,
+      this.isAdd = true,
+      this.ingredientModel})
+      : super(key: key);
 
   @override
-  State<IngredientsAddFieldWidget> createState() => _IngredientsAddFieldWidgetState();
+  State<IngredientsAddFieldWidget> createState() =>
+      _IngredientsAddFieldWidgetState();
 }
 
 class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
@@ -48,85 +55,94 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
   final nutritionalKeysForms = <GlobalKey<_IngredientNutritionalWidgetState>>[];
 
   bool isRefresh = false;
-   @override
+  @override
   void initState() {
     super.initState();
     nameController = TextEditingController();
     _storeCubit = StoreCubit();
-    _storeCubitNutritional = StoreCubit()..getNutritionalAndUnitsAndCategories(
-      paramsNutritional: IndexNutritionalParams(),
-      paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
-      paramsUnits: IndexUnitTypesParams()
-    );
+    _storeCubitNutritional = StoreCubit()
+      ..getNutritionalAndUnitsAndCategories(
+          paramsNutritional: IndexNutritionalParams(),
+          paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+          paramsUnits: IndexUnitTypesParams());
 
-    if(!widget.isAdd)
-      {
-        nameController = TextEditingController(text: widget.ingredientModel!.name);
-        priceController = TextEditingController(text: widget.ingredientModel!.price.toString());
-        valueController = TextEditingController(text: widget.ingredientModel!.priceById.toString().split(" ").first.toString());
-        imageForIngredient = widget.ingredientModel!.imageUrl;
-        ingredientPriceUnit = widget.ingredientModel!.ingredientUnitType;
-        ingredientPriceUnitId = int.parse(widget.ingredientModel!.ingredientUnitTypeId.toString());
-        ingredientCategoryName = widget.ingredientModel!.ingredientCategory.toString();
-        ingredientCategoryId = int.parse(widget.ingredientModel!.ingredientCategoryId.toString());
-        widget.ingredientModel!.nutritionals!.forEach((element) {
-          nutritionalKeysForms.add(GlobalKey<_IngredientNutritionalWidgetState>());
-        });
-
-      }
-
+    if (!widget.isAdd) {
+      nameController =
+          TextEditingController(text: widget.ingredientModel!.name);
+      priceController =
+          TextEditingController(text: widget.ingredientModel!.price.toString());
+      valueController = TextEditingController(
+          text: widget.ingredientModel!.priceById
+              .toString()
+              .split(" ")
+              .first
+              .toString());
+      imageForIngredient = widget.ingredientModel!.imageUrl;
+      ingredientPriceUnit = widget.ingredientModel!.ingredientUnitType;
+      ingredientPriceUnitId =
+          int.parse(widget.ingredientModel!.ingredientUnitTypeId.toString());
+      ingredientCategoryName =
+          widget.ingredientModel!.ingredientCategory.toString();
+      ingredientCategoryId =
+          int.parse(widget.ingredientModel!.ingredientCategoryId.toString());
+      widget.ingredientModel!.nutritionals!.forEach((element) {
+        nutritionalKeysForms
+            .add(GlobalKey<_IngredientNutritionalWidgetState>());
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return  BlocBuilder<StoreCubit, StoreState>(
+    return BlocBuilder<StoreCubit, StoreState>(
       bloc: _storeCubitNutritional,
       builder: (BuildContext context, StoreState state) {
         return switch (state.status) {
-        CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-        CubitStatus.success =>
-        addFormWidget(categories: state.categoriesIngredients,nutritional: state.nutritional, unitTypes: state.unitTypes),
-        _ => Text('error'.tr()).center(),
-      };
+          CubitStatus.loading =>
+            const CircularProgressIndicator.adaptive().center(),
+          CubitStatus.success => addFormWidget(
+              categories: state.categoriesIngredients,
+              nutritional: state.nutritional,
+              unitTypes: state.unitTypes),
+          _ => Text('error'.tr()).center(),
+        };
       },
     ).center();
-
   }
 
-
-  Widget addFormWidget({required List<Nutritional> nutritional, required List<UnitTypesModel> unitTypes, required List<CategoriesIngredientModel> categories, }){
+  Widget addFormWidget({
+    required List<Nutritional> nutritional,
+    required List<UnitTypesModel> unitTypes,
+    required List<CategoriesIngredientModel> categories,
+  }) {
     return Form(
       key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Padding(
-            padding: const EdgeInsets.only(top: 16,
-                right: 6,left: 6),
+            padding: const EdgeInsets.only(top: 16, right: 6, left: 6),
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  color: Colors.black.withOpacity(0.2)
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 24,horizontal: 16),
+                  color: Colors.black.withOpacity(0.2)),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               child: Column(
                 children: [
                   Transform.translate(
-                      offset: Offset(0,-10),
-                      child: Text("Ingredient Details".tr(),
+                      offset: Offset(0, -10),
+                      child: Text(
+                        "Ingredient Details".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            fontSize: 16
-                        ),
+                            fontSize: 16),
                       ).center()),
                   Flex(
                     direction: Axis.horizontal,
                     children: [
-
                       Flexible(
                         fit: FlexFit.tight,
                         flex: 5,
@@ -143,60 +159,56 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                         ),
                       ),
                       SizedBox(width: 16),
-
                       Flexible(
                         flex: 5,
                         fit: FlexFit.tight,
                         child: SimpleDropDownOption(
-                          onSelected: (value){
+                          onSelected: (value) {
                             ingredientCategoryName = value;
-                            ingredientCategoryId = categories.firstWhere((element) => element.name == ingredientCategoryName).id;
-                            setState(() {
-
-                            });
+                            ingredientCategoryId = categories
+                                .firstWhere((element) =>
+                                    element.name == ingredientCategoryName)
+                                .id;
+                            setState(() {});
                           },
                           selectedItem: ingredientCategoryName,
-                          itemsOptions: categories.map((e) => e.name.toString()).toList(),
+                          itemsOptions:
+                              categories.map((e) => e.name.toString()).toList(),
                           title: "Ingredient Category".tr(),
                           hint: "Select one...".tr(),
                         ),
                       ),
-
-
                     ],
                   ),
                 ],
               ),
             ),
           ),
-
-          const SizedBox(height: 16,),
-
+          const SizedBox(
+            height: 16,
+          ),
           Padding(
-            padding: const EdgeInsets.only(top: 16,
-                right: 6,left: 6),
+            padding: const EdgeInsets.only(top: 16, right: 6, left: 6),
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                color: Colors.black.withOpacity(0.2)
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 24,horizontal: 16),
+                  color: Colors.black.withOpacity(0.2)),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               child: Column(
                 children: [
                   Transform.translate(
-                      offset: Offset(0,-10),
-                      child: Text("Price Details".tr(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
+                      offset: Offset(0, -10),
+                      child: Text(
+                        "Price Details".tr(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 16),
                       ).center()),
                   Flex(
                     direction: Axis.horizontal,
                     children: [
-
                       Flexible(
                         fit: FlexFit.tight,
                         flex: 3,
@@ -204,9 +216,9 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                           labelText: "Ingredient Price".tr(),
                           textEditingController: priceController,
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9.]')),
                           ],
-
                           validator: (text) {
                             if (text != null && text.isNotEmpty) {
                               return null;
@@ -218,11 +230,12 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   Flex(
                     direction: Axis.horizontal,
                     children: [
-
                       Flexible(
                         fit: FlexFit.tight,
                         flex: 5,
@@ -230,7 +243,8 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                           labelText: "Weight per Price".tr(),
                           textEditingController: valueController,
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9.]')),
                           ],
                           validator: (text) {
                             if (text != null && text.isNotEmpty) {
@@ -242,134 +256,130 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                         ),
                       ),
                       SizedBox(width: 16),
-
                       Flexible(
                         flex: 5,
                         fit: FlexFit.tight,
                         child: SimpleDropDownOption(
-                          onSelected: (value){
+                          onSelected: (value) {
                             ingredientPriceUnit = value;
-                            ingredientPriceUnitId = unitTypes.firstWhere((element) => element.name == ingredientPriceUnit).id;
-                            setState(() {
-
-                            });
+                            ingredientPriceUnitId = unitTypes
+                                .firstWhere((element) =>
+                                    element.name == ingredientPriceUnit)
+                                .id;
+                            setState(() {});
                           },
                           selectedItem: ingredientPriceUnit,
-                          itemsOptions: unitTypes.map((e) => e.name.toString()).toList(),
+                          itemsOptions:
+                              unitTypes.map((e) => e.name.toString()).toList(),
                           title: "Unit Type".tr(),
                           hint: "Select one...".tr(),
                         ),
                       ),
-
-
                     ],
                   ),
                 ],
               ),
             ),
           ),
-
-          const SizedBox(height: 16,),
-
+          const SizedBox(
+            height: 16,
+          ),
           Padding(
-            padding: const EdgeInsets.only(top: 16,
-                right: 6,left: 6),
+            padding: const EdgeInsets.only(top: 16, right: 6, left: 6),
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  color: Colors.black.withOpacity(0.2)
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 24,horizontal: 16),
+                  color: Colors.black.withOpacity(0.2)),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               child: Column(
                 children: [
                   Transform.translate(
-                      offset: Offset(0,-10),
-                      child: Text("Ingredient Image".tr(),
+                      offset: Offset(0, -10),
+                      child: Text(
+                        "Ingredient Image".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            fontSize: 16
-                        ),
+                            fontSize: 16),
                       ).center()),
-
                   Row(
-                    mainAxisAlignment: imageForIngredient==null?MainAxisAlignment.center:MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: imageForIngredient == null
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.spaceBetween,
                     children: [
                       MainButton(
-                          text: imageForIngredient!=null?"Change Image for ingredient".tr():"Pick an Image for ingredient".tr(),
-                          icon: const Icon(Icons.camera,
+                          text: imageForIngredient != null
+                              ? "Change Image for ingredient".tr()
+                              : "Pick an Image for ingredient".tr(),
+                          icon: const Icon(
+                            Icons.camera,
                             color: Colors.white,
                           ),
-                          color:firstCheck && imageForIngredient==null?Colors.red : Colors.grey, onPressed: () async {
-
-                        PlatformFilePicker().startWebFilePicker((files) {
-                          if(files.isNotEmpty)
-                          {
-                            UploadService.uploadFile(
-                                context: context,
-                                url: "http://food.programmer23.store/addimage",
-                                file: files.first,
-                                fileName: "image",
-                                success: (data){
-                                  print(data);
-                                  setState(() {
-                                    imageForIngredient = data["data"][0]["url"].toString();
-                                  });
-                                },
-                                failed: (f){
-                                  print(f);
-                                }
-                            );
-                          }
-                        });
-
-                      }).center(),
-
-                      if(imageForIngredient!=null)
-                        Image.network(imageForIngredient!,height: 50,),
+                          color: firstCheck && imageForIngredient == null
+                              ? Colors.red
+                              : Colors.grey,
+                          onPressed: () async {
+                            PlatformFilePicker().startWebFilePicker((files) {
+                              if (files.isNotEmpty) {
+                                UploadService.uploadFile(
+                                    context: context,
+                                    url:
+                                        "http://food.programmer23.store/addimage",
+                                    file: files.first,
+                                    fileName: "image",
+                                    success: (data) {
+                                      print(data);
+                                      setState(() {
+                                        imageForIngredient =
+                                            data["data"][0]["url"].toString();
+                                      });
+                                    },
+                                    failed: (f) {
+                                      print(f);
+                                    });
+                              }
+                            });
+                          }).center(),
+                      if (imageForIngredient != null)
+                        Image.network(
+                          imageForIngredient!,
+                          height: 50,
+                        ),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-
-
-
-
-          const SizedBox(height: 16,),
-
+          const SizedBox(
+            height: 16,
+          ),
           Padding(
-            padding: const EdgeInsets.only(top: 16,
-                right: 6,left: 6),
+            padding: const EdgeInsets.only(top: 16, right: 6, left: 6),
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  color: Colors.black.withOpacity(0.2)
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 24,horizontal: 16),
+                  color: Colors.black.withOpacity(0.2)),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               child: Column(
                 children: [
                   Transform.translate(
-                      offset: Offset(0,-10),
-                      child: Text("Ingredient Nutritional".tr(),
+                      offset: Offset(0, -10),
+                      child: Text(
+                        "Ingredient Nutritional".tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            fontSize: 16
-                        ),
+                            fontSize: 16),
                       ).center()),
-
-
-
-
                   Visibility(
                     visible: !isRefresh,
                     replacement: Padding(
                       padding: const EdgeInsets.all(30.0),
-                      child: const CircularProgressIndicator.adaptive().center(),
+                      child:
+                          const CircularProgressIndicator.adaptive().center(),
                     ),
                     child: ListView.builder(
                       itemCount: nutritionalKeysForms.length,
@@ -377,7 +387,11 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                       itemBuilder: (context, index) {
                         return IngredientNutritionalWidget(
                           key: nutritionalKeysForms[index],
-                          nutritionalUpdate: widget.ingredientModel!=null && widget.ingredientModel!.nutritionals!.length > index?widget.ingredientModel!.nutritionals![index] : null,
+                          nutritionalUpdate: widget.ingredientModel != null &&
+                                  widget.ingredientModel!.nutritionals!.length >
+                                      index
+                              ? widget.ingredientModel!.nutritionals![index]
+                              : null,
                           index: index,
                           nutritional: nutritional,
                           unitTypes: unitTypes,
@@ -390,25 +404,22 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                       },
                     ),
                   ),
-
-                  const SizedBox(height: 16,),
-
+                  const SizedBox(
+                    height: 16,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
-
-
                       FloatingActionButton(
-                          child: const Icon(Icons.add,
+                          child: const Icon(
+                            Icons.add,
                             color: Colors.white,
                           ),
-                          backgroundColor:  Colors.cyan,
-                          onPressed: (){
-                            nutritionalKeysForms.add(GlobalKey<_IngredientNutritionalWidgetState>());
-                            setState(() {
-
-                            });
+                          backgroundColor: Colors.cyan,
+                          onPressed: () {
+                            nutritionalKeysForms.add(
+                                GlobalKey<_IngredientNutritionalWidgetState>());
+                            setState(() {});
                           })
                     ],
                   ),
@@ -416,16 +427,13 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
               ),
             ),
           ),
-
-
-
-          const SizedBox(height: 30,),
-
+          const SizedBox(
+            height: 30,
+          ),
           BlocListener(
             bloc: _storeCubit,
-            listener: (context,StoreState state) {
-              if(state.status == CubitStatus.success)
-              {
+            listener: (context, StoreState state) {
+              if (state.status == CubitStatus.success) {
                 Navigator.of(context).pop();
                 widget.onAddFinish();
               }
@@ -434,79 +442,84 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
               bloc: _storeCubit,
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
-                CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => Text('error'.tr()).center(),
-
-                _ =>  getFooter()
-              };
+                  CubitStatus.loading =>
+                    const CircularProgressIndicator.adaptive().center(),
+                  CubitStatus.failure => Text('error'.tr()).center(),
+                  _ => getFooter()
+                };
               },
             ),
           ),
-
         ],
       ),
     );
   }
 
-  Widget getFooter(){
-    if(widget.isAdd) {
-      return mmAddDialogFooter(context: context,
+  Widget getFooter() {
+    if (widget.isAdd) {
+      return mmAddDialogFooter(
+          context: context,
           onAdd: () {
             _onAdd();
           });
     } else {
-      return mmUpdateDialogFooter(context: context,
-        onUpdate: () {
-          _onUpdate();
-        });
+      return mmUpdateDialogFooter(
+          context: context,
+          onUpdate: () {
+            _onUpdate();
+          });
     }
   }
 
-
-
-  void _onUpdate(){
+  void _onUpdate() {
     firstCheck = true;
-    bool nutritional =nutritionalKeysForms.where((element) => element.currentState!.formKey.currentState!.validate()).length == nutritionalKeysForms.length;
-    bool fromFields =  _formKey.currentState!.validate();
-    bool image = imageForIngredient!=null;
-    if(nutritional && fromFields && image)
-    {
-
-      // _storeCubit.addIngredients(AddIngredientsParams(
-      //   name: nameController.text,
-      //   price: double.parse(priceController.text),
-      //   priceBy: double.parse(valueController.text),
-      //   priceUnitId: ingredientPriceUnitId!,
-      //   categoryId: ingredientCategoryId!,
-      //   imageUrl: imageForIngredient!,
-      //   ingredientNutritionals: [
-      //     ...nutritionalKeysForms.map((e) {
-      //       var nutritionalId = e.currentState!.ingredientNutritionalId;
-      //       var unitId = e.currentState!.ingredientUnitId;
-      //       var value = double.parse(e.currentState!.valueController.text);
-      //       var percent = double.parse(e.currentState!.percentController.text);
-      //       return IngredientNutritionals(
-      //           id: nutritionalId,
-      //           unitId: unitId,
-      //           value: value,
-      //           percent: percent
-      //       );
-      //     } )
-      //   ],
-      // ));
+    bool nutritional = nutritionalKeysForms
+            .where((element) =>
+                element.currentState!.formKey.currentState!.validate())
+            .length ==
+        nutritionalKeysForms.length;
+    bool fromFields = _formKey.currentState!.validate();
+    bool image = imageForIngredient != null;
+    if (nutritional && fromFields && image) {
+      _storeCubit.updateIngredients(UpdateIngredientsParams(
+        body: {
+          "id": widget.ingredientModel!.id,
+          "name": nameController.text,
+          "price": double.parse(priceController.text),
+          "unit_id": ingredientPriceUnitId!,
+          "category_id": ingredientCategoryId,
+          "price_by": double.parse(valueController.text),
+          "url": imageForIngredient!,
+          "nutritional": [
+            ...nutritionalKeysForms.map((e) {
+              var nutritionalId = e.currentState!.ingredientNutritionalId;
+              var unitId = e.currentState!.ingredientUnitId;
+              var value = double.parse(e.currentState!.valueController.text);
+              var percent =
+                  double.parse(e.currentState!.percentController.text);
+              return {
+                "id": nutritionalId,
+                "value": value,
+                "precent": percent,
+                "unit_id": unitId
+              };
+            })
+          ]
+        },
+      ));
     }
-
   }
 
-
-  void _onAdd(){
+  void _onAdd() {
     firstCheck = true;
-    bool nutritional =nutritionalKeysForms.where((element) => element.currentState!.formKey.currentState!.validate()).length == nutritionalKeysForms.length;
-    bool fromFields =  _formKey.currentState!.validate();
-    bool image = imageForIngredient!=null;
-    if(nutritional && fromFields && image)
-    {
-
+    bool nutritional = nutritionalKeysForms
+            .where((element) =>
+                element.currentState!.formKey.currentState!.validate())
+            .length ==
+        nutritionalKeysForms.length;
+    bool fromFields = _formKey.currentState!.validate();
+    bool image = imageForIngredient != null;
+    if (nutritional && fromFields && image) {
       _storeCubit.addIngredients(AddIngredientsParams(
         name: nameController.text,
         price: double.parse(priceController.text),
@@ -520,222 +533,235 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
             var unitId = e.currentState!.ingredientUnitId;
             var value = double.parse(e.currentState!.valueController.text);
             var percent = double.parse(e.currentState!.percentController.text);
-             return IngredientNutritionals(
-               id: nutritionalId,
-               unitId: unitId,
-               value: value,
-               percent: percent
-            );
-          } )
+            return IngredientNutritionals(
+                id: nutritionalId,
+                unitId: unitId,
+                value: value,
+                percent: percent);
+          })
         ],
       ));
     }
-
   }
-
 }
 
- 
- class IngredientNutritionalWidget extends StatefulWidget {
+class IngredientNutritionalWidget extends StatefulWidget {
   final int index;
   final Function onRemove;
   final List<Nutritional> nutritional;
   final List<UnitTypesModel> unitTypes;
   final Nutritional? nutritionalUpdate;
 
-   const IngredientNutritionalWidget({Key? key,
-     required  this.nutritional, required  this.unitTypes,
-     this.nutritionalUpdate,
-     required this.index,required this.onRemove}) : super(key: key);
- 
-   @override
-   State<IngredientNutritionalWidget> createState() => _IngredientNutritionalWidgetState();
- }
- 
- class _IngredientNutritionalWidgetState extends State<IngredientNutritionalWidget> {
-   String? ingredientNutritional;
-   int? ingredientNutritionalId;
-   String? ingredientUnit;
-   int? ingredientUnitId;
+  const IngredientNutritionalWidget(
+      {Key? key,
+      required this.nutritional,
+      required this.unitTypes,
+      this.nutritionalUpdate,
+      required this.index,
+      required this.onRemove})
+      : super(key: key);
+
+  @override
+  State<IngredientNutritionalWidget> createState() =>
+      _IngredientNutritionalWidgetState();
+}
+
+class _IngredientNutritionalWidgetState
+    extends State<IngredientNutritionalWidget> {
+  String? ingredientNutritional;
+  int? ingredientNutritionalId;
+  String? ingredientUnit;
+  int? ingredientUnitId;
   TextEditingController percentController = TextEditingController();
   TextEditingController valueController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-   @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.nutritionalUpdate!=null)
-      {
-        ingredientNutritional = widget.nutritionalUpdate!.name;
-        ingredientNutritionalId = widget.nutritionalUpdate!.id;
-        if(widget.nutritionalUpdate!.ingredientNutritionals!.unitId!=null) {
-          ingredientUnitId = widget.nutritionalUpdate!.ingredientNutritionals!.unitId;
-        }
-        if(widget.nutritionalUpdate!.ingredientNutritionals!.unitId!=null) {
-          ingredientUnit = widget.unitTypes.firstWhere((element) => element.id==ingredientUnitId).name;
-        }
-        if(widget.nutritionalUpdate!.ingredientNutritionals!.value!=null) {
-          valueController = TextEditingController(text: widget.nutritionalUpdate!.ingredientNutritionals!.value.toString());
-        }
-        if(widget.nutritionalUpdate!.ingredientNutritionals!.percent!=null) {
-          percentController = TextEditingController(text: widget.nutritionalUpdate!.ingredientNutritionals!.percent.toString());
-        }
+    if (widget.nutritionalUpdate != null) {
+      ingredientNutritional = widget.nutritionalUpdate!.name;
+      ingredientNutritionalId = widget.nutritionalUpdate!.id;
+      if (widget.nutritionalUpdate!.ingredientNutritionals!.unitId != null) {
+        ingredientUnitId =
+            widget.nutritionalUpdate!.ingredientNutritionals!.unitId;
       }
+      if (widget.nutritionalUpdate!.ingredientNutritionals!.unitId != null) {
+        ingredientUnit = widget.unitTypes
+            .firstWhere((element) => element.id == ingredientUnitId)
+            .name;
+      }
+      if (widget.nutritionalUpdate!.ingredientNutritionals!.value != null) {
+        valueController = TextEditingController(
+            text: widget.nutritionalUpdate!.ingredientNutritionals!.value
+                .toString());
+      }
+      if (widget.nutritionalUpdate!.ingredientNutritionals!.percent != null) {
+        percentController = TextEditingController(
+            text: widget.nutritionalUpdate!.ingredientNutritionals!.percent
+                .toString());
+      }
+    }
   }
-  
-   @override
-   Widget build(BuildContext context) {
-     return Form(
-       key: formKey,
-       child: Padding(
-         padding: const EdgeInsets.symmetric(vertical: 4),
-         child: Stack(
-           alignment: Alignment.center,
-           children: [
-             Padding(
-               padding: const EdgeInsets.only(top: 16,
-               right: 6,left: 6),
-               child: Container(
-                 decoration: BoxDecoration(
-                   border: Border.all(color: Colors.white),
-                   borderRadius: const BorderRadius.all(Radius.circular(16))
-                 ),
-                 padding: const EdgeInsets.symmetric(vertical: 24,horizontal: 16),
-                 child: Column(
-                   children: [
-                     Flex(
-                       direction: Axis.horizontal,
-                       children: [
-                         Flexible(
-                           flex: 5,
-                           fit: FlexFit.tight,
-                           child: SimpleDropDownOption(
-                             onSelected: (value){
-                               ingredientNutritional = value;
-                               ingredientNutritionalId = widget.nutritional.firstWhere((element) => element.name == ingredientNutritional).id;
-                               setState(() {});
-                             },
-                             selectedItem: ingredientNutritional,
-                             itemsOptions: widget.nutritional.map((e) => e.name.toString()).toList(),
-                             title: "Ingredient Nutritionals".tr(),
-                             hint: "Select one...".tr(),
-                           ),
-                         ),
-                         SizedBox(width: 16),
-                         Flexible(
-                           fit: FlexFit.tight,
-                           flex: 3,
-                           child: SimpleLabelTextField(
-                             labelText: "Nutritional Percent".tr(),
-                             textEditingController: percentController,
-                             inputFormatters: [
-                               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                             ],
-                             onFinish: (){
 
-                             },
-                             validator: (text) {
-                               if (text != null && text.isNotEmpty) {
-                                 return null;
-                               } else {
-                                 return "please add a valid Nutritional Percent".tr();
-                               }
-                             },
-                           ),
-                         ),
-                       ],
-                     ),
-                     const SizedBox(height: 16,),
-                     Flex(
-                       direction: Axis.horizontal,
-                       children: [
-
-                         Flexible(
-                           fit: FlexFit.tight,
-                           flex: 5,
-                           child: SimpleLabelTextField(
-                             labelText: "Weight per unit".tr(),
-                             textEditingController: valueController,
-                             inputFormatters: [
-                               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                             ],
-                             validator: (text) {
-                               if (text != null && text.isNotEmpty) {
-                                 return null;
-                               } else {
-                                 return "please add a valid Weight".tr();
-                               }
-                             },
-                           ),
-                         ),
-                         SizedBox(width: 16),
-
-                         Flexible(
-                           flex: 5,
-                           fit: FlexFit.tight,
-                           child: SimpleDropDownOption(
-                             onSelected: (value){
-                               ingredientUnit = value;
-                               ingredientUnitId = widget.unitTypes.firstWhere((element) => element.name == ingredientUnit).id;
-                               setState(() {
-
-                               });
-                             },
-                             selectedItem: ingredientUnit,
-                             itemsOptions: widget.unitTypes.map((e) => e.name.toString()).toList(),
-                             title: "Unit Type".tr(),
-                             hint: "Select one...".tr(),
-                           ),
-                         ),
-
-
-                       ],
-                     ),
-                   ],
-                 ),
-               ),
-             ),
-             Positioned(
-                 top: 0,
-                 right: 0,
-                 child: Container(
-                     decoration: const BoxDecoration(
-                         shape: BoxShape.circle,
-                         color: Colors.white
-                     ),
-                     child: GestureDetector(
-                       onTap: (){
-                         widget.onRemove(widget.index);
-                       },
-                       child: const Padding(
-                         padding: EdgeInsets.all(4.0),
-                         child: Icon(Icons.delete,color: Colors.red,size: 24,),
-                       ),
-                     ))),
-             Positioned(
-                 top: 0,
-                 child: Container(
-                     decoration: BoxDecoration(
-                         shape: BoxShape.circle,
-                         color: primaryColor
-                     ),
-                     child: GestureDetector(
-                       onTap: (){
-                         widget.onRemove(widget.index);
-                       },
-                       child: Padding(
-                         padding: EdgeInsets.all(8.0),
-                       child:  Text((widget.index+1).toString(),
-                       style: TextStyle(color: Colors.white,fontSize: 16),
-                       ),
-                       ),
-                     ))),
-
-           ],
-         ),
-       ),
-     );
-   }
- }
- 
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16, right: 6, left: 6),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: const BorderRadius.all(Radius.circular(16))),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                child: Column(
+                  children: [
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Flexible(
+                          flex: 5,
+                          fit: FlexFit.tight,
+                          child: SimpleDropDownOption(
+                            onSelected: (value) {
+                              ingredientNutritional = value;
+                              ingredientNutritionalId = widget.nutritional
+                                  .firstWhere((element) =>
+                                      element.name == ingredientNutritional)
+                                  .id;
+                              setState(() {});
+                            },
+                            selectedItem: ingredientNutritional,
+                            itemsOptions: widget.nutritional
+                                .map((e) => e.name.toString())
+                                .toList(),
+                            title: "Ingredient Nutritionals".tr(),
+                            hint: "Select one...".tr(),
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 3,
+                          child: SimpleLabelTextField(
+                            labelText: "Nutritional Percent".tr(),
+                            textEditingController: percentController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9.]')),
+                            ],
+                            onFinish: () {},
+                            validator: (text) {
+                              if (text != null && text.isNotEmpty) {
+                                return null;
+                              } else {
+                                return "please add a valid Nutritional Percent"
+                                    .tr();
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 5,
+                          child: SimpleLabelTextField(
+                            labelText: "Weight per unit".tr(),
+                            textEditingController: valueController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9.]')),
+                            ],
+                            validator: (text) {
+                              if (text != null && text.isNotEmpty) {
+                                return null;
+                              } else {
+                                return "please add a valid Weight".tr();
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Flexible(
+                          flex: 5,
+                          fit: FlexFit.tight,
+                          child: SimpleDropDownOption(
+                            onSelected: (value) {
+                              ingredientUnit = value;
+                              ingredientUnitId = widget.unitTypes
+                                  .firstWhere((element) =>
+                                      element.name == ingredientUnit)
+                                  .id;
+                              setState(() {});
+                            },
+                            selectedItem: ingredientUnit,
+                            itemsOptions: widget.unitTypes
+                                .map((e) => e.name.toString())
+                                .toList(),
+                            title: "Unit Type".tr(),
+                            hint: "Select one...".tr(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white),
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onRemove(widget.index);
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 24,
+                        ),
+                      ),
+                    ))),
+            Positioned(
+                top: 0,
+                child: Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: primaryColor),
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onRemove(widget.index);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          (widget.index + 1).toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ))),
+          ],
+        ),
+      ),
+    );
+  }
+}

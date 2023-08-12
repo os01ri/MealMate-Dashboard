@@ -27,6 +27,7 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredie
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_recipes.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class RecipesAddFieldWidget extends StatefulWidget {
@@ -144,7 +145,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
                         fit: FlexFit.tight,
                         flex: 5,
                         child: SimpleLabelTextField(
-                          labelText: "Recipent Name".tr(),
+                          labelText: "Recipe Name".tr(),
                           textEditingController: nameController,
                           validator: (text) {
                             if (text != null && text.isNotEmpty) {
@@ -536,28 +537,30 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
     if(ingredients && steps && fromFields && image)
     {
 
-      // _storeCubit.addRecipe(AddRecipeParams(
-      //     body: {
-      //       "name":nameController.text,
-      //       "description":descriptionController.text,
-      //       "feeds": feedController.text,
-      //       "time":feedController.text,
-      //       "url":imageForRecipe,
-      //       "type_id":recipeTypeId,
-      //       "category_id":ingredientCategoryId,
-      //       "step": keysFormsSteps.map((e) =>
-      //       {
-      //         "name":e.currentState!.nameController.text.toString(),
-      //         "rank":e.currentState!.widget.index.toString(),
-      //         "description":e.currentState!.descriptionController.text.toString()
-      //       }).toList(),
-      //       "ingredient": keysFormsIngredients.map((e) =>  {
-      //         "id":e.currentState!.ingredientId.toString(),
-      //         "quantity":e.currentState!.quantityController.text.toString(),
-      //         "unit_id":e.currentState!.ingredientUnitId.toString()
-      //       }).toList()
-      //     }
-      // ));
+      _storeCubit.updateRecipe(UpdateRecipesParams(
+          body: {
+            "id": widget.recipeModel!.id,
+            "name":nameController.text,
+            "description":descriptionController.text,
+            "feeds": feedController.text,
+            "time":feedController.text,
+            "url":imageForRecipe,
+            "type_id":recipeTypeId,
+            "category_id":ingredientCategoryId,
+            "step": keysFormsSteps.map((e) =>
+            {
+              "name":e.currentState!.nameController.text.toString(),
+              "rank":e.currentState!.widget.index.toString(),
+              "description":e.currentState!.descriptionController.text.toString()
+            }).toList(),
+            "ingredient": keysFormsIngredients.map((e) =>  {
+              "id":e.currentState!.ingredientId.toString(),
+              "quantity":e.currentState!.quantityController.text.toString(),
+              "unit_id":e.currentState!.ingredientUnitId.toString()
+            }).toList()
+          }
+      ));
+
     }
 
   }

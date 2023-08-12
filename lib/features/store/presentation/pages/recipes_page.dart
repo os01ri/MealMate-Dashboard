@@ -9,6 +9,7 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.d
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
@@ -74,7 +75,7 @@ class _RecipesPageState extends State<RecipesPage> {
           "id": item.id,
           "name": item.name,
           "description": item.description,
-          "ingredients": item.ingredients!.map((e) => "${e.name}: ${e.recipeIngredient!.quantity}${e.ingredientUnitType}").join("\n"),
+          "ingredients": item.ingredients!.map((e) => "${e.name}: ${e.recipeIngredient!.quantity}${e.recipeIngredient!.unitName??""}").join("\n"),
           "category": item.category!.name,
           "type": item.type!.name,
           "steps": item.steps!.map((e) => "${e.name}: ${e.description!}").join("\n").toString(),
@@ -174,9 +175,9 @@ class _RecipesPageState extends State<RecipesPage> {
         );
       },
       onEdit: (item){
-        showMMAddDialog(context: context,
+        showMMUpdateDialog(context: context,
             title: "Update Recipes".tr(),
-            addFieldsWidget: RecipesAddFieldWidget(
+            updateFieldsWidget: RecipesAddFieldWidget(
               onAddFinish: (){
                 _storeCubit.getRecipes(IndexRecipesParams());
               },

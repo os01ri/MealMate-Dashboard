@@ -28,6 +28,7 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/add_nutritiona
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/update_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 
 class CategoriesIngredientsAddFieldWidget extends StatefulWidget {
@@ -253,11 +254,13 @@ class _CategoriesIngredientsAddFieldWidgetState extends State<CategoriesIngredie
     bool image = imageForCategory!=null;
     if(fromFields && image)
     {
-
-      // _storeCubit.addIngredientsCategories(AddCategoriesIngredientParams(
-      //   name: nameController.text,
-      //   imageUrl: imageForCategory!,
-      // ));
+      _storeCubit.updateIngredientsCategories(UpdateCategoriesIngredientsParams(
+          body: {
+            "id": widget.categoriesIngredientModel!.id,
+            "name": nameController.text,
+            "url": imageForCategory!
+          }
+      ));
     }
 
   }
