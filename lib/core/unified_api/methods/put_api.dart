@@ -22,7 +22,7 @@ class PutApi<T> with HandlingExceptionRequest {
     required this.body,
     required this.fromJson,
     this.isLogin = false,
-    this.timeout = const Duration(seconds: 20),
+    this.timeout = const Duration(seconds: 60),
   });
 
   Future<T> callRequest() async {
@@ -31,6 +31,7 @@ class PutApi<T> with HandlingExceptionRequest {
     bool isAuth = await HelperFunctions.isAuth();
 
     log('the token in the request header is $token', name: 'request manager ==> put function ');
+    log("$body", name: 'request body');
     try {
       var headers = {
         'Content-Type': 'application/json',

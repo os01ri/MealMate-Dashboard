@@ -11,6 +11,7 @@ import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart'
 import 'package:mealmate_dashboard/features/store/data/models/types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/unit_types_model.dart';
 import 'package:mealmate_dashboard/features/store/data/repositories/store_repository_impl.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/accept_recipe.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/add_ingredients.dart';
@@ -23,6 +24,7 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/delete_ingredi
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_nutritional.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_recipe.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/disable_recipe.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
@@ -44,6 +46,8 @@ class StoreCubit extends Cubit<StoreState> {
   final _addRecipe = AddRecipesUseCase(storeRepository: StoreRepositoryImpl());
   final _updateRecipe = UpdateRecipesUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteRecipe = DeleteRecipeUseCase(storeRepository: StoreRepositoryImpl());
+  final _acceptRecipe = AcceptRecipeUseCase(storeRepository: StoreRepositoryImpl());
+  final _disableRecipe = DisableRecipeUseCase(storeRepository: StoreRepositoryImpl());
 
   final _indexIngredients = IndexIngredientsUseCase(storeRepository: StoreRepositoryImpl());
   final _addIngredients = AddIngredientsUseCase(storeRepository: StoreRepositoryImpl());
@@ -121,6 +125,7 @@ class StoreCubit extends Cubit<StoreState> {
           (r) {
         log('succ');
         emit(state.copyWith(status: CubitStatus.success));
+
       },
     );
   }
@@ -139,6 +144,46 @@ class StoreCubit extends Cubit<StoreState> {
         log('succ');
         emit(state.copyWith(status: CubitStatus.success));
       },
+    );
+  }
+
+  acceptRecipe(AcceptRecipeParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _acceptRecipe(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) async {
+        log('succ');
+
+        emit(state.copyWith(status: CubitStatus.success));
+
+        getRecipes(IndexRecipesParams());
+      },
+    );
+  }
+
+  disableRecipe(DisableRecipeParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    final result = await _disableRecipe(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) async {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+
+        getRecipes(IndexRecipesParams());
+
+          },
     );
   }
 
@@ -561,6 +606,55 @@ class StoreCubit extends Cubit<StoreState> {
               categoriesIngredients: indexCategoriesTypesData,
               unitTypes: indexUnitTypesData,
             ));
+      }
+    });
+
+  }
+
+
+  getIngredientsAndCategories(
+      {required IndexIngredientsParams ingredientsParams,
+        required IndexCategoriesIngredientParams paramsCategoriesIngredient,
+
+      }){
+    emit(state.copyWith(status: CubitStatus.loading));
+
+
+    ParallelService parallelService = ParallelService(services: [
+      ParallelModel(
+          service: _indexIngredients(ingredientsParams),
+          name: "_indexIngredients"),
+      ParallelModel(
+          service: _indexCategoriesTypes(paramsCategoriesIngredient),
+          name: "_indexCategoriesTypes"),
+
+    ]);
+
+
+    parallelService.getResults().catchError((onError){
+      log('fail');
+      emit(state.copyWith(status: CubitStatus.failure));
+    }).then((value) {
+      if (parallelService.isServicesFailed()) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+
+      } else {
+        log('success');
+
+        dynamic indexIngredientsResult = value!.firstWhere((element) => element.name=="_indexIngredients").finalResult;
+        var indexIngredientsData = indexIngredientsResult.fold((l) {log('fail');}, (r) => r.data,);
+
+        dynamic indexCategoriesTypesResult = value.firstWhere((element) => element.name=="_indexCategoriesTypes").finalResult;
+        var indexCategoriesTypesData = indexCategoriesTypesResult.fold((l) {log('fail');}, (r) => r.data,);
+
+
+        emit(
+            state.copyWith(
+              status: CubitStatus.success,
+              ingredients: indexIngredientsData,
+              categoriesIngredients: indexCategoriesTypesData,
+             ));
       }
     });
 

@@ -54,6 +54,29 @@ class RemoteStoreDatasource {
     return result;
   }
 
+  Future<bool> acceptRecipe({required Map<String, dynamic> params}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.acceptRecipe(
+          id: params['id']
+      ),
+      fromJson: (v) => true, body: {},
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+
+  Future<bool> disableRecipe({required Map<String, dynamic> params}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.disableRecipe(
+          id: params['id']
+      ),
+      fromJson: (v) => true, body: {},
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
 
   ///CATEGORIES
   ///
@@ -148,7 +171,9 @@ class RemoteStoreDatasource {
 
   Future<IngredientModelResponse> indexIngredients({Map<String, dynamic>? params}) async {
     GetApi getApi = GetApi(
-      uri: ApiVariables.indexIngredients(),
+      uri: ApiVariables.indexIngredients(
+        queryParameters: params
+      ),
       fromJson: IngredientModelResponse.fromRawJson,
     );
     final result = await getApi.callRequest();

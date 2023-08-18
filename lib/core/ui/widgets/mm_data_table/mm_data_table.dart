@@ -13,8 +13,9 @@ class MMDataTable extends StatefulWidget {
   final Function? onRefresh;
   final Function? onEdit;
   final Function? onDelete;
+  final Function? onAccept;
 
-  MMDataTable({Key? key,required this.data,this.onDelete,this.onEdit,this.onAdd,this.onRefresh,required this.dataTableColumns,required this.dataTableTitle}) : super(key: key);
+  MMDataTable({Key? key,required this.data,this.onAccept,this.onDelete,this.onEdit,this.onAdd,this.onRefresh,required this.dataTableColumns,required this.dataTableTitle}) : super(key: key);
 
   @override
   _MMDataTableState createState() => _MMDataTableState();
@@ -90,6 +91,9 @@ class _MMDataTableState extends State<MMDataTable> {
             },
             onEdit: (item){
               widget.onEdit!(item);
+            },
+            onAccept: (item){
+              widget.onAccept!(item);
             }
           ),
         ),

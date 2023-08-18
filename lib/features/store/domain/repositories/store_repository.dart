@@ -16,6 +16,10 @@ abstract class StoreRepository {
 
   Future<Either<Failure, bool>> deleteRecipe({required Map<String, dynamic> params});
 
+  Future<Either<Failure, bool>> acceptRecipe({required Map<String, dynamic> params});
+
+  Future<Either<Failure, bool>> disableRecipe({required Map<String, dynamic> params});
+
 
   Future<Either<Failure, CategoriesModelResponse>> indexCategories({Map<String, dynamic> params});
 

@@ -13,6 +13,8 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialo
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
 import 'package:mealmate_dashboard/features/store/data/models/recipe_model.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/accept_recipe.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/disable_recipe.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_recipe.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
@@ -81,14 +83,17 @@ class _RecipesPageState extends State<RecipesPage> {
           "id": item.id,
           "name": item.name,
           "description": item.description,
-          "ingredients": item.ingredients!.map((e) => "${e.name}: ${e.recipeIngredient!.quantity}${e.recipeIngredient!.unitName??""}").join("\n"),
+          "ingredients": item.ingredients!.map((e) => "${e.name}: ${e.recipeIngredient!.quantity} ${e.ingredientUnitType??""}").join("\n"),
           "category": item.category!.name,
           "type": item.type!.name,
           "steps": item.steps!.map((e) => "${e.name}: ${e.description!}").join("\n").toString(),
           "feeds": item.feeds,
           "time": item.time,
           "image" : item.url,
-          "editAndDelete": item
+          "editAndDelete": item,
+            "acceptRecipe": item,
+
+
         });
       }
     dataTableColumns.addAll(
@@ -159,6 +164,13 @@ class _RecipesPageState extends State<RecipesPage> {
             columnTitle: "Edit/Delete".tr(),
             isSortEnabled: false
         ),
+        MMDataTableColumn(
+            dataKey: "acceptRecipe",
+            dataType: MMDataTableColumnType.editAndDelete,
+            columnTitle: "Recipe Status".tr(),
+            isSortEnabled: false
+        ),
+
 
       ]
     );
@@ -192,6 +204,16 @@ class _RecipesPageState extends State<RecipesPage> {
             )
         );
       },
+      onAccept: (item){
+        if(item.status)
+          {
+            _storeCubit.disableRecipe(DisableRecipeParams(id: item.id));
+          }
+        else
+          {
+            _storeCubit.acceptRecipe(AcceptRecipeParams(id: item.id));
+          }
+      },
       onDelete: (id){
         showMMDeleteDialog(context: context,
           title: "Delete Recipes".tr(),
@@ -205,5 +227,8 @@ class _RecipesPageState extends State<RecipesPage> {
       },
     );
   }
+
+
+
 }
 

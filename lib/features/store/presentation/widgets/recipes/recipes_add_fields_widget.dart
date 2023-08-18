@@ -551,7 +551,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
   void _onUpdate(){
     firstCheck = true;
     bool ingredients = keysFormsIngredients.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsIngredients.length;
-    bool steps = keysFormsSteps.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsIngredients.length;
+    bool steps = keysFormsSteps.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsSteps.length;
     bool fromFields =  _formKey.currentState!.validate();
     bool image = imageForRecipe!=null;
     if(ingredients && steps && fromFields && image)
@@ -589,7 +589,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
   void _onAdd(){
     firstCheck = true;
     bool ingredients = keysFormsIngredients.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsIngredients.length;
-    bool steps = keysFormsSteps.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsIngredients.length;
+    bool steps = keysFormsSteps.where((element) => element.currentState!.formKey.currentState!.validate()).length == keysFormsSteps.length;
     bool fromFields =  _formKey.currentState!.validate();
     bool image = imageForRecipe!=null;
     if(ingredients && steps && fromFields && image)

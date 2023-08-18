@@ -132,10 +132,9 @@ class RecipeIngredient {
   dynamic ingredientId;
   dynamic quantity;
   dynamic unitId;
-  dynamic unitName;
 
   RecipeIngredient(
-      {this.id, this.recipeId, this.ingredientId, this.quantity, this.unitId,this.unitName});
+      {this.id, this.recipeId, this.ingredientId, this.quantity, this.unitId,});
 
   RecipeIngredient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -143,7 +142,6 @@ class RecipeIngredient {
     ingredientId = json['ingredient_id'];
     quantity = json['quantity'];
     unitId = json['unit_id'];
-    unitName = json['unit_name'];
   }
 
   Map<String, dynamic> toJson() {

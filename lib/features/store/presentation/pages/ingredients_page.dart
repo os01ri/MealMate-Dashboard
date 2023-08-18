@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/app_config.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
@@ -11,7 +12,9 @@ import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_c
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_teble_enums.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
+import 'package:mealmate_dashboard/features/store/data/models/categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/data/models/ingredient_model.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/index_categories_ingredient.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_ingredients.dart';
 import 'package:mealmate_dashboard/features/store/presentation/cubit/store_cubit.dart';
 import 'package:mealmate_dashboard/features/store/presentation/widgets/ingredients/ingredient_delete_fields_widget.dart';
@@ -27,11 +30,16 @@ class IngredientsPage extends StatefulWidget {
 
 class _IngredientsPageState extends State<IngredientsPage> {
   late final StoreCubit _storeCubit;
-
+  dynamic categoryId;
   @override
   void initState() {
     super.initState();
-    _storeCubit = StoreCubit()..getIngredients(IndexIngredientsParams());
+    _storeCubit = StoreCubit()..getIngredientsAndCategories(
+      paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+      ingredientsParams: IndexIngredientsParams(
+        categoryId: categoryId
+      )
+    );
   }
 
 
@@ -50,10 +58,15 @@ class _IngredientsPageState extends State<IngredientsPage> {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.success =>
-                ingredientsDataTable(state.ingredients),
+                ingredientsDataTable(state.ingredients,state.categoriesIngredients),
                 _ => MainErrorWidget(
                 onTap: (){
-                  _storeCubit.getIngredients(IndexIngredientsParams());
+                  _storeCubit.getIngredientsAndCategories(
+                  paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+                ingredientsParams: IndexIngredientsParams(
+                categoryId: categoryId
+                )
+                );
                 },
                 size: Size(400,200),
                 ).center(),
@@ -66,7 +79,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
     );
   }
 
-  Widget ingredientsDataTable(List<IngredientModel> ingredients){
+  Widget ingredientsDataTable(List<IngredientModel> ingredients,List<CategoriesIngredientModel> categoriesIngredients){
     List<Map<String, dynamic>> data = [];
     List<MMDataTableColumn> dataTableColumns = [];
 
@@ -138,46 +151,127 @@ class _IngredientsPageState extends State<IngredientsPage> {
       ]
     );
 
-    return MMDataTable(
-      dataTableTitle: "Ingredients Table".tr(),
-        data: data,
-        dataTableColumns: dataTableColumns,
-      onRefresh: (){
-        _storeCubit.getIngredients(IndexIngredientsParams());
-      },
-      onAdd: (){
-        showMMAddDialog(context: context,
-            title: "Add Ingredient".tr(),
-            addFieldsWidget: IngredientsAddFieldWidget(
-              onAddFinish: (){
-                _storeCubit.getIngredients(IndexIngredientsParams());
-              },
-            )
-        );
-      },
-      onEdit: (item){
-        showMMUpdateDialog(context: context,
-            title: "Update Ingredient".tr(),
-            updateFieldsWidget: IngredientsAddFieldWidget(
-              onAddFinish: (){
-                _storeCubit.getIngredients(IndexIngredientsParams());
-              },
-              isAdd: false,
-              ingredientModel: item,
-            )
-        );
-      },
-      onDelete: (id){
-        showMMDeleteDialog(context: context,
-          title: "Delete Ingredient".tr(),
-          deleteFieldsWidget: IngredientDeleteFieldWidget(
-            id: id,
-            onDeleteFinish: (){
-              _storeCubit.getIngredients(IndexIngredientsParams());
+    return Column(
+      children: [
+        if(categoriesIngredients.isNotEmpty)
+        Container(
+          height: 60,
+          child: Row(
+            children: [
+              Text("${"Ingredients Categories".tr()}: "),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: categoriesIngredients.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    var item = categoriesIngredients[index];
+                    return GestureDetector(
+                      onTap: (){
+                        if(item.id==categoryId)
+                          {
+                            categoryId = null;
+                          }
+                        else
+                          {
+                            categoryId = item.id;
+                          }
+                        _storeCubit.getIngredientsAndCategories(
+                            paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+                            ingredientsParams: IndexIngredientsParams(
+                                categoryId: categoryId
+                            )
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: categoryId==item.id?Colors.cyan: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                            child: Center(
+                              child: Text(item.name??"",
+                              style: TextStyle(color: bgColor,fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        Expanded(
+          child: MMDataTable(
+            dataTableTitle: "Ingredients Table".tr(),
+              data: data,
+              dataTableColumns: dataTableColumns,
+            onRefresh: (){
+              _storeCubit.getIngredientsAndCategories(
+                  paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+                  ingredientsParams: IndexIngredientsParams(
+                      categoryId: categoryId
+                  )
+              );
+            },
+            onAdd: (){
+              showMMAddDialog(context: context,
+                  title: "Add Ingredient".tr(),
+                  addFieldsWidget: IngredientsAddFieldWidget(
+                    onAddFinish: (){
+                      _storeCubit.getIngredientsAndCategories(
+                          paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+                          ingredientsParams: IndexIngredientsParams(
+                              categoryId: categoryId
+                          )
+                      );
+                    },
+                  )
+              );
+            },
+            onEdit: (item){
+              showMMUpdateDialog(context: context,
+                  title: "Update Ingredient".tr(),
+                  updateFieldsWidget: IngredientsAddFieldWidget(
+                    onAddFinish: (){
+                      _storeCubit.getIngredientsAndCategories(
+                          paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+                          ingredientsParams: IndexIngredientsParams(
+                              categoryId: categoryId
+                          )
+                      );
+                    },
+                    isAdd: false,
+                    ingredientModel: item,
+                  )
+              );
+            },
+            onDelete: (id){
+              showMMDeleteDialog(context: context,
+                title: "Delete Ingredient".tr(),
+                deleteFieldsWidget: IngredientDeleteFieldWidget(
+                  id: id,
+                  onDeleteFinish: (){
+                    _storeCubit.getIngredientsAndCategories(
+                        paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+                        ingredientsParams: IndexIngredientsParams(
+                            categoryId: categoryId
+                        )
+                    );
+                  },
+                ),
+              );
             },
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }

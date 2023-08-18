@@ -18,10 +18,12 @@ class IndexIngredientsUseCase implements UseCase<IngredientModelResponse, IndexI
 class IndexIngredientsParams implements UseCaseParams {
   final int? perPage;
   final int? page;
+  final dynamic categoryId;
 
   IndexIngredientsParams({
     this.perPage,
     this.page,
+    this.categoryId
   });
 
   @override
@@ -29,6 +31,7 @@ class IndexIngredientsParams implements UseCaseParams {
     return {
       if (page != null) "page": page.toString(),
       if (perPage != null) "perPage": perPage.toString(),
+      if (categoryId != null) "category_id": categoryId.toString(),
     };
   }
 
