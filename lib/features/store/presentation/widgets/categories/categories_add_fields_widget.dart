@@ -13,6 +13,7 @@ import 'package:mealmate_dashboard/core/helper/file_uploader/upload_service.dart
 import 'package:mealmate_dashboard/core/helper/helper_functions.dart';
 import 'package:mealmate_dashboard/core/ui/theme/colors.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/error_widget.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
@@ -208,7 +209,16 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => Text('error'.tr()).center(),
+                CubitStatus.failure => MainErrorWidget(
+                onTap: (){
+                if(widget.isAdd) {
+                _onAdd();
+                } else {
+                _onUpdate();
+                }
+                },
+                size: Size(400,200),
+                ).center(),
 
                 _ =>  getFooter()
               };
@@ -246,7 +256,9 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
         imageUrl: imageForCategory!,
       ));
     }
+    setState(() {
 
+    });
   }
 
   void _onUpdate(){
@@ -259,6 +271,7 @@ class _CategoriesAddFieldWidgetState extends State<CategoriesAddFieldWidget> {
         body: {
           "id": widget.categoriesModel!.id,
           "name": nameController.text,
+          if(imageForCategory!=widget.categoriesModel!.url)
           "url": imageForCategory!
         }
       ));

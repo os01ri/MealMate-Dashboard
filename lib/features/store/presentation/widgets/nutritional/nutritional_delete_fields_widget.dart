@@ -5,6 +5,7 @@ import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
 import 'package:mealmate_dashboard/core/ui/theme/colors.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/error_widget.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_text_field.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
@@ -85,7 +86,12 @@ class _NutritionalDeleteFieldWidgetState extends State<NutritionalDeleteFieldWid
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => Text('error'.tr()).center(),
+                CubitStatus.failure => MainErrorWidget(
+                onTap: (){
+                _storeCubit.deleteNutritional(DeleteNutritionalParams(id: widget.id));
+                },
+                size: Size(400,200),
+                ).center(),
 
                 _ =>  mmDeleteDialogFooter(context: context,
                 onDelete: (){

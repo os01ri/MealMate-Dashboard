@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/error_widget.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_delete_dialog.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/delete_categories_types.dart';
@@ -80,7 +81,12 @@ class _CategoriesDeleteFieldWidgetState extends State<CategoriesDeleteFieldWidge
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => Text('error'.tr()).center(),
+                CubitStatus.failure => MainErrorWidget(
+                onTap: (){
+                  _storeCubit.deleteCategories(DeleteCategoriesParams(id: widget.id));
+                },
+                size: Size(400,200),
+                ).center(),
 
                 _ =>  mmDeleteDialogFooter(context: context,
                 onDelete: (){

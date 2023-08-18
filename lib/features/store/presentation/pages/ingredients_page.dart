@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/app_config.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/error_widget.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_data_table_column_type.dart';
@@ -50,7 +51,12 @@ class _IngredientsPageState extends State<IngredientsPage> {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
                 CubitStatus.success =>
                 ingredientsDataTable(state.ingredients),
-                _ => Text('error'.tr()).center(),
+                _ => MainErrorWidget(
+                onTap: (){
+                  _storeCubit.getIngredients(IndexIngredientsParams());
+                },
+                size: Size(400,200),
+                ).center(),
               };
               },
             ).expand(),

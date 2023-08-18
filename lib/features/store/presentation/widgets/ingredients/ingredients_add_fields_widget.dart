@@ -7,6 +7,7 @@ import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
 import 'package:mealmate_dashboard/core/helper/file_uploader/platform_file_picker.dart';
 import 'package:mealmate_dashboard/core/helper/file_uploader/upload_service.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/error_widget.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/main_button.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
@@ -104,7 +105,15 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
               categories: state.categoriesIngredients,
               nutritional: state.nutritional,
               unitTypes: state.unitTypes),
-          _ => Text('error'.tr()).center(),
+          _ => MainErrorWidget(
+        onTap: (){
+        _storeCubitNutritional.getNutritionalAndUnitsAndCategories(
+        paramsNutritional: IndexNutritionalParams(),
+        paramsCategoriesIngredient: IndexCategoriesIngredientParams(),
+        paramsUnits: IndexUnitTypesParams());
+        },
+        size: Size(400,200),
+        ).center(),
         };
       },
     ).center();
@@ -444,7 +453,16 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
                 return switch (state.status) {
                   CubitStatus.loading =>
                     const CircularProgressIndicator.adaptive().center(),
-                  CubitStatus.failure => Text('error'.tr()).center(),
+                  CubitStatus.failure => MainErrorWidget(
+                  onTap: (){
+                if(widget.isAdd) {
+                _onAdd();
+                } else {
+                _onUpdate();
+                }
+                },
+                size: Size(400,200),
+                ).center(),
                   _ => getFooter()
                 };
               },
@@ -489,7 +507,8 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
           "unit_id": ingredientPriceUnitId!,
           "category_id": ingredientCategoryId,
           "price_by": double.parse(valueController.text),
-          "url": imageForIngredient!,
+          if(imageForIngredient!=widget.ingredientModel!.imageUrl)
+            "url": imageForIngredient!,
           "nutritional": [
             ...nutritionalKeysForms.map((e) {
               var nutritionalId = e.currentState!.ingredientNutritionalId;
@@ -542,6 +561,10 @@ class _IngredientsAddFieldWidgetState extends State<IngredientsAddFieldWidget> {
         ],
       ));
     }
+
+    setState(() {
+
+    });
   }
 }
 

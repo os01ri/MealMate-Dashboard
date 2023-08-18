@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealmate_dashboard/core/extensions/widget_extensions.dart';
 import 'package:mealmate_dashboard/core/helper/cubit_status.dart';
+import 'package:mealmate_dashboard/core/ui/widgets/error_widget.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_add_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/mm_data_table/mm_update_dialog.dart';
 import 'package:mealmate_dashboard/core/ui/widgets/simple_label_text_field.dart';
@@ -81,7 +82,16 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
               builder: (BuildContext context, StoreState state) {
                 return switch (state.status) {
                 CubitStatus.loading => const CircularProgressIndicator.adaptive().center(),
-                CubitStatus.failure => Text('error'.tr()).center(),
+                CubitStatus.failure => MainErrorWidget(
+                onTap: (){
+                if(widget.isAdd) {
+                  _onAdd();
+                } else {
+                  _onUpdate();
+                }
+                },
+                size: Size(400,200),
+                ).center(),
 
                 _ =>  getFooter()
               };
@@ -95,15 +105,17 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
   }
 
   Widget getFooter(){
-    if(widget.isAdd)
+    if(widget.isAdd) {
       return mmAddDialogFooter(context: context,
           onAdd: () {
             _onAdd();
           });
-    else return mmUpdateDialogFooter(context: context,
+    } else {
+      return mmUpdateDialogFooter(context: context,
         onUpdate: () {
           _onUpdate();
         });
+    }
   }
 
 
@@ -122,5 +134,8 @@ class _NutritionalAddFieldWidgetState extends State<NutritionalAddFieldWidget> {
     {
       _storeCubit.addNutritional(AddNutritionalParams(name: nameController.text));
     }
+    setState(() {
+
+    });
   }
 }
