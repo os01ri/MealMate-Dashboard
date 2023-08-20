@@ -61,7 +61,7 @@ class ApiVariables {
 
 
   static Uri disableRecipe({required int id,}) =>
-      _dashboardUri(path: 'recipe/$id/disable');
+      _dashboardUri(path: 'recipe/$id/unactive');
 
 
   static Uri indexCategories({Map<String, dynamic>? queryParameters}) =>

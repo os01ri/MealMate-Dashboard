@@ -572,6 +572,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
             {
               "name":e.currentState!.nameController.text.toString(),
               "rank":e.currentState!.widget.index.toString(),
+              "time":e.currentState!.timeController.text.toString(),
               "description":e.currentState!.descriptionController.text.toString()
             }).toList(),
             "ingredient": keysFormsIngredients.map((e) =>  {
@@ -608,6 +609,7 @@ class _RecipesAddFieldWidgetState extends State<RecipesAddFieldWidget> {
             {
               "name":e.currentState!.nameController.text.toString(),
               "rank":e.currentState!.widget.index.toString(),
+              "time":e.currentState!.timeController.text.toString(),
               "description":e.currentState!.descriptionController.text.toString()
             }).toList(),
             "ingredient": keysFormsIngredients.map((e) =>  {
@@ -823,6 +825,7 @@ class _StepsWidgetState extends State<StepsWidget> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  TextEditingController timeController = TextEditingController();
 
   @override
   void initState() {
@@ -833,6 +836,7 @@ class _StepsWidgetState extends State<StepsWidget> {
       {
         nameController = TextEditingController(text: widget.step!.name.toString());
         descriptionController = TextEditingController(text: widget.step!.description.toString());
+        timeController = TextEditingController(text: widget.step!.time.toString());
       }
   }
 
@@ -899,6 +903,39 @@ class _StepsWidgetState extends State<StepsWidget> {
                                 return null;
                               } else {
                                 return "please add a valid Description".tr();
+                              }
+                            },
+                          ),
+                        ),
+
+
+                      ],
+                    ),
+                    SizedBox(height: 16,),
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+
+
+
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 3,
+                          child: SimpleLabelTextField(
+                            labelText: "Step Time".tr(),
+                            textEditingController: timeController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9.]')),
+                            ],
+                            onFinish: (){
+
+                            },
+                            validator: (text) {
+                              if (text != null && text.isNotEmpty) {
+                                return null;
+                              } else {
+                                return "please add a valid Time".tr();
                               }
                             },
                           ),

@@ -158,6 +158,7 @@ class RecipeIngredient {
 class Steps {
   dynamic id;
   dynamic name;
+  dynamic time;
   dynamic rank;
   dynamic description;
 
@@ -166,6 +167,7 @@ class Steps {
   Steps.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    time = json['time'];
     rank = json['rank'];
     description = json['description'];
   }
