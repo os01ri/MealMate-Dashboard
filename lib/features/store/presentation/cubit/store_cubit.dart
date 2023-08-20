@@ -32,6 +32,8 @@ import 'package:mealmate_dashboard/features/store/domain/usecases/index_nutritio
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_recipe.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/index_unit_types.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/save_notification.dart';
+import 'package:mealmate_dashboard/features/store/domain/usecases/sned_notification.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/update_categories.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/update_categories_types.dart';
 import 'package:mealmate_dashboard/features/store/domain/usecases/update_ingredients.dart';
@@ -75,6 +77,9 @@ class StoreCubit extends Cubit<StoreState> {
   final _addTypes = AddTypesUseCase(storeRepository: StoreRepositoryImpl());
   final _updateTypes = UpdateTypesUseCase(storeRepository: StoreRepositoryImpl());
   final _deleteTypes = DeleteTypesUseCase(storeRepository: StoreRepositoryImpl());
+
+  final _sendNotification = SendNotificationUseCase(storeRepository: StoreRepositoryImpl());
+  final _saveNotification = SaveNotificationUseCase(storeRepository: StoreRepositoryImpl());
 
   StoreCubit() : super(const StoreState());
 
@@ -721,6 +726,26 @@ class StoreCubit extends Cubit<StoreState> {
       }
     });
 
+  }
+
+
+
+  sendNotification(SendNotificationParams params) async {
+    emit(state.copyWith(status: CubitStatus.loading));
+
+    _saveNotification(SaveNotificationParams(title: params.title, body: params.body));
+    final result = await _sendNotification(params);
+
+    result.fold(
+          (l) {
+        log('fail');
+        emit(state.copyWith(status: CubitStatus.failure));
+      },
+          (r) {
+        log('succ');
+        emit(state.copyWith(status: CubitStatus.success));
+      },
+    );
   }
 
 }

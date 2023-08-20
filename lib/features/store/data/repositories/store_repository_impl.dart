@@ -301,6 +301,28 @@ class StoreRepositoryImpl with HandlingExceptionManager implements StoreReposito
   }
 
 
+  @override
+  Future<Either<Failure, bool>> sendNotification({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.sendNotification(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+
+  @override
+  Future<Either<Failure, bool>> saveNotification({required Map<String, dynamic> body}) {
+    return wrapHandling(
+      tryCall: () async {
+        final result = await _datasource.saveNotification(body: body);
+        return Right(result);
+      },
+    );
+  }
+
+
 
   @override
   Future<Either<Failure, IngredientModel>> showIngredient({required int id}) {

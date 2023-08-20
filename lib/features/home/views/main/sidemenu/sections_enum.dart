@@ -7,7 +7,7 @@ enum Sections {
   categoriesIngredients,
   categories,
   types,
-  users,
-  settings
+  notifications
+
 
 }

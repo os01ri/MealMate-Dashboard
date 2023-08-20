@@ -114,7 +114,7 @@ class SimpleLabelTextFieldState extends State<SimpleLabelTextField> {
             enabled: widget.enableValue?? true,
             textAlignVertical: TextAlignVertical.center,
             controller: widget.textEditingController,
-            minLines: widget.isMultiLine! ? 2 : 1,
+            minLines: widget.isMultiLine! ? 6 : 1,
             onChanged: widget.onChange,
             focusNode: widget.focusNode,
             onEditingComplete: widget.onFinish,
@@ -153,7 +153,7 @@ class SimpleLabelTextFieldState extends State<SimpleLabelTextField> {
                   fontWeight: FontWeight.w700
                 ),
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12,vertical: 8
+                  horizontal: 12,vertical: 16
                 )
 
             ),

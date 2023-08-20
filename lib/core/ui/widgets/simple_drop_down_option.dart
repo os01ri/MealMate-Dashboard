@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/constants/constants.dart';
 import 'package:mealmate_dashboard/core/ui/theme/text_styles.dart';
@@ -131,11 +132,11 @@ class _SimpleDropDownOptionState extends State<SimpleDropDownOption> {
                 print(widget.selectedItem);
                 if(widget.selectedItem==null || widget.selectedItem=='') {
                   setState(() {
-                    errorText = 'This field is required';
+                    errorText = 'This field is required'.tr();
                   });
                   return widget.selectedItem == null
-                      ? 'This field is required'
-                      : "This field is required";
+                      ? 'This field is required'.tr()
+                      : "This field is required".tr();
                 }
                 else {
                   setState(() {

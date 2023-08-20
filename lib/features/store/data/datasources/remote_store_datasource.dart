@@ -312,4 +312,26 @@ class RemoteStoreDatasource {
   }
 
 
+
+  Future<bool> sendNotification({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.notificationsUri(),
+      body: body,
+      isSendNotification: true,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
+  Future<bool> saveNotification({required Map<String, dynamic> body}) async {
+    PostApi postApi = PostApi(
+      uri: ApiVariables.saveNotification(),
+      body: body,
+      fromJson: (v) => true,
+    );
+    final result = await postApi.callRequest();
+    return result;
+  }
+
 }

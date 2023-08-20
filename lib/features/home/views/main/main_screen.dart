@@ -11,6 +11,7 @@ import 'package:mealmate_dashboard/features/home/views/main/sidemenu/sections_en
 import 'package:mealmate_dashboard/features/home/views/main/sidemenu/side_menu.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/categories_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/ingredients_categories_page.dart';
+import 'package:mealmate_dashboard/features/store/presentation/pages/notifcation_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/nutritional_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/ingredients_page.dart';
 import 'package:mealmate_dashboard/features/store/presentation/pages/recipes_page.dart';
@@ -71,7 +72,8 @@ class _MainScreenState extends State<MainScreen> {
   Sections.categoriesIngredients =>  IngredientsCategoriesPage(),
   Sections.categories =>  CategoriesPage(),
   Sections.types =>  TypesPage(),
-  _ =>  MyDataTable(),
+  Sections.notifications =>  NotificationsPage(),
+  _ =>  Center(),
   };
 
   @override
@@ -82,109 +84,3 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 
-
-
-class MyDataTable extends StatefulWidget {
-  MyDataTable({Key? key}) : super(key: key);
-
-  @override
-  _MyDataTableState createState() => _MyDataTableState();
-}
-
-class _MyDataTableState extends State<MyDataTable> {
-  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-  int _sortColumnIndex = 0;
-  bool _sortAscending = true;
-  List<Map<String, dynamic>> _data = List.generate(
-    20,
-        (index) => {
-      "id": Random().nextInt(200) + 1,
-      "name": "Name ${Random().nextInt(200) + 1}",
-      "date": DateTime.now().subtract(Duration(days: Random().nextInt(200))),
-      "note": "Note ${Random().nextInt(200) + 1}"
-    },
-  );
-
-
-  void _sort<T>(Comparable<T> Function(Map<String, dynamic> d) getField, int columnIndex, bool ascending) {
-    setState(() {
-      _sortColumnIndex = columnIndex;
-      _sortAscending = ascending;
-      _data.sort((a, b) {
-        final aValue = getField(a);
-        final bValue = getField(b);
-        return ascending ? Comparable.compare(aValue, bValue) : Comparable.compare(bValue, aValue);
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: SingleChildScrollView(
-        child: PaginatedDataTable(
-          header: Text('My DataTable'.tr()),
-          rowsPerPage: _rowsPerPage,
-          onRowsPerPageChanged: (rowCount) {
-            setState(() {
-              _rowsPerPage = rowCount!;
-            });
-          },
-          sortColumnIndex: _sortColumnIndex,
-          sortAscending: _sortAscending,
-          columns: [
-            DataColumn(
-              label: Text("ID".tr(),textAlign: TextAlign.start,),
-              onSort: (columnIndex, ascending) => _sort<num>((d) => d['id'], columnIndex, ascending),
-            ),
-            DataColumn(
-              label: Text("Name".tr(),textAlign: TextAlign.start),
-              onSort: (columnIndex, ascending) => _sort<String>((d) => d['name'], columnIndex, ascending),
-
-            ),
-            DataColumn(
-              label: Text("Date".tr()),
-              onSort: (columnIndex, ascending) => _sort<DateTime>((d) => d['date'], columnIndex, ascending),
-
-            ),
-            DataColumn(
-              label: Text("Note".tr()),
-              onSort: (columnIndex, ascending) => _sort<String>((d) => d['note'], columnIndex, ascending),
-
-            ),
-          ],
-          source: _DataSource(_data),
-        ),
-      ),
-    );
-  }
-}
-
-class _DataSource extends DataTableSource {
-  final List<Map<String, dynamic>> _data;
-
-  _DataSource(this._data);
-
-  @override
-  DataRow getRow(int index) {
-    final record = _data[index];
-    return DataRow.byIndex(
-      index: index,
-      cells: [
-        DataCell(Text(record['id'].toString())),
-        DataCell(Text(record['name'])),
-        DataCell(Text(record['date'].toString())),
-        DataCell(Text(record['note'])),
-      ],
-    );
-  }
-
-  @override
-  int get rowCount => _data.length;
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get selectedRowCount => 0;
-}

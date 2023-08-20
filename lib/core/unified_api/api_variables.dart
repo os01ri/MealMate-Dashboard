@@ -21,6 +21,16 @@ class ApiVariables {
     return uri;
   }
 
+  static Uri notificationsUri() {
+    final uri = Uri(
+      scheme: "https",
+      host: "fcm.googleapis.com",
+      path: "/fcm/send",
+    );
+    log(uri.toString());
+    return uri;
+  }
+
   ///Auth
   static Uri _auth({required String path}) {
     return _mainUri(path: 'auth/$path');
@@ -141,5 +151,8 @@ class ApiVariables {
 
   static Uri login({Map<String, dynamic>? queryParameters}) =>
       _dashboardUri(path: 'auth/login', queryParameters: queryParameters);
+
+  static Uri saveNotification({Map<String, dynamic>? queryParameters}) =>
+      _mainUri(path: 'notification/store', queryParameters: queryParameters);
 
 }
