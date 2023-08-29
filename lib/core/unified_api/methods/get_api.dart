@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../helper/helper_functions.dart';
@@ -33,7 +34,8 @@ class GetApi<T> with HandlingExceptionRequest {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'fcm_token': fcmToken,
+        if(!kIsWeb)
+          'fcm_token': fcmToken,
         if (isAuth) 'Authorization': 'Bearer $token',
         if (getFCMToken) "device_id": deviceId,
       };

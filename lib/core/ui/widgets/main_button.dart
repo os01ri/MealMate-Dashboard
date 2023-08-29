@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mealmate_dashboard/core/extensions/context_extensions.dart';
+import 'package:mealmate_dashboard/core/helper/responsive.dart';
 
 import '../theme/text_styles.dart';
 
@@ -41,12 +42,13 @@ class MainButton extends StatelessWidget {
             side: const BorderSide(color: Colors.transparent),
           ),
         ),
-        fixedSize: MaterialStateProperty.all(
+        minimumSize: MaterialStateProperty.all(
           Size(
-            width ?? context.width * .3,
-            height ?? context.width * .11,
+            50,
+            50,
           ),
         ),
+
       ),
       onPressed: (onPressed != null)
           ? () {
@@ -55,23 +57,28 @@ class MainButton extends StatelessWidget {
             }
           : null,
       child: FittedBox(
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.styleWeight500(
-                color: textColor,
-                fontSize: fontSize ?? context.width * .0475,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if(!Responsive.isMobile(context) || (icon==null))
+              Text(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.styleWeight500(
+                  color: textColor,
+                  fontSize: fontSize ?? 18
+                ),
               ),
-            ),
-            if (icon != null) ...[
-              const SizedBox(width: 10),
-              icon!,
+              if (icon != null) ...[
+                if(!Responsive.isMobile(context) || (icon==null))
+                const SizedBox(width: 10),
+                icon!,
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

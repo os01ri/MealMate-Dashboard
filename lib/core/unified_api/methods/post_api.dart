@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../helper/helper_functions.dart';
@@ -14,6 +15,7 @@ class PostApi<T> with HandlingExceptionRequest {
   final Map body;
   final FromJson fromJson;
   final bool isLogin;
+  final bool isSendNotification;
   final Duration timeout;
 
   const PostApi({
@@ -21,6 +23,7 @@ class PostApi<T> with HandlingExceptionRequest {
     required this.body,
     required this.fromJson,
     this.isLogin = false,
+    this.isSendNotification = false,
     this.timeout = const Duration(seconds: 20),
   });
 
@@ -33,9 +36,11 @@ class PostApi<T> with HandlingExceptionRequest {
     try {
       var headers = {
         'Content-Type': 'application/json',
-        'fcm_token': fcmToken,
+        if(!kIsWeb)
+          'fcm_token': fcmToken,
         'Accept': 'application/json',
-        if (isAuth) 'Authorization': 'Bearer $token',
+        if (isAuth && !isSendNotification) 'Authorization': 'Bearer $token',
+        if(isSendNotification) 'Authorization': 'key=AAAAW856pwY:APA91bGq3Y3OcVzfRgjNdEdcqNpRk0ta0rR1iGGH3y3JBRdVzwoyr07hcHdKh6y5uFOhbIaaC3_AGahUPkZFvxponHMOu5hImWTpdh1-p9NFHt6iShWN5SKUmQ1dhYsJQBIS6EJ6QXgE',
       };
 
       var request = http.Request('POST', uri);
@@ -43,8 +48,12 @@ class PostApi<T> with HandlingExceptionRequest {
       request.headers.addAll(headers);
       http.StreamedResponse streamedResponse = await request.send().timeout(timeout);
       log(request.body, name: "request body");
+      print(request.body);
+      print(request.headers);
       http.Response response = await http.Response.fromStream(streamedResponse);
       log(response.body);
+      print(response.body);
+
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
         return fromJson(response.body);

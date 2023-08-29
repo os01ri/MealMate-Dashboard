@@ -74,7 +74,6 @@ class _MainTextFieldState extends State<MainTextField> with WidgetsBindingObserv
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return SizedBox(
       width: widget.width,
       height: widget.height,
@@ -101,17 +100,19 @@ class _MainTextFieldState extends State<MainTextField> with WidgetsBindingObserv
         keyboardType: widget.keyboardType,
         maxLines: widget.maxLines,
         onChanged: widget.onChanged,
+        style: TextStyle(
+          color: Colors.black
+        ),
         autofocus: widget.autoFocus,
         decoration: InputDecoration(
-          constraints: BoxConstraints(maxWidth: size.width),
           label: widget.label == null ? null : Text(widget.label!),
           filled: true,
           fillColor: widget.fillColor,
           focusColor: AppColors.buttonColor,
           hintText: widget.hint,
           hintStyle: AppTextStyles.styleWeight500(
-            fontSize: size.width * .035,
             color: widget.hintColor ?? Colors.grey.shade700,
+            fontSize: 16
           ),
           
           enabledBorder: OutlineInputBorder(
@@ -133,9 +134,7 @@ class _MainTextFieldState extends State<MainTextField> with WidgetsBindingObserv
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           prefixIcon: widget.prefixIcon,
-          prefixIconConstraints: widget.smallSuffixIcon ? BoxConstraints(maxWidth: size.width * .15) : null,
           suffixIcon: widget.suffixIcon,
-          suffixIconConstraints: widget.smallSuffixIcon ? BoxConstraints(maxWidth: size.width * .15) : null,
           contentPadding: widget.maxLines != 1 ? null : const EdgeInsets.symmetric(horizontal: 16.0),
         ),
         obscureText: !widget.isPassword,

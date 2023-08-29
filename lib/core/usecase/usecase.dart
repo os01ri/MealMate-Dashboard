@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mealmate_dashboard/core/error/failures.dart';
 
-import '../error/failures.dart';
 
 abstract class UseCase<Type, Params> {
   Future<Either<Failure, Type>> call(Params params);
@@ -10,10 +10,10 @@ abstract class UseCase<Type, Params> {
 abstract class UseCaseParams extends Equatable {
   Map<String, dynamic> getBody() => {};
 
-  Map<String, String> getParams() => {};
+  Map<String, dynamic> getParams() => {};
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class NoParams implements UseCaseParams {
@@ -21,10 +21,10 @@ class NoParams implements UseCaseParams {
   Map<String, dynamic> getBody() => {};
 
   @override
-  Map<String, String> getParams() => {};
+  Map<String, dynamic> getParams() => {};
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   bool? get stringify => false;

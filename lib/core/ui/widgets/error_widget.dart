@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/colors.dart';
@@ -32,7 +33,7 @@ class MainErrorWidget extends StatelessWidget {
           // ),
           SizedBox(height: size.width * .02),
           Text(
-            'error',
+            'error'.tr(),
             style: AppTextStyles.styleWeight500(
               color: Colors.grey.shade400,
               fontSize: size.width * .04,
@@ -44,7 +45,7 @@ class MainErrorWidget extends StatelessWidget {
             child: FittedBox(
               child: MainButton(
                 width: size.width * .3,
-                text: 'retry',
+                text: 'retry'.tr(),
                 textColor: textColor ?? Colors.white,
                 color: color,
                 onPressed: onTap,
